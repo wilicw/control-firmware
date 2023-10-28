@@ -54,4 +54,5 @@ dkms.conf
 .mxproject
 .cproject
 build/
-
+*.json
+.cache/
