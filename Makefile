@@ -1,4 +1,5 @@
 BUILD_DIR = build
+DEBUGGER := daplink
 
 all:
 	mkdir -p $(BUILD_DIR)
@@ -9,4 +10,7 @@ all:
 clean:
 	rm -rf $(BUILD_DIR)
 
-.PHONY: all clean
+flash:
+	@-openocd -f $(shell pwd)/openocd_$(DEBUGGER).cfg -c "program $(BUILD_DIR)/fsae-2024.elf verify reset exit"
+
+.PHONY: all clean flash

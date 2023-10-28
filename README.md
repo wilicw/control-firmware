@@ -27,6 +27,20 @@ For the Daplink
 $ openocd -f $(pwd)/openocd_daplink.cfg
 ```
 
+## Flash
+
+Change the programmer type in `Makefile` and run 
+
+```
+$ make flash
+```
+
+Or specify the programmer/debugger type in command
+
+```
+$ make flash DEBUGGER=stlink
+```
+
 ## License
 
 Not yet
