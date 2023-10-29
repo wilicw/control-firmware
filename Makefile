@@ -1,10 +1,11 @@
 BUILD_DIR = build
 TARGET := stm32f407vgtx
 RTT_ADDR := 0x2000097c
+BUILD_TYPE := Debug
 
 all:
 	mkdir -p $(BUILD_DIR)
-	cd $(BUILD_DIR) && cmake .. -GNinja
+	cd $(BUILD_DIR) && cmake .. -GNinja -DCMAKE_BUILD_TYPE=$(BUILD_TYPE)
 	cd $(BUILD_DIR) && ninja
 	@-mv $(BUILD_DIR)/compile_commands.json .
 
