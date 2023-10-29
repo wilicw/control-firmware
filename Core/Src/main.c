@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "SEGGER_RTT.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,7 +101,7 @@ int main(void)
   MX_SDIO_SD_Init();
   MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
-
+  SEGGER_RTT_Init();
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -277,6 +277,8 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
+    uint32_t tick = HAL_GetTick();
+    SEGGER_RTT_printf(0, "Hello World! %d\n", tick);
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
     osDelay(100);
   }

@@ -8,6 +8,7 @@ The control-box firmware of the NCKU formula
 - [AArch32 bare-metal target (arm-none-eabi)](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads)
 - [ninja](https://ninja-build.org/)
 - [STM32CubeMX](https://www.st.com/en/development-tools/stm32cubemx.html)
+- [pyocd](https://pyocd.io/)
 
 ## Build
 
@@ -19,26 +20,32 @@ The compiled binary file will be `build/fsae-2024.bin` or `build/fsae-2024.elf`
 
 ## Debug
 
-In order to debug this firmware you need to attach the probe to the board first. The debug config file will be `openocd_*.cfg` dependents on the type of the debug probe.
-
-For the Daplink
-
 ```
-$ openocd -f $(pwd)/openocd_daplink.cfg
+$ pyocd gdbserver -t stm32f07vgtx
 ```
 
 ## Flash
-
-Change the programmer type in `Makefile` and run 
 
 ```
 $ make flash
 ```
 
-Or specify the programmer/debugger type in command
+## Monitor
+
+This firmware use [Segger RTT](https://www.segger.com/products/debug-probes/j-link/technology/about-real-time-transfer/) library. If pyocd have `Control Block` error, change the `RTT_ADDR` in makefile according to the `_SEGGER_RTT` address in the `build/fsae-2024.map`.
 
 ```
-$ make flash DEBUGGER=stlink
+$ make monitor
+```
+
+or 
+
+```
+$ cat build/fsae-2024.map | grep _SEGGER_RTT
+ .bss._SEGGER_RTT
+                0x2000097c                _SEGGER_RTT
+
+$ make monitor RTT_ADDR=0x2000097c
 ```
 
 ## License
