@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "SEGGER_RTT.h"
+#include "ldps.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -33,7 +34,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define LDPS_N 4
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -55,7 +56,9 @@ const osThreadAttr_t defaultTask_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* USER CODE BEGIN PV */
-
+// Linear displacement sensors (LDPS)
+ldps_t ldps[LDPS_N];
+ldps_cal_t ldps_cal[LDPS_N];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -72,7 +75,7 @@ void StartDefaultTask(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint16_t adc_buffer[4];
+
 /* USER CODE END 0 */
 
 /**
@@ -110,10 +113,13 @@ int main(void)
   /* USER CODE BEGIN 2 */
   SEGGER_RTT_Init();
 
-  if (HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_buffer, 4) != HAL_OK) {
-    SEGGER_RTT_printf(0, "ADC start failed\r\n");
-    Error_Handler();
-  }
+  ldps_init(&ldps[0], &ldps_cal[0], LDPS_N);
+  
+  // TODO: Read calibration data from SD card
+  ldps_cal[0].scale = 1.0f;
+  ldps_cal[1].scale = 1.0f;
+  ldps_cal[2].scale = 1.0f;
+  ldps_cal[3].scale = 1.0f;
 
   /* USER CODE END 2 */
 
@@ -442,8 +448,13 @@ void StartDefaultTask(void *argument)
   for(;;)
   {
     uint32_t tick = osKernelGetTickCount();
-    SEGGER_RTT_printf(0, "ADC: %d %d %d %d %d\r\n", tick, adc_buffer[0], adc_buffer[1], adc_buffer[2], adc_buffer[3]);
-    osDelay(1);
+    SEGGER_RTT_printf(0, "tick: %d", tick);
+    for (size_t i = 0; i < LDPS_N; i++) {
+      int16_t v = ldps_read(&ldps[i], &ldps_cal[i]);
+      SEGGER_RTT_printf(0, ", %5d", v);
+    }
+    SEGGER_RTT_printf(0, "\n");
+    osDelay(10);
   }
   /* USER CODE END 5 */
 }
