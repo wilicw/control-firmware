@@ -1,5 +1,6 @@
 BUILD_DIR = build
-DEBUGGER := daplink
+TARGET := stm32f407vgtx
+RTT_ADDR := 0x2000097c
 
 all:
 	mkdir -p $(BUILD_DIR)
@@ -11,6 +12,9 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 flash:
-	@-openocd -f $(shell pwd)/openocd_$(DEBUGGER).cfg -c "program $(BUILD_DIR)/fsae-2024.elf verify reset exit"
+	@-pyocd flash -t $(TARGET) $(BUILD_DIR)/fsae-2024.elf
 
-.PHONY: all clean flash
+monitor:
+	@-pyocd rtt -t $(TARGET) -a $(RTT_ADDR)
+
+.PHONY: all clean flash monitor
