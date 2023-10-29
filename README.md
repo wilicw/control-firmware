@@ -1,6 +1,26 @@
 # fsae-2024
 The control-box firmware of the NCKU formula
 
+## Project's File Structure
+
+```
+.
+├── Core
+│   ├── ...
+│   ├── Inc             # Implementation of the core functions
+│   ├── Src             # Source code files
+│   └── SEGGER_RTT      # The Segger RTT library source code and header files
+├── Drivers
+│   ├── ...
+│   └── Sensors         # [*] All sensors driver with interface and BSP code
+│       └── LDPS        #  └── Driver for Linear DisPlacment Sensor
+├── FATFS
+│   ├── App
+│   └── Target
+└── Middlewares
+    └── Third_Party
+```
+
 ## Requirements
 
 - [make](https://www.gnu.org/software/make/)
