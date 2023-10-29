@@ -1,7 +1,7 @@
 /*
 ----------------------------------------------------------------------
 File    : ldps_bsp.c
-Purpose : BSP(Board Support Package) for the linear displacement 
+Purpose : BSP(Board Support Package) for the linear displacement
           sernsor. Curently only implemented for STM32F407xx via HAL.
 Revision: $Rev: 2023.43$
 ----------------------------------------------------------------------

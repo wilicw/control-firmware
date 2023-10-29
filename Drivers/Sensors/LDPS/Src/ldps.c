@@ -1,7 +1,7 @@
 /*
 ----------------------------------------------------------------------
 File    : ldps.c
-Purpose : User dirver functions for the linear displacement sernsor. 
+Purpose : User dirver functions for the linear displacement sernsor.
 Revision: $Rev: 2023.43$
 ----------------------------------------------------------------------
 */
