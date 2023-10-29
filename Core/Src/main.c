@@ -72,7 +72,7 @@ void StartDefaultTask(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint16_t adc_buffer[4];
 /* USER CODE END 0 */
 
 /**
@@ -109,6 +109,12 @@ int main(void)
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   SEGGER_RTT_Init();
+
+  if (HAL_ADC_Start_DMA(&hadc1, (uint32_t*)adc_buffer, 4) != HAL_OK) {
+    SEGGER_RTT_printf(0, "ADC start failed\r\n");
+    Error_Handler();
+  }
+
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -379,10 +385,9 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    uint32_t tick = HAL_GetTick();
-    SEGGER_RTT_printf(0, "Hello World! %d\n", tick);
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
-    osDelay(100);
+    uint32_t tick = osKernelGetTickCount();
+    SEGGER_RTT_printf(0, "ADC: %d %d %d %d %d\r\n", tick, adc_buffer[0], adc_buffer[1], adc_buffer[2], adc_buffer[3]);
+    osDelay(1);
   }
   /* USER CODE END 5 */
 }
