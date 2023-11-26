@@ -28,6 +28,8 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "fx_api.h"
 
+#include "fx_stm32_sram_driver.h"
+#include "fx_stm32_sd_driver.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
