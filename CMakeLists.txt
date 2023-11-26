@@ -66,6 +66,12 @@ add_link_options(-T ${LINKER_SCRIPT})
 
 add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
 
+# Microsoft IoT Stuff
+set(THREADX_ARCH "cortex_m4")
+set(THREADX_TOOLCHAIN "gnu")
+add_subdirectory(threadx)
+target_link_libraries(${PROJECT_NAME}.elf azrtos::threadx)
+
 set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
 set(BIN_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin)
 
