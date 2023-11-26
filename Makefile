@@ -1,6 +1,6 @@
 BUILD_DIR = build
 TARGET := stm32f407vgtx
-RTT_ADDR := 0x2000097c
+RTT_ADDR := 0x20000000
 BUILD_TYPE := Debug
 
 all:

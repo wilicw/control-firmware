@@ -52,20 +52,10 @@ $ make flash
 
 ## Monitor
 
-This firmware use [Segger RTT](https://www.segger.com/products/debug-probes/j-link/technology/about-real-time-transfer/) library. If pyocd have `Control Block` error, change the `RTT_ADDR` in makefile according to the `_SEGGER_RTT` address in the `build/fsae-2024.map`.
+This firmware use [Segger RTT](https://www.segger.com/products/debug-probes/j-link/technology/about-real-time-transfer/) library with default CB (control block) address `0x20000000`.
 
 ```
 $ make monitor
-```
-
-or 
-
-```
-$ cat build/fsae-2024.map | grep _SEGGER_RTT
- .bss._SEGGER_RTT
-                0x2000097c                _SEGGER_RTT
-
-$ make monitor RTT_ADDR=0x2000097c
 ```
 
 ## License
