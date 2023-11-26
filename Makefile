@@ -18,4 +18,7 @@ flash:
 monitor:
 	@-pyocd rtt -t $(TARGET) -a $(RTT_ADDR)
 
+debug:
+	@-pyocd gdbserver -t $(TARGET) --persist
+
 .PHONY: all clean flash monitor
