@@ -17,13 +17,13 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include "app_threadx.h"
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "SEGGER_RTT.h"
 #include "ldps.h"
-#include "tx_api.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,29 +67,6 @@ static void MX_SDIO_SD_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-TX_THREAD thread_0;
-TX_THREAD thread_1;
-
-static uint8_t thread0_stack[1024];
-void thread_0_entry(ULONG thread_input) {
-  while (1) {
-    SEGGER_RTT_printf(0, "This is thread 0\n");
-    tx_thread_sleep(1000);
-  }
-}
-
-static uint8_t thread1_stack[1024];
-void thread_1_entry(ULONG thread_input) {
-  while (1) {
-    SEGGER_RTT_printf(0, "This is thread 1\n");
-    tx_thread_sleep(1000);
-  }
-}
-
-void tx_application_define(void *first_unused_memory) {
-  tx_thread_create(&thread_0, "thread_0", thread_0_entry, 0, thread0_stack, 1024, 1, 1, 1, TX_AUTO_START);
-  tx_thread_create(&thread_1, "thread_1", thread_1_entry, 0, thread1_stack, 1024, 1, 1, 1, TX_AUTO_START);
-}
 
 /* USER CODE END 0 */
 
@@ -142,10 +119,11 @@ int main(void)
 	CardCap=(uint64_t)(SDCardInfo.LogBlockNbr)*(uint64_t)(SDCardInfo.LogBlockSize);	//计算SD卡容量
   SEGGER_RTT_printf(0, "Card Capacity: %dMB\n", CardCap >> 20);
 
-  tx_kernel_enter();
-
   /* USER CODE END 2 */
 
+  MX_ThreadX_Init();
+
+  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
