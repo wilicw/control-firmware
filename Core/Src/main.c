@@ -77,7 +77,7 @@ static void MX_SDIO_SD_Init(void);
  */
 int main(void) {
   /* USER CODE BEGIN 1 */
-
+  SEGGER_RTT_Init();
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -103,7 +103,6 @@ int main(void) {
   MX_ADC1_Init();
   MX_SDIO_SD_Init();
   /* USER CODE BEGIN 2 */
-  SEGGER_RTT_Init();
 
   ldps_init(&ldps[0], &ldps_cal[0], LDPS_N);
 
@@ -419,6 +418,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
  */
 void Error_Handler(void) {
   /* USER CODE BEGIN Error_Handler_Debug */
+  SEGGER_RTT_printf(0, "Error_Handler\n");
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1) {
