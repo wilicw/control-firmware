@@ -45,12 +45,14 @@
 /* USER CODE BEGIN PV */
 extern void Error_Handler(void);
 
+/* Default ThreadX application
+ * It will suspend forever after ThreadX initialization
+ * */
 TX_THREAD app_thread;
 void app_thread_entry(ULONG thread_input) {
-  while (1) {
-    SEGGER_RTT_printf(0, "This is thread 0\n");
-    tx_thread_sleep(1000);
-  }
+  while (1)
+    if (tx_thread_suspend(&app_thread) != TX_SUCCESS)
+      SEGGER_RTT_printf(0, "tx_thread_suspend failed\n");
 }
 /* USER CODE END PV */
 
@@ -77,8 +79,10 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
     Error_Handler();
   }
 
-  ret = tx_thread_create(&app_thread, "app_thread", app_thread_entry, 0,
-                         pointer, app_memory_size, 1, 1, 1, TX_AUTO_START);
+  ret =
+      tx_thread_create(&app_thread, "app_thread", app_thread_entry, 0, pointer,
+                       app_memory_size, TX_MAX_PRIORITIES - 1,
+                       TX_MAX_PRIORITIES - 1, TX_NO_TIME_SLICE, TX_AUTO_START);
   /* USER CODE END App_ThreadX_Init */
 
   return ret;
