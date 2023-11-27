@@ -25,8 +25,6 @@ void ldps_bsp_init(ldps_t *ldps, size_t n) {
   }
 }
 
-void ldps_bsp_delay() {
-  HAL_Delay(10);
-}
+void ldps_bsp_delay() { HAL_Delay(10); }
 
 #endif

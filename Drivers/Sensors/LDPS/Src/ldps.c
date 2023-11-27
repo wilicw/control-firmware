@@ -18,12 +18,10 @@ void ldps_init(ldps_t *ldps, ldps_cal_t *cal, size_t n) {
 
   ldps_bsp_delay();
 
-  while (n--)
-    cal[n].offset = ldps[n].dma_buffer;
+  while (n--) cal[n].offset = ldps[n].dma_buffer;
 }
 
-void ldps_deinit() {
-}
+void ldps_deinit() {}
 
 float ldps_read(ldps_t *ldps, ldps_cal_t *cal) {
   return (float)(ldps->dma_buffer) * cal->scale - cal->offset;

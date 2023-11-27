@@ -32,8 +32,8 @@ extern "C" {
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
-#define FX_SRAM_DISK_BASE_ADDRESS         SRAM2_BASE
-#define FX_SRAM_DISK_SIZE                 8192
+#define FX_SRAM_DISK_BASE_ADDRESS SRAM2_BASE
+#define FX_SRAM_DISK_SIZE 8192
 
 /* USER CODE BEGIN EC */
 
@@ -64,4 +64,3 @@ VOID fx_stm32_sram_driver(FX_MEDIA *media_ptr);
 }
 #endif
 #endif /* FX_STM32_SRAM_DRIVER_H */
-

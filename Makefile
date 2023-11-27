@@ -5,6 +5,7 @@ BUILD_TYPE := Debug
 
 all:
 	mkdir -p $(BUILD_DIR)
+	./run_clang-format.sh
 	cd $(BUILD_DIR) && cmake .. -GNinja -DCMAKE_BUILD_TYPE=$(BUILD_TYPE)
 	cd $(BUILD_DIR) && ninja
 	@-mv $(BUILD_DIR)/compile_commands.json .
