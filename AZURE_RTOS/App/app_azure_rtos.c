@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "SEGGER_RTT.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,18 +55,12 @@ static UCHAR  fx_byte_pool_buffer[FX_APP_MEM_POOL_SIZE];
 static TX_BYTE_POOL fx_app_byte_pool;
 
 /* USER CODE BEGIN PV */
-TX_THREAD app_thread;
-UCHAR app_thread_stack[1024];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
-void app_thread_entry(ULONG thread_input) {
-  while (1) {
-    SEGGER_RTT_printf(0, "This is thread 0\n");
-    tx_thread_sleep(1000);
-  }
-}
+
 /* USER CODE END PFP */
 
 /**
@@ -77,13 +71,7 @@ void app_thread_entry(ULONG thread_input) {
 VOID tx_application_define(VOID *first_unused_memory)
 {
   /* USER CODE BEGIN  tx_application_define */
-  tx_thread_create(
-    &app_thread, 
-    "app_thread",
-    app_thread_entry,
-    0, app_thread_stack, 1024,
-    1, 1, TX_NO_TIME_SLICE, TX_AUTO_START
-  );
+
   /* USER CODE END  tx_application_define */
 
   VOID *memory_ptr;
