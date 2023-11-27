@@ -38,7 +38,7 @@ extern TX_SEMAPHORE transfer_semaphore;
 #define FX_STM32_SD_DEFAULT_TIMEOUT                      (10 * TX_TIMER_TICKS_PER_SECOND)
 
 /* Let the filex low-level driver initialize the SD driver */
-#define FX_STM32_SD_INIT                                 1
+#define FX_STM32_SD_INIT                                 0
 
 /* Use the SD DMA API */
 #define FX_STM32_SD_DMA_API                              1
