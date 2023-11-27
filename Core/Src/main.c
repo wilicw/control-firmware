@@ -111,15 +111,6 @@ int main(void) {
   ldps_cal[1].scale = 1.0f;
   ldps_cal[2].scale = 1.0f;
   ldps_cal[3].scale = 1.0f;
-  uint64_t CardCap;
-  HAL_SD_CardCIDTypeDef SDCard_CID;
-  HAL_SD_CardInfoTypeDef SDCardInfo;
-  HAL_SD_GetCardCID(&hsd, &SDCard_CID);   // 获取CID
-  HAL_SD_GetCardInfo(&hsd, &SDCardInfo);  // 获取SD卡信息
-  CardCap = (uint64_t)(SDCardInfo.LogBlockNbr) *
-            (uint64_t)(SDCardInfo.LogBlockSize);  // 计算SD卡容量
-  SEGGER_RTT_printf(0, "Card Capacity: %dMB\n", CardCap >> 20);
-
   /* USER CODE END 2 */
 
   MX_ThreadX_Init();
