@@ -27,7 +27,5 @@
 #define FX_SRAM_INTERFACE
 #define FX_SD_INTERFACE
 #define THREADX_ENABLED
-#define NETXDUO_ENABLED
-#define NX_CLOUD_ENABLED
 
 #endif /* __RTE_COMPONENTS_H__ */

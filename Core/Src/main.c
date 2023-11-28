@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "SEGGER_RTT.h"
+#include "jsmn.h"
 #include "ldps.h"
 /* USER CODE END Includes */
 
