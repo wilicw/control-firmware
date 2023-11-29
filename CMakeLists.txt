@@ -54,7 +54,7 @@ endif ()
 
 include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_HAL_Driver/Inc/Legacy Drivers/CMSIS/Device/ST/STM32F4xx/Include Drivers/CMSIS/Include Core/ThreadSafe AZURE_RTOS/App Middlewares/ST/filex/common/inc/ Middlewares/ST/filex/ports/generic/inc/ Middlewares/ST/threadx/common/inc/ Middlewares/ST/threadx/ports/cortex_m4/gnu/inc/ Middlewares/ST/threadx/utility/low_power/ FileX/App Drivers/BSP/Components/lan8742/ Drivers/BSP/Components/n25q128a/ Drivers/BSP/Components/n25q512a/ Drivers/BSP/Components/n25q256a/ Middlewares/ST/levelx/common/inc/ FileX/Target Middlewares/ST/netxduo/common/inc/ Middlewares/ST/netxduo/ports/cortex_m4/gnu/inc/ Middlewares/ST/netxduo/addons/cloud/ Core/SEGGER_RTT/RTT Core/SEGGER_RTT/Config Drivers/Sensors/LDPS/Inc)
 
-add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -DSTM32_THREAD_SAFE_STRATEGY=2 -DTX_INCLUDE_USER_DEFINE_FILE -DFX_INCLUDE_USER_DEFINE_FILE)
+add_definitions(-DJSMN_STATIC -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -DSTM32_THREAD_SAFE_STRATEGY=2 -DTX_INCLUDE_USER_DEFINE_FILE -DFX_INCLUDE_USER_DEFINE_FILE)
 
 file(GLOB_RECURSE SOURCES "AZURE_RTOS/*.*" "FileX/*.*" "ThreadX/*.*" "Core/*.*" "Middlewares/*.*" "Drivers/*.*")
 

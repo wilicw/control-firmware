@@ -65,6 +65,13 @@ static void MX_ADC1_Init(void);
 static void MX_SDIO_SD_Init(void);
 /* USER CODE BEGIN PFP */
 
+float static_stof(char *s, size_t n) {
+  static char buf[32];
+  strncpy(buf, s, n);
+  buf[n] = '\0';
+  return atof(buf);
+}
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -104,6 +111,37 @@ int main(void) {
   MX_ADC1_Init();
   MX_SDIO_SD_Init();
   /* USER CODE BEGIN 2 */
+
+  char s[] = "{\"ldps\": [1.0, 1.0, 1.0, 1.0]}";
+
+  int json_r;
+  jsmn_parser p;
+  jsmntok_t t[16];
+  jsmn_init(&p);
+
+  json_r = jsmn_parse(&p, s, strlen(s), t, sizeof(t) / sizeof(t[0]));
+  if (json_r < 0) {
+    SEGGER_RTT_printf(0, "Failed to parse JSON: %d\n", json_r);
+  } else {
+    int i = 1;
+    while (i < json_r) {
+      if (strncmp(s + t[i].start, "ldps", t[i].end - t[i].start) == 0) {
+        if (t[i + 1].type != JSMN_ARRAY) {
+          SEGGER_RTT_printf(0, "Expected array\n");
+          Error_Handler();
+        }
+
+        for (int j = 0; j < t[i + 1].size; j++) {
+          jsmntok_t *g = &t[i + j + 2];
+          float val = static_stof(s + g->start, g->end - g->start);
+        }
+
+        i += t[i + 1].size + 1;
+      } else {
+        i++;
+      }
+    }
+  }
 
   ldps_init(&ldps[0], &ldps_cal[0], LDPS_N);
 
