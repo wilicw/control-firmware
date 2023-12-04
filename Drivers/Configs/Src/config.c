@@ -24,6 +24,14 @@ static inline float static_stof(const char *s, size_t n) {
 }
 
 int config_init(const char *s, size_t len) {
+  /* Init config manually to prevent missing config in JSON files */
+
+  /* Linear displacement sensors */
+#if LDPS_ENABLE
+  for (int i = 0; i < LDPS_N; i++) config.ldps_cal[i].scale = 1.0f;
+#endif
+
+  /* JSON parser */
   int json_r;
   jsmn_parser p;
   jsmntok_t t[16];
