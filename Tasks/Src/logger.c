@@ -10,10 +10,13 @@ Revision: $Rev: 2023.49$
 #include "logger.h"
 
 #include "config.h"
+#include "events.h"
 #include "fx_api.h"
 #include "stddef.h"
 
 TX_THREAD logger_thread;
+
+extern TX_EVENT_FLAGS_GROUP event_flags;
 
 // Logger file objects
 extern FX_MEDIA sdio_disk;
@@ -30,6 +33,13 @@ extern config_t config;
 
 void logger_thread_entry(ULONG thread_input) {
   UINT status = FX_SUCCESS;
+
+  // Wait for the filesystem and config to be loaded
+  ULONG recv_events_flags = 0;
+  status = tx_event_flags_get(
+      &event_flags, EVENT_BIT(EVENT_FS_INIT) | EVENT_BIT(EVENT_CONFIG_LOADED),
+      TX_AND, &recv_events_flags, TX_WAIT_FOREVER);
+
   LOGGER_DEBUG("Logger thread started\n");
 
   fx_file_create(&sdio_disk, "fsae-2024.log");
@@ -40,6 +50,7 @@ void logger_thread_entry(ULONG thread_input) {
     tx_thread_suspend(tx_thread_identify());
   }
 
+  // Start the logger
   while (1) {
     char buf[128];
 

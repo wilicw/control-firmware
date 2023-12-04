@@ -24,8 +24,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "SEGGER_RTT.h"
-#include "config.h"
-#include "ldps.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,12 +50,7 @@ DMA_HandleTypeDef hdma_sdio_rx;
 DMA_HandleTypeDef hdma_sdio_tx;
 
 /* USER CODE BEGIN PV */
-extern config_t config;
 
-// Instance of the linear displacement sensors
-#if LDPS_ENABLE
-ldps_t ldps[LDPS_N];
-#endif
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -108,12 +101,8 @@ int main(void) {
   MX_SDIO_SD_Init();
   /* USER CODE BEGIN 2 */
 
-  // TODO: Read json from SD card
-  char s[] = "{\"ldps\": [1.1, 1.2, 1.3, 1.4]}";
+  /* Real entry point at Tasks/Src/init.c */
 
-  config_init(s, sizeof(s) - 1);
-
-  ldps_init(&ldps[0], &config.ldps_cal[0], LDPS_N);
   /* USER CODE END 2 */
 
   MX_ThreadX_Init();

@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "events.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,7 +51,7 @@ TX_THREAD fx_app_thread;
 uint32_t fx_sd_media_memory[FX_STM32_SD_DEFAULT_SECTOR_SIZE / sizeof(uint32_t)];
 FX_MEDIA sdio_disk;
 
-extern TX_THREAD logger_thread;
+extern TX_EVENT_FLAGS_GROUP event_flags;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -91,6 +91,8 @@ UINT MX_FileX_Init(VOID *memory_ptr) {
 
 /* USER CODE BEGIN 1 */
 void fx_app_thread_entry(ULONG thread_input) {
+  SEGGER_RTT_printf(0, "FileX thread started\n");
+
   UINT status = FX_SUCCESS;
   status =
       fx_media_open(&sdio_disk, "SDIO", fx_stm32_sd_driver, (VOID *)FX_NULL,
@@ -101,11 +103,8 @@ void fx_app_thread_entry(ULONG thread_input) {
     Error_Handler();
   }
 
-  // Resume logger thread after FileX initialization
-  tx_thread_resume(&logger_thread);
+  tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_FS_INIT), TX_OR);
 
-  while (1) {
-    tx_thread_suspend(tx_thread_identify());
-  }
+  SEGGER_RTT_printf(0, "FileX thread finished\n");
+  tx_thread_terminate(tx_thread_identify());
 }
-/* USER CODE END 1 */

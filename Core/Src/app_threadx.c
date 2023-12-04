@@ -23,7 +23,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "init.h"
 #include "logger.h"
+#include "tx_api.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,9 +45,12 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
+TX_EVENT_FLAGS_GROUP event_flags;
+
 extern void Error_Handler(void);
 
 extern TX_THREAD logger_thread;
+extern TX_THREAD init_thread;
 
 /* Default ThreadX application
  * It will suspend forever after ThreadX initialization
@@ -87,12 +92,28 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
                        app_memory_size, TX_MAX_PRIORITIES - 1,
                        TX_MAX_PRIORITIES - 1, TX_NO_TIME_SLICE, TX_AUTO_START);
 
+  /* System Initialization Thread
+   * - Priority: 1
+   * - Stack size: 1024 bytes
+   * - Auto start: NO
+   *   Dependencies: FileX
+   * - Description: This thread defined in init.h and implement its
+   *   functionality at init.c. It can only be started after FileX
+   *   initialization.
+   */
+  VOID *init_pointer;
+  int init_priority = 1;
+  tx_byte_allocate(byte_pool, &init_pointer, 1024, TX_NO_WAIT);
+  ret = tx_thread_create(&init_thread, "init_thread", init_thread_entry, 0,
+                         init_pointer, 1024, init_priority, init_priority,
+                         TX_NO_TIME_SLICE, TX_AUTO_START);
+
   /* Data Logger Thread
    * - Priority: 5
    * - Stack size: 256 bytes
    * - Auto start: NO
    *   Dependencies: FileX
-   * - Description: This thread defined in logger.h and implement its 
+   * - Description: This thread defined in logger.h and implement its
    *   functionality at logger.c. It can only be started after FileX
    *   initialization.
    */
@@ -101,7 +122,8 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
   tx_byte_allocate(byte_pool, &logger_pointer, app_memory_size, TX_NO_WAIT);
   ret = tx_thread_create(&logger_thread, "logger_thread", logger_thread_entry,
                          0, logger_pointer, app_memory_size, logger_priority,
-                         logger_priority, TX_NO_TIME_SLICE, TX_DONT_START);
+                         logger_priority, TX_NO_TIME_SLICE, TX_AUTO_START);
+
   /* USER CODE END App_ThreadX_Init */
 
   return ret;
@@ -114,7 +136,12 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
  */
 void MX_ThreadX_Init(void) {
   /* USER CODE BEGIN  Before_Kernel_Start */
-
+  /* Event Flags Group Initialization */
+  UINT ret = tx_event_flags_create(&event_flags, "event_flags");
+  if (ret != TX_SUCCESS) {
+    SEGGER_RTT_printf(0, "tx_event_flags_create failed\n");
+    Error_Handler();
+  }
   /* USER CODE END  Before_Kernel_Start */
 
   tx_kernel_enter();
