@@ -21,6 +21,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "app_filex.h"
 
+#include "tx_api.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -48,7 +50,8 @@ extern void Error_Handler(void);
 TX_THREAD fx_app_thread;
 uint32_t fx_sd_media_memory[FX_STM32_SD_DEFAULT_SECTOR_SIZE / sizeof(uint32_t)];
 FX_MEDIA sdio_disk;
-FX_FILE fx_file;
+
+extern TX_THREAD logger_thread;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -98,39 +101,11 @@ void fx_app_thread_entry(ULONG thread_input) {
     Error_Handler();
   }
 
-  SEGGER_RTT_printf(0, "fx_media_open success\n");
-
-  status = fx_file_open(&sdio_disk, &fx_file, "config.txt", FX_OPEN_FOR_READ);
-  if (status != FX_SUCCESS) {
-    SEGGER_RTT_printf(0, "fx_file_open failed with status 0x%02X\n", status);
-    Error_Handler();
-  }
-
-  SEGGER_RTT_printf(0, "fx_file_open success\n");
-
-  CHAR buffer[128];
-  ULONG bytes_read;
-  status = fx_file_read(&fx_file, buffer, 128, &bytes_read);
-  if (status != FX_SUCCESS) {
-    SEGGER_RTT_printf(0, "fx_file_read failed with status 0x%02X\n", status);
-    Error_Handler();
-  }
-
-  buffer[bytes_read] = '\0';
-  SEGGER_RTT_printf(0, "fx_file_read success\n");
-  SEGGER_RTT_printf(0, "Read %lu bytes\n", bytes_read);
-  SEGGER_RTT_printf(0, "Content: %s\n", buffer);
-
-  status = fx_file_close(&fx_file);
-  if (status != FX_SUCCESS) {
-    SEGGER_RTT_printf(0, "fx_file_close failed with status 0x%02X\n", status);
-    Error_Handler();
-  }
-
-  SEGGER_RTT_printf(0, "fx_file_close success\n");
+  // Resume logger thread after FileX initialization
+  tx_thread_resume(&logger_thread);
 
   while (1) {
-    tx_thread_sleep(1000);
+    tx_thread_suspend(tx_thread_identify());
   }
 }
 /* USER CODE END 1 */

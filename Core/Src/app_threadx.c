@@ -23,7 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "logger.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,6 +44,8 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 extern void Error_Handler(void);
+
+extern TX_THREAD logger_thread;
 
 /* Default ThreadX application
  * It will suspend forever after ThreadX initialization
@@ -71,7 +73,8 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
   TX_BYTE_POOL *byte_pool = (TX_BYTE_POOL *)memory_ptr;
 
   /* USER CODE BEGIN App_ThreadX_Init */
-  static const ULONG app_memory_size = 1024;
+  static const ULONG app_memory_size = 256;
+
   VOID *pointer;
   ret = tx_byte_allocate(byte_pool, &pointer, app_memory_size, TX_NO_WAIT);
   if (ret != TX_SUCCESS) {
@@ -83,6 +86,22 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
       tx_thread_create(&app_thread, "app_thread", app_thread_entry, 0, pointer,
                        app_memory_size, TX_MAX_PRIORITIES - 1,
                        TX_MAX_PRIORITIES - 1, TX_NO_TIME_SLICE, TX_AUTO_START);
+
+  /* Data Logger Thread
+   * - Priority: 5
+   * - Stack size: 256 bytes
+   * - Auto start: NO
+   *   Dependencies: FileX
+   * - Description: This thread defined in logger.h and implement its 
+   *   functionality at logger.c. It can only be started after FileX
+   *   initialization.
+   */
+  VOID *logger_pointer;
+  int logger_priority = 5;
+  tx_byte_allocate(byte_pool, &logger_pointer, app_memory_size, TX_NO_WAIT);
+  ret = tx_thread_create(&logger_thread, "logger_thread", logger_thread_entry,
+                         0, logger_pointer, app_memory_size, logger_priority,
+                         logger_priority, TX_NO_TIME_SLICE, TX_DONT_START);
   /* USER CODE END App_ThreadX_Init */
 
   return ret;

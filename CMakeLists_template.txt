@@ -51,11 +51,11 @@ else ()
     add_compile_options(-Og -g)
 endif ()
 
-include_directories(${includes} Core/SEGGER_RTT/RTT Core/SEGGER_RTT/Config Drivers/Sensors/LDPS/Inc Drivers/Configs/Inc)
+include_directories(${includes} Core/SEGGER_RTT/RTT Core/SEGGER_RTT/Config Drivers/Sensors/LDPS/Inc Drivers/Configs/Inc Tasks/Inc)
 
 add_definitions(${defines})
 
-file(GLOB_RECURSE SOURCES ${sources})
+file(GLOB_RECURSE SOURCES ${sources} "Tasks/*.*")
 
 set(LINKER_SCRIPT $${CMAKE_SOURCE_DIR}/${linkerScript})
 
