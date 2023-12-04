@@ -51,7 +51,7 @@ else ()
     add_compile_options(-Og -g)
 endif ()
 
-include_directories(${includes} Core/SEGGER_RTT/RTT Core/SEGGER_RTT/Config Drivers/Sensors/LDPS/Inc)
+include_directories(${includes} Core/SEGGER_RTT/RTT Core/SEGGER_RTT/Config Drivers/Sensors/LDPS/Inc Drivers/Configs/Inc)
 
 add_definitions(${defines})
 

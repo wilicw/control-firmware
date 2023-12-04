@@ -24,7 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "SEGGER_RTT.h"
-#include "jsmn.h"
+#include "config.h"
 #include "ldps.h"
 /* USER CODE END Includes */
 
@@ -35,7 +35,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define LDPS_N 4
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -52,9 +52,12 @@ DMA_HandleTypeDef hdma_sdio_rx;
 DMA_HandleTypeDef hdma_sdio_tx;
 
 /* USER CODE BEGIN PV */
-// Linear displacement sensors (LDPS)
+extern config_t config;
+
+// Instance of the linear displacement sensors
+#if LDPS_ENABLE
 ldps_t ldps[LDPS_N];
-ldps_cal_t ldps_cal[LDPS_N];
+#endif
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,13 +67,6 @@ static void MX_DMA_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_SDIO_SD_Init(void);
 /* USER CODE BEGIN PFP */
-
-float static_stof(char *s, size_t n) {
-  static char buf[32];
-  strncpy(buf, s, n);
-  buf[n] = '\0';
-  return atof(buf);
-}
 
 /* USER CODE END PFP */
 
@@ -112,44 +108,12 @@ int main(void) {
   MX_SDIO_SD_Init();
   /* USER CODE BEGIN 2 */
 
-  char s[] = "{\"ldps\": [1.0, 1.0, 1.0, 1.0]}";
+  // TODO: Read json from SD card
+  char s[] = "{\"ldps\": [1.1, 1.2, 1.3, 1.4]}";
 
-  int json_r;
-  jsmn_parser p;
-  jsmntok_t t[16];
-  jsmn_init(&p);
+  config_init(s, sizeof(s) - 1);
 
-  json_r = jsmn_parse(&p, s, strlen(s), t, sizeof(t) / sizeof(t[0]));
-  if (json_r < 0) {
-    SEGGER_RTT_printf(0, "Failed to parse JSON: %d\n", json_r);
-  } else {
-    int i = 1;
-    while (i < json_r) {
-      if (strncmp(s + t[i].start, "ldps", t[i].end - t[i].start) == 0) {
-        if (t[i + 1].type != JSMN_ARRAY) {
-          SEGGER_RTT_printf(0, "Expected array\n");
-          Error_Handler();
-        }
-
-        for (int j = 0; j < t[i + 1].size; j++) {
-          jsmntok_t *g = &t[i + j + 2];
-          float val = static_stof(s + g->start, g->end - g->start);
-        }
-
-        i += t[i + 1].size + 1;
-      } else {
-        i++;
-      }
-    }
-  }
-
-  ldps_init(&ldps[0], &ldps_cal[0], LDPS_N);
-
-  // TODO: Read calibration data from SD card
-  ldps_cal[0].scale = 1.0f;
-  ldps_cal[1].scale = 1.0f;
-  ldps_cal[2].scale = 1.0f;
-  ldps_cal[3].scale = 1.0f;
+  ldps_init(&ldps[0], &config.ldps_cal[0], LDPS_N);
   /* USER CODE END 2 */
 
   MX_ThreadX_Init();
