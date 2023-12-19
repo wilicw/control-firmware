@@ -1,10 +1,11 @@
 BUILD_DIR = build
 TARGET := stm32f407vgtx
-RTT_ADDR := 0x2000097c
+RTT_ADDR := 0x20000000
 BUILD_TYPE := Debug
 
 all:
 	mkdir -p $(BUILD_DIR)
+	./run_clang-format.sh
 	cd $(BUILD_DIR) && cmake .. -GNinja -DCMAKE_BUILD_TYPE=$(BUILD_TYPE)
 	cd $(BUILD_DIR) && ninja
 	@-mv $(BUILD_DIR)/compile_commands.json .
@@ -17,5 +18,8 @@ flash:
 
 monitor:
 	@-pyocd rtt -t $(TARGET) -a $(RTT_ADDR)
+
+debug:
+	@-pyocd gdbserver -t $(TARGET) --persist
 
 .PHONY: all clean flash monitor
