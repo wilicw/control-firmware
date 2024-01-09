@@ -57,6 +57,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc1;
+extern CAN_HandleTypeDef hcan1;
 extern DMA_HandleTypeDef hdma_sdio_rx;
 extern DMA_HandleTypeDef hdma_sdio_tx;
 extern SD_HandleTypeDef hsd;
@@ -154,6 +155,32 @@ void DebugMon_Handler(void) {
 /******************************************************************************/
 
 /**
+ * @brief This function handles CAN1 TX interrupts.
+ */
+void CAN1_TX_IRQHandler(void) {
+  /* USER CODE BEGIN CAN1_TX_IRQn 0 */
+
+  /* USER CODE END CAN1_TX_IRQn 0 */
+  HAL_CAN_IRQHandler(&hcan1);
+  /* USER CODE BEGIN CAN1_TX_IRQn 1 */
+
+  /* USER CODE END CAN1_TX_IRQn 1 */
+}
+
+/**
+ * @brief This function handles CAN1 RX0 interrupts.
+ */
+void CAN1_RX0_IRQHandler(void) {
+  /* USER CODE BEGIN CAN1_RX0_IRQn 0 */
+
+  /* USER CODE END CAN1_RX0_IRQn 0 */
+  HAL_CAN_IRQHandler(&hcan1);
+  /* USER CODE BEGIN CAN1_RX0_IRQn 1 */
+
+  /* USER CODE END CAN1_RX0_IRQn 1 */
+}
+
+/**
  * @brief This function handles TIM1 update interrupt and TIM10 global
  * interrupt.
  */
@@ -220,5 +247,15 @@ void DMA2_Stream6_IRQHandler(void) {
 }
 
 /* USER CODE BEGIN 1 */
+// CAN Bus RX Callback
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
+  CAN_RxHeaderTypeDef rx_header;
+  uint8_t rx_data[128];
 
+  HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data);
+  SEGGER_RTT_printf(0, "CAN: 0x%x\r\n", rx_header.StdId);
+  for (int i = 0; i < rx_header.DLC; i++)
+    SEGGER_RTT_printf(0, "%02x ", rx_data[i]);
+  SEGGER_RTT_printf(0, "\r\n");
+}
 /* USER CODE END 1 */

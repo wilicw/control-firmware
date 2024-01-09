@@ -21,8 +21,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "app_filex.h"
 
-#include "tx_api.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "events.h"
@@ -108,3 +106,4 @@ void fx_app_thread_entry(ULONG thread_input) {
   SEGGER_RTT_printf(0, "FileX thread finished\n");
   tx_thread_terminate(tx_thread_identify());
 }
+/* USER CODE END 1 */
