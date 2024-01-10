@@ -51,6 +51,8 @@ SD_HandleTypeDef hsd;
 DMA_HandleTypeDef hdma_sdio_rx;
 DMA_HandleTypeDef hdma_sdio_tx;
 
+PCD_HandleTypeDef hpcd_USB_OTG_FS;
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -62,6 +64,7 @@ static void MX_DMA_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_SDIO_SD_Init(void);
 static void MX_CAN1_Init(void);
+static void MX_USB_OTG_FS_PCD_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -103,6 +106,7 @@ int main(void) {
   MX_ADC1_Init();
   MX_SDIO_SD_Init();
   MX_CAN1_Init();
+  MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -322,6 +326,37 @@ static void MX_SDIO_SD_Init(void) {
 }
 
 /**
+ * @brief USB_OTG_FS Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_USB_OTG_FS_PCD_Init(void) {
+  /* USER CODE BEGIN USB_OTG_FS_Init 0 */
+
+  /* USER CODE END USB_OTG_FS_Init 0 */
+
+  /* USER CODE BEGIN USB_OTG_FS_Init 1 */
+
+  /* USER CODE END USB_OTG_FS_Init 1 */
+  hpcd_USB_OTG_FS.Instance = USB_OTG_FS;
+  hpcd_USB_OTG_FS.Init.dev_endpoints = 4;
+  hpcd_USB_OTG_FS.Init.speed = PCD_SPEED_FULL;
+  hpcd_USB_OTG_FS.Init.dma_enable = DISABLE;
+  hpcd_USB_OTG_FS.Init.phy_itface = PCD_PHY_EMBEDDED;
+  hpcd_USB_OTG_FS.Init.Sof_enable = DISABLE;
+  hpcd_USB_OTG_FS.Init.low_power_enable = DISABLE;
+  hpcd_USB_OTG_FS.Init.lpm_enable = DISABLE;
+  hpcd_USB_OTG_FS.Init.vbus_sensing_enable = DISABLE;
+  hpcd_USB_OTG_FS.Init.use_dedicated_ep1 = DISABLE;
+  if (HAL_PCD_Init(&hpcd_USB_OTG_FS) != HAL_OK) {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USB_OTG_FS_Init 2 */
+
+  /* USER CODE END USB_OTG_FS_Init 2 */
+}
+
+/**
  * Enable DMA controller clock
  */
 static void MX_DMA_Init(void) {
@@ -412,12 +447,12 @@ static void MX_GPIO_Init(void) {
 
   /*Configure GPIO pins : PD8 PD9 PD10 PD11
                            PD12 PD13 PD14 PD15
-                           PD0 PD1 PD3 PD4
-                           PD5 PD6 PD7 */
+                           PD3 PD4 PD5 PD6
+                           PD7 */
   GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 |
                         GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15 |
-                        GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_3 | GPIO_PIN_4 |
-                        GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7;
+                        GPIO_PIN_3 | GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 |
+                        GPIO_PIN_7;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
