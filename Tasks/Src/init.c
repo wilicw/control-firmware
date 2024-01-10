@@ -30,13 +30,12 @@ extern FX_MEDIA sdio_disk;
 FX_FILE config_file;
 
 void init_thread_entry(ULONG thread_input) {
-
   UINT status = FX_SUCCESS;
 
   // Wait for the filesystem to be loaded
   ULONG recv_events_flags = 0;
-  status = tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_FS_INIT), TX_AND, &recv_events_flags,
-                     TX_WAIT_FOREVER);
+  status = tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_FS_INIT), TX_AND,
+                              &recv_events_flags, TX_WAIT_FOREVER);
 
   INIT_DEBUG("Init started\n");
 
@@ -44,7 +43,7 @@ void init_thread_entry(ULONG thread_input) {
   ULONG len;
 
   status =
-      fx_file_open(&sdio_disk, &config_file, "config.json", FX_OPEN_FOR_READ);
+      fx_file_open(&sdio_disk, &config_file, CONFIG_FILENAME, FX_OPEN_FOR_READ);
   if (status != FX_SUCCESS) {
     INIT_DEBUG("Failed to open config file\n");
     tx_thread_terminate(tx_thread_identify());

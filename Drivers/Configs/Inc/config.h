@@ -19,6 +19,8 @@ Revision: $Rev: 2023.48$
 #define CONFIG_DEBUG(...)
 #endif
 
+#define CONFIG_FILENAME "config.json"
+
 // Config for ALL peripherals
 
 /* Linear Displacement Sensor configs */
