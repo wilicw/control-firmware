@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "SEGGER_RTT.h"
+#include "usb_device.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -108,6 +109,8 @@ int main(void) {
   MX_CAN1_Init();
   MX_USB_OTG_FS_PCD_Init();
   /* USER CODE BEGIN 2 */
+  MX_USB_DEVICE_Init();
+  CDC_Transmit_FS((uint8_t *)"Hello World!\r\n", 14);
 
   /* USER CODE END 2 */
 
@@ -292,7 +295,7 @@ static void MX_CAN1_Init(void) {
   if (HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) !=
       HAL_OK) {
     SEGGER_RTT_printf(0, "CAN notification failed\r\n");
-    Error_Handler();
+    // Error_Handler();
   }
   /* USER CODE END CAN1_Init 2 */
 }
