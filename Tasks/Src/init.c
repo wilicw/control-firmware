@@ -12,6 +12,7 @@ Revision: $Rev: 2023.49$
 #include "events.h"
 #include "fx_api.h"
 #include "ldps.h"
+#include "imu.h"
 
 TX_THREAD init_thread;
 
@@ -23,6 +24,11 @@ extern config_t config;
 // Instance of the linear displacement sensors
 #if LDPS_ENABLE
 ldps_t ldps[LDPS_N];
+#endif
+
+#if IMU_ENABLE
+// Instance of the IMU
+imu_t imu;
 #endif
 
 // Config json file objects

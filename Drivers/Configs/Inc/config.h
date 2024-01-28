@@ -32,6 +32,19 @@ Revision: $Rev: 2023.48$
 #define LDPS_N 4
 #endif
 
+/* IMU configs */
+#define IMU_ENABLE 1
+
+#if IMU_ENABLE
+// Define IMU interface type
+#define IMU_CAN
+// #define IMU_SPI
+
+// Define IMU type
+#define IMU_MTI630
+// #define IMU_ADIS16467
+#endif
+
 typedef struct {
 #if LDPS_ENABLE
   // Linear displacement sensors (LDPS)

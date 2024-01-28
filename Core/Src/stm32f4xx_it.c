@@ -23,6 +23,8 @@
 #include "main.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "config.h"
+#include "imu.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -263,13 +265,8 @@ void DMA2_Stream6_IRQHandler(void) {
 /* USER CODE BEGIN 1 */
 // CAN Bus RX Callback
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
-  CAN_RxHeaderTypeDef rx_header;
-  uint8_t rx_data[128];
-
-  HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data);
-  SEGGER_RTT_printf(0, "CAN: 0x%x\r\n", rx_header.StdId);
-  for (int i = 0; i < rx_header.DLC; i++)
-    SEGGER_RTT_printf(0, "%02x ", rx_data[i]);
-  SEGGER_RTT_printf(0, "\r\n");
+#if defined(IMU_ENABLE) && defined(IMU_CAN)
+  imu_bsp_interrupt((void *)hcan);
+#endif
 }
 /* USER CODE END 1 */

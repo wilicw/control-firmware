@@ -28,6 +28,12 @@ FX_FILE logger_file;
 extern ldps_t ldps[LDPS_N];
 #endif
 
+#if IMU_ENABLE
+// IMU instance objects
+#include "imu.h"
+extern imu_t imu;
+#endif
+
 // Configuration instance objects
 extern config_t config;
 
@@ -62,6 +68,18 @@ void logger_thread_entry(ULONG thread_input) {
     }
     strcat(buf, "\n");
     fx_file_write(&logger_file, buf, strlen(buf));
+#endif
+
+#if IMU_ENABLE
+    static uint32_t last_imu_timestamp = 0;
+    if (imu.timestamp != last_imu_timestamp) {
+      sprintf(buf, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n", imu.timestamp,
+              imu.acc_raw.x, imu.acc_raw.y, imu.acc_raw.z, imu.gyro_raw.x,
+              imu.gyro_raw.y, imu.gyro_raw.z, imu.mag_raw.x, imu.mag_raw.y,
+              imu.mag_raw.z);
+      fx_file_write(&logger_file, buf, strlen(buf));
+      last_imu_timestamp = imu.timestamp;
+    }
 #endif
 
     fx_media_flush(&sdio_disk);
