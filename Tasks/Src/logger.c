@@ -61,7 +61,7 @@ void logger_thread_entry(ULONG thread_input) {
     char buf[128];
 
 #if LDPS_ENABLE
-    sprintf(buf, "%d", tx_time_get());
+    sprintf(buf, "%d,ldps,", tx_time_get());
     for (size_t i = 0; i < LDPS_N; i++) {
       int16_t v = ldps_read(&ldps[i], &config.ldps_cal[i]);
       sprintf(buf + strlen(buf), ",%d", v);
@@ -71,14 +71,19 @@ void logger_thread_entry(ULONG thread_input) {
 #endif
 
 #if IMU_ENABLE
-    static uint32_t last_imu_timestamp = 0;
-    if (imu.timestamp != last_imu_timestamp) {
-      sprintf(buf, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r\n", imu.timestamp,
-              imu.acc_raw.x, imu.acc_raw.y, imu.acc_raw.z, imu.gyro_raw.x,
-              imu.gyro_raw.y, imu.gyro_raw.z, imu.mag_raw.x, imu.mag_raw.y,
-              imu.mag_raw.z);
+    static uint32_t last_acc_timestamp = 0;
+    static uint32_t last_gyro_timestamp = 0;
+    if (imu.acc.timestamp != last_acc_timestamp) {
+      sprintf(buf, "%d,acc,%lf,%lf,%lf\n", imu.acc.timestamp, imu.acc.x,
+              imu.acc.y, imu.acc.z);
       fx_file_write(&logger_file, buf, strlen(buf));
-      last_imu_timestamp = imu.timestamp;
+      last_acc_timestamp = imu.acc.timestamp;
+    }
+    if (imu.gyro.timestamp != last_gyro_timestamp) {
+      sprintf(buf, "%d,gyro,%lf,%lf,%lf\n", imu.gyro.timestamp, imu.gyro.x,
+              imu.gyro.y, imu.gyro.z);
+      fx_file_write(&logger_file, buf, strlen(buf));
+      last_gyro_timestamp = imu.gyro.timestamp;
     }
 #endif
 

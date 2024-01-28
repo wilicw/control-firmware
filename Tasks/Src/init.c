@@ -71,6 +71,8 @@ void init_thread_entry(ULONG thread_input) {
 
   ldps_init(&ldps[0], &config.ldps_cal[0], LDPS_N);
 
+  imu_init(&imu);
+
   tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_CONFIG_LOADED), TX_OR);
 
   INIT_DEBUG("Init finished\n");
