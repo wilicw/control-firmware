@@ -11,8 +11,8 @@ Revision: $Rev: 2023.49$
 #include "config.h"
 #include "events.h"
 #include "fx_api.h"
-#include "ldps.h"
 #include "imu.h"
+#include "ldps.h"
 
 TX_THREAD init_thread;
 
@@ -69,9 +69,13 @@ void init_thread_entry(ULONG thread_input) {
 
   config_init(buf, len);
 
+#if LDPS_ENABLE
   ldps_init(&ldps[0], &config.ldps_cal[0], LDPS_N);
+#endif
 
+#if IMU_ENABLE
   imu_init(&imu);
+#endif
 
   tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_CONFIG_LOADED), TX_OR);
 
