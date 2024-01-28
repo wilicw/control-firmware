@@ -55,7 +55,7 @@ include_directories(${includes} Core/SEGGER_RTT/RTT Core/SEGGER_RTT/Config Drive
 
 add_definitions(${defines})
 
-file(GLOB_RECURSE SOURCES ${sources} "Tasks/*.*" "USB_DEVICE/*.*")
+file(GLOB_RECURSE SOURCES ${sources} "Tasks/*.*" "USB_DEVICE/*.*" "STM32_USB_Device_Library/*.*")
 
 set(LINKER_SCRIPT $${CMAKE_SOURCE_DIR}/${linkerScript})
 

@@ -56,7 +56,7 @@ include_directories(Core/Inc Drivers/STM32F4xx_HAL_Driver/Inc Drivers/STM32F4xx_
 
 add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -DSTM32_THREAD_SAFE_STRATEGY=2 -DTX_INCLUDE_USER_DEFINE_FILE -DFX_INCLUDE_USER_DEFINE_FILE)
 
-file(GLOB_RECURSE SOURCES "AZURE_RTOS/*.*" "FileX/*.*" "ThreadX/*.*" "Core/*.*" "Middlewares/*.*" "Drivers/*.*" "Tasks/*.*" "USB_DEVICE/*.*")
+file(GLOB_RECURSE SOURCES "AZURE_RTOS/*.*" "FileX/*.*" "ThreadX/*.*" "Core/*.*" "Middlewares/*.*" "Drivers/*.*" "Tasks/*.*" "USB_DEVICE/*.*" "STM32_USB_Device_Library/*.*")
 
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F407VGTX_FLASH.ld)
 
