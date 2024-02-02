@@ -23,6 +23,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "config.h"
 #include "init.h"
 #include "logger.h"
 #include "tx_api.h"
@@ -115,14 +116,17 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
    *   Dependencies: FileX
    * - Description: This thread defined in logger.h and implement its
    *   functionality at logger.c. It can only be started after FileX
-   *   initialization.
+   *   initialization. Only enabled if LOGGER_ENABLE is defined.
    */
+
+#ifdef LOGGER_ENABLE
   VOID *logger_pointer;
   int logger_priority = 5;
   tx_byte_allocate(byte_pool, &logger_pointer, app_memory_size, TX_NO_WAIT);
   ret = tx_thread_create(&logger_thread, "logger_thread", logger_thread_entry,
                          0, logger_pointer, app_memory_size, logger_priority,
                          logger_priority, TX_NO_TIME_SLICE, TX_AUTO_START);
+#endif
 
   /* USER CODE END App_ThreadX_Init */
 

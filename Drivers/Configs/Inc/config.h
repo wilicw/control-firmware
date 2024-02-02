@@ -45,6 +45,15 @@ Revision: $Rev: 2023.48$
 // #define IMU_ADIS16467
 #endif
 
+/* Logger configs */
+#define LOGGER_ENABLE 1
+
+#if LOGGER_ENABLE
+// Logger interface type (multiple can be defined)
+#define LOGGER_USB_SERIAL
+#define LOGGER_SD
+#endif
+
 typedef struct {
 #if LDPS_ENABLE
   // Linear displacement sensors (LDPS)

@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "config.h"
 #include "imu.h"
+#include "ldps.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -265,7 +266,7 @@ void DMA2_Stream6_IRQHandler(void) {
 /* USER CODE BEGIN 1 */
 // CAN Bus RX Callback
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
-#if defined(IMU_ENABLE) && defined(IMU_CAN)
+#if IMU_ENABLE && defined(IMU_CAN)
   imu_bsp_interrupt((void *)hcan);
 #endif
 }

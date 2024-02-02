@@ -1,5 +1,6 @@
 #include "config.h"
 #include "imu.h"
+#include "tx_api.h"
 
 #ifdef USE_HAL_DRIVER
 
@@ -10,17 +11,15 @@
 extern imu_t imu;
 
 void imu_bsp_interrupt(void *arg) {
+  static uint8_t rx_data[128];
+
 #ifdef IMU_CAN
-  CAN_HandleTypeDef *hcan = (CAN_HandleTypeDef *)arg;
-  CAN_RxHeaderTypeDef rx_header;
-  uint8_t rx_data[128];
+  static CAN_RxHeaderTypeDef rx_header;
 
-  int16_t gx, gy, gz;
-  int16_t ax, ay, az;
+  HAL_CAN_GetRxMessage((CAN_HandleTypeDef *)arg, CAN_RX_FIFO0, &rx_header,
+                       rx_data);
 
-  HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data);
-
-  imu_update(&imu, rx_header.StdId, rx_data, rx_header.DLC, HAL_GetTick());
+  imu_update(&imu, rx_header.StdId, rx_data, rx_header.DLC, tx_time_get());
 #endif
 #ifdef IMU_SPI
   /* TODO: Implement SPI interrupt */
