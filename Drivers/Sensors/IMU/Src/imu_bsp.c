@@ -10,6 +10,11 @@
 
 extern imu_t imu;
 
+/*
+ * IMU BSP interrupt handler
+ * Only works for STM32 HAL drivers
+ * @param CAN_HandleTypeDef* arg or SPI_HandleTypeDef* arg
+ */
 void imu_bsp_interrupt(void *arg) {
   static uint8_t rx_data[128];
 
