@@ -13,6 +13,7 @@ Revision: $Rev: 2023.49$
 #include "fx_api.h"
 #include "imu.h"
 #include "ldps.h"
+#include "wheel.h"
 
 TX_THREAD init_thread;
 
@@ -29,6 +30,11 @@ ldps_t ldps[LDPS_N];
 #if IMU_ENABLE
 // Instance of the IMU
 imu_t imu;
+#endif
+
+// Instance of the wheel sensors
+#if WHEEL_ENABLE
+wheel_t wheel[WHEEL_N];
 #endif
 
 // Config json file objects
@@ -75,6 +81,10 @@ void init_thread_entry(ULONG thread_input) {
 
 #if IMU_ENABLE
   imu_init(&imu);
+#endif
+
+#if WHEEL_ENABLE
+  wheel_init(wheel, WHEEL_N);
 #endif
 
   tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_CONFIG_LOADED), TX_OR);
