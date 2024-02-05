@@ -24,7 +24,7 @@ Revision: $Rev: 2023.48$
 // Config for ALL peripherals
 
 /* Linear Displacement Sensor configs */
-#define LDPS_ENABLE 0
+#define LDPS_ENABLE 1
 
 #if LDPS_ENABLE
 #include "ldps.h"
@@ -33,7 +33,7 @@ Revision: $Rev: 2023.48$
 #endif
 
 /* IMU configs */
-#define IMU_ENABLE 0
+#define IMU_ENABLE 1
 
 #if IMU_ENABLE
 // Define IMU interface type

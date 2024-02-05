@@ -13,19 +13,17 @@ extern imu_t imu;
 /*
  * IMU BSP interrupt handler
  * Only works for STM32 HAL drivers
- * @param CAN_HandleTypeDef* arg or SPI_HandleTypeDef* arg
+ * @param CAN_RxHeaderTypeDef* arg1 or SPI_HandleTypeDef* arg1
+ * @param void* arg2 any arbitrary arguments
  */
-void imu_bsp_interrupt(void *arg) {
-  static uint8_t rx_data[128];
-
+void imu_bsp_interrupt(void *arg1, void *arg2) {
 #ifdef IMU_CAN
-  static CAN_RxHeaderTypeDef rx_header;
+  CAN_RxHeaderTypeDef *rx_header = (CAN_RxHeaderTypeDef *)arg1;
+  uint8_t *rx_data = (uint8_t *)arg2;
 
-  HAL_CAN_GetRxMessage((CAN_HandleTypeDef *)arg, CAN_RX_FIFO0, &rx_header,
-                       rx_data);
-
-  imu_update(&imu, rx_header.StdId, rx_data, rx_header.DLC, tx_time_get());
+  imu_update(&imu, rx_header->StdId, rx_data, rx_header->DLC);
 #endif
+
 #ifdef IMU_SPI
   /* TODO: Implement SPI interrupt */
 #endif

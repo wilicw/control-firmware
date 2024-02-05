@@ -295,8 +295,12 @@ void DMA2_Stream6_IRQHandler(void) {
 /* USER CODE BEGIN 1 */
 // CAN Bus RX Callback
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
+  static CAN_RxHeaderTypeDef rx_header;
+  static uint8_t rx_data[128];
+  HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data);
+
 #if IMU_ENABLE && defined(IMU_CAN)
-  imu_bsp_interrupt((void *)hcan);
+  imu_bsp_interrupt((void *)&rx_header, (void *)rx_data);
 #endif
 }
 

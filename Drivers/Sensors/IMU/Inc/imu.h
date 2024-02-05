@@ -70,9 +70,8 @@ typedef struct {
 } imu_t;
 
 void imu_init(imu_t *imu);
-void imu_update(imu_t *imu, uint32_t id, uint8_t *data, size_t len,
-                uint32_t timestamp);
+void imu_update(imu_t *imu, uint32_t id, uint8_t *data, size_t len);
 
-void imu_bsp_interrupt(void *arg);
+void imu_bsp_interrupt(void *arg1, void *arg2);
 
 #endif

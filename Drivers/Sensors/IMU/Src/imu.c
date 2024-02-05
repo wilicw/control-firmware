@@ -19,15 +19,13 @@ void imu_init(imu_t* imu) {
   imu->mag_raw.timestamp = 0;
 }
 
-void imu_update(imu_t* imu, uint32_t id, uint8_t* data, size_t len,
-                uint32_t timestamp) {
+void imu_update(imu_t* imu, uint32_t id, uint8_t* data, size_t len) {
 #ifdef IMU_MTI630
   static int16_t gx, gy, gz;
   static int16_t ax, ay, az;
 
   switch (id) {
     case XCDI_AccelerationHR:
-      SEGGER_RTT_printf(0, "AccelerationHR\n");
       ax = (data[0] << 8) | data[1];
       ay = (data[2] << 8) | data[3];
       az = (data[4] << 8) | data[5];
@@ -41,7 +39,6 @@ void imu_update(imu_t* imu, uint32_t id, uint8_t* data, size_t len,
       imu->acc_raw.timestamp++;
       break;
     case XCDI_RateOfTurnHR:
-      SEGGER_RTT_printf(0, "RateOfTurnHR\n");
       gx = (data[0] << 8) | data[1];
       gy = (data[2] << 8) | data[3];
       gz = (data[4] << 8) | data[5];
