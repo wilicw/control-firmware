@@ -159,8 +159,8 @@ void logger_thread_entry(ULONG thread_input) {
       buf[4] = 0x04;
       for (size_t i = 0; i < WHEEL_N; i++)
         memcpy(buf + 5 + i * 4, &wheel[i].rpm, 4);
-      buf[WHEEL_N * 4 + 5] = 0x0A;
-      buf[WHEEL_N * 4 + 6] = 0x0D;
+      buf[WHEEL_N * 4 + 5] = 0x0D;
+      buf[WHEEL_N * 4 + 6] = 0x0A;
       logger_output(buf, WHEEL_N * 4 + 7);
       last_wheel_timestamp = timestamp;
     }
