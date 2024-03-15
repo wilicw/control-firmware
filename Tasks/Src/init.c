@@ -12,6 +12,7 @@ Revision: $Rev: 2023.49$
 #include "events.h"
 #include "fx_api.h"
 #include "imu.h"
+#include "inverter.h"
 #include "ldps.h"
 #include "wheel.h"
 
@@ -35,6 +36,10 @@ imu_t imu;
 // Instance of the wheel sensors
 #if WHEEL_ENABLE
 wheel_t wheel[WHEEL_N];
+#endif
+
+#if INVERTER_ENABLE
+inverter_t inverter;
 #endif
 
 // Config json file objects
@@ -85,6 +90,10 @@ void init_thread_entry(ULONG thread_input) {
 
 #if WHEEL_ENABLE
   wheel_init(wheel, WHEEL_N);
+#endif
+
+#if INVERTER_ENABLE
+  inverter_init(&inverter);
 #endif
 
   tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_CONFIG_LOADED), TX_OR);

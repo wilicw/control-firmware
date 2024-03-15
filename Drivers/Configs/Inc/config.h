@@ -60,6 +60,16 @@ Revision: $Rev: 2023.48$
 #define LOGGER_SD
 #endif
 
+/* Inverter configs */
+#define INVERTER_ENABLE 1
+
+#if INVERTER_ENABLE
+// Drive wheel number
+#define INVERTER_DRIVE_WHEEL 2
+// Inverter type
+#define INVERTER_PM100DZ
+#endif
+
 typedef struct {
 #if LDPS_ENABLE
   // Linear displacement sensors (LDPS)
