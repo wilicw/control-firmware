@@ -33,6 +33,7 @@ Revision: $Rev: 2023.49$
 #include "config.h"
 #include "events.h"
 #include "fx_api.h"
+#include "imu.h"
 #include "stddef.h"
 #include "usbd_cdc_if.h"
 
@@ -48,12 +49,6 @@ FX_FILE logger_file;
 // LDPS instance objects
 #include "ldps.h"
 extern ldps_t ldps[LDPS_N];
-#endif
-
-#if IMU_ENABLE
-// IMU instance objects
-#include "imu.h"
-extern imu_t imu;
 #endif
 
 #if WHEEL_ENABLE
@@ -125,30 +120,33 @@ void logger_thread_entry(ULONG thread_input) {
 #endif
 
 #if IMU_ENABLE
+    static imu_t *imu = NULL;
+    if (!imu) imu = open_imu_instance(0);
+
     static uint32_t last_acc_timestamp = 0;
     static uint32_t last_gyro_timestamp = 0;
-    if (imu.acc.timestamp != last_acc_timestamp) {
+    if (imu->acc.timestamp != last_acc_timestamp) {
       buf[4] = 0x02;
       buf[5] = 0x06;
-      memcpy(buf + 6, &imu.acc_raw.x, 2);
-      memcpy(buf + 8, &imu.acc_raw.y, 2);
-      memcpy(buf + 10, &imu.acc_raw.z, 2);
+      memcpy(buf + 6, &imu->acc_raw.x, 2);
+      memcpy(buf + 8, &imu->acc_raw.y, 2);
+      memcpy(buf + 10, &imu->acc_raw.z, 2);
       buf[12] = 0x0D;
       buf[13] = 0x0A;
       logger_output(buf, 14);
-      last_acc_timestamp = imu.acc.timestamp;
+      last_acc_timestamp = imu->acc.timestamp;
     }
 
-    if (imu.gyro.timestamp != last_gyro_timestamp) {
+    if (imu->gyro.timestamp != last_gyro_timestamp) {
       buf[4] = 0x03;
       buf[5] = 0x06;
-      memcpy(buf + 6, &imu.gyro_raw.x, 2);
-      memcpy(buf + 8, &imu.gyro_raw.y, 2);
-      memcpy(buf + 10, &imu.gyro_raw.z, 2);
+      memcpy(buf + 6, &imu->gyro_raw.x, 2);
+      memcpy(buf + 8, &imu->gyro_raw.y, 2);
+      memcpy(buf + 10, &imu->gyro_raw.z, 2);
       buf[12] = 0x0D;
       buf[13] = 0x0A;
       logger_output(buf, 14);
-      last_gyro_timestamp = imu.gyro.timestamp;
+      last_gyro_timestamp = imu->gyro.timestamp;
     }
 #endif
 

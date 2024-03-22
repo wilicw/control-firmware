@@ -26,11 +26,6 @@ extern TX_EVENT_FLAGS_GROUP event_flags;
 ldps_t ldps[LDPS_N];
 #endif
 
-#if IMU_ENABLE
-// Instance of the IMU
-imu_t imu;
-#endif
-
 // Instance of the wheel sensors
 #if WHEEL_ENABLE
 wheel_t wheel[WHEEL_N];
@@ -84,7 +79,8 @@ void init_thread_entry(ULONG thread_input) {
 #endif
 
 #if IMU_ENABLE
-  imu_init(&imu);
+  imu_t *imu = open_imu_instance(0);
+  imu_set_type(imu, IMU_MTI600);
 #endif
 
 #if WHEEL_ENABLE

@@ -1,5 +1,4 @@
-#ifndef IMU_H
-#define IMU_H
+#pragma once
 
 #include <stddef.h>
 #include <stdint.h>
@@ -55,6 +54,11 @@ typedef struct {
   uint32_t timestamp;
 } imu_mag_t;
 
+typedef enum {
+  IMU_MTI600,
+  IMU_ADIS16,
+} imu_type_t;
+
 typedef struct {
   /* physical values in SI units */
   imu_acc_t acc;
@@ -67,11 +71,10 @@ typedef struct {
   imu_mag_raw_t mag_raw;
 
   imu_config_t config;
+  imu_type_t type;
 } imu_t;
 
-void imu_init(imu_t *imu);
-void imu_update(imu_t *imu, uint32_t id, uint8_t *data, size_t len);
+imu_t *open_imu_instance(uint32_t id);
+void imu_set_type(imu_t *imu, imu_type_t type);
 
-void imu_bsp_interrupt(void *arg1, void *arg2);
-
-#endif
+void imu_bsp_interrupt(imu_t *imu, void *arg1, void *arg2);

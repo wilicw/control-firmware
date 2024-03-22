@@ -37,17 +37,6 @@ Revision: $Rev: 2024.12$
 #define LDPS_N 4
 #endif
 
-/* IMU configs */
-#if IMU_ENABLE
-// Define IMU interface type
-#define IMU_CAN
-// #define IMU_SPI
-
-// Define IMU type
-#define IMU_MTI630
-// #define IMU_ADIS16467
-#endif
-
 #if WHEEL_ENABLE
 #define WHEEL_N 4
 #endif

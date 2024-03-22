@@ -300,8 +300,10 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
   static uint8_t rx_data[128];
   HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data);
 
-#if IMU_ENABLE && defined(IMU_CAN)
-  imu_bsp_interrupt((void *)&rx_header, (void *)rx_data);
+#if IMU_ENABLE
+  static imu_t *imu = NULL;
+  if (!imu) imu = open_imu_instance(0);
+  imu_bsp_interrupt(imu, &rx_header, rx_data);
 #endif
 
 #if INVERTER_ENABLE
