@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "config.h"
+#include "control.h"
 #include "init.h"
 #include "logger.h"
 #include "tx_api.h"
@@ -52,6 +53,7 @@ extern void Error_Handler(void);
 
 extern TX_THREAD logger_thread;
 extern TX_THREAD init_thread;
+extern TX_THREAD control_thread;
 
 /* Default ThreadX application
  * It will suspend forever after ThreadX initialization
@@ -119,7 +121,7 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
    *   initialization. Only enabled if LOGGER_ENABLE is defined.
    */
 
-#ifdef LOGGER_ENABLE
+#if LOGGER_ENABLE
   VOID *logger_pointer;
   int logger_priority = 5;
   tx_byte_allocate(byte_pool, &logger_pointer, app_memory_size, TX_NO_WAIT);
@@ -127,6 +129,23 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
                          0, logger_pointer, app_memory_size, logger_priority,
                          logger_priority, TX_NO_TIME_SLICE, TX_AUTO_START);
 #endif
+
+  /* Control Thread
+   * - Priority: 4
+   * - Stack size: 256 bytes
+   * - Auto start: NO
+   *   Dependencies: FileX
+   * - Description: This thread defined in control.h and implement its
+   *   functionality at control.c. It can only be started after FileX
+   *   initialization. Only enabled if CONTROL_ENABLE is defined.
+   */
+  VOID *control_pointer;
+  int control_priority = 4;
+  tx_byte_allocate(byte_pool, &control_pointer, 2048, TX_NO_WAIT);
+  ret =
+      tx_thread_create(&control_thread, "control_thread", control_thread_entry,
+                       0, control_pointer, app_memory_size, control_priority,
+                       control_priority, TX_NO_TIME_SLICE, TX_AUTO_START);
 
   /* USER CODE END App_ThreadX_Init */
 

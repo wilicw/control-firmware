@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "config.h"
 #include "imu.h"
+#include "inverter.h"
 #include "ldps.h"
 #include "wheel.h"
 /* USER CODE END Includes */
@@ -301,6 +302,10 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
 
 #if IMU_ENABLE && defined(IMU_CAN)
   imu_bsp_interrupt((void *)&rx_header, (void *)rx_data);
+#endif
+
+#if INVERTER_ENABLE
+  inverter_bsp_interrupt((void *)&rx_header, (void *)rx_data);
 #endif
 }
 
