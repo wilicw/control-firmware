@@ -3,38 +3,41 @@
 File    : config.h
 Purpose : Implementation and functionilay definitation for ALL driver-
           -s and peripherals.
-Revision: $Rev: 2023.48$
+Revision: $Rev: 2024.12$
 ----------------------------------------------------------------------
 */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#pragma once
 
 #include <stddef.h>
 
 #ifdef DEBUG
 #include "SEGGER_RTT.h"
-#define CONFIG_DEBUG(...) SEGGER_RTT_printf(0, __VA_ARGS__)
+#define CONFIG_DEBUG(...)                                           \
+  {                                                                 \
+    SEGGER_RTT_printf("%s:%s <%s>:", __FILE__, __LINE__, __func__); \
+    SEGGER_RTT_printf(0, __VA_ARGS__);                              \
+  }
 #else
 #define CONFIG_DEBUG(...)
 #endif
 
 #define CONFIG_FILENAME "config.json"
+#define LDPS_ENABLE 1
+#define IMU_ENABLE 1
+#define WHEEL_ENABLE 1
+#define LOGGER_ENABLE 1
+#define INVERTER_ENABLE 1
 
 // Config for ALL peripherals
 
 /* Linear Displacement Sensor configs */
-#define LDPS_ENABLE 1
-
 #if LDPS_ENABLE
 #include "ldps.h"
-
 #define LDPS_N 4
 #endif
 
 /* IMU configs */
-#define IMU_ENABLE 1
-
 #if IMU_ENABLE
 // Define IMU interface type
 #define IMU_CAN
@@ -45,15 +48,11 @@ Revision: $Rev: 2023.48$
 // #define IMU_ADIS16467
 #endif
 
-#define WHEEL_ENABLE 1
 #if WHEEL_ENABLE
-#include "wheel.h"
 #define WHEEL_N 4
 #endif
 
 /* Logger configs */
-#define LOGGER_ENABLE 1
-
 #if LOGGER_ENABLE
 // Logger interface type (multiple can be defined)
 #define LOGGER_USB_SERIAL
@@ -61,8 +60,6 @@ Revision: $Rev: 2023.48$
 #endif
 
 /* Inverter configs */
-#define INVERTER_ENABLE 1
-
 #if INVERTER_ENABLE
 // Drive wheel number
 #define INVERTER_DRIVE_WHEEL 2
@@ -77,8 +74,11 @@ typedef struct {
 #endif
 } config_t;
 
-extern config_t config;
+enum {
+  CONFIG_SUCCESS,
+  CONFIG_ERR_PARSE,
+  CONFIG_ERR_LEN,
+};
 
-int config_init(const char *config_json, size_t len);
-
-#endif
+config_t* open_config_instance(uint32_t id);
+int config_load(config_t* instance, const char* json, size_t len);

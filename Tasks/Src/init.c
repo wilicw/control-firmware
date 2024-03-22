@@ -20,8 +20,6 @@ TX_THREAD init_thread;
 
 extern TX_EVENT_FLAGS_GROUP event_flags;
 
-extern config_t config;
-
 /* System Peripherals and Drivers Instances */
 // Instance of the linear displacement sensors
 #if LDPS_ENABLE
@@ -78,10 +76,11 @@ void init_thread_entry(ULONG thread_input) {
     tx_thread_terminate(tx_thread_identify());
   }
 
-  config_init(buf, len);
+  config_t *config = open_config_instance(0);
+  config_load(config, buf, len);
 
 #if LDPS_ENABLE
-  ldps_init(&ldps[0], &config.ldps_cal[0], LDPS_N);
+  ldps_init(&ldps[0], &config->ldps_cal[0], LDPS_N);
 #endif
 
 #if IMU_ENABLE

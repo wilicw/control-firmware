@@ -62,9 +62,6 @@ extern imu_t imu;
 extern wheel_t wheel[WHEEL_N];
 #endif
 
-// Configuration instance objects
-extern config_t config;
-
 static inline void logger_output(char *buf, size_t len) {
 #ifdef LOGGER_SD
   fx_file_write(&logger_file, buf, len);
@@ -101,6 +98,8 @@ void logger_thread_entry(ULONG thread_input) {
     fid++;
   }
 
+  config_t *config = open_config_instance(0);
+
   // Start the logger
   while (1) {
     static char buf[128];
@@ -114,7 +113,7 @@ void logger_thread_entry(ULONG thread_input) {
       buf[5] = LDPS_N * 2;
 
       for (size_t i = 0; i < LDPS_N; i++) {
-        int16_t v = ldps_read(&ldps[i], &config.ldps_cal[i]);
+        int16_t v = ldps_read(&ldps[i], &config->ldps_cal[i]);
         memcpy(buf + 6 + i * 2, &v, 2);
       }
 
