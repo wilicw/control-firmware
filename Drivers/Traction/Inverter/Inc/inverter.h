@@ -13,8 +13,8 @@ typedef struct {
 void inverter_init(inverter_t *instance);
 void inverter_set(inverter_t *instance);
 
-void inverter_init_bsp();
-void inverter_set_bsp(inverter_t *instance);
-void inverter_bsp_interrupt(void *arg);
+void inverter_bsp_init();
+void inverter_bsp_set(inverter_t *instance);
+void inverter_bsp_interrupt(void *arg1, void *arg2);
 
 #endif
