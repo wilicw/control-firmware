@@ -29,6 +29,7 @@ Revision: $Rev: 2023.49$
 
 #include "SEGGER_RTT.h"
 #include "adc.h"
+#include "config.h"
 #include "events.h"
 #include "fx_api.h"
 #include "imu.h"
@@ -50,7 +51,6 @@ static inline void logger_output(char *buf, size_t len) {
 #ifdef LOGGER_USB_SERIAL
   CDC_Transmit_FS((uint8_t *)buf, len);
 #endif
-  SEGGER_RTT_printf(0, "[LOGGER] 0x%02x\r\n", buf[4]);
 }
 
 void logger_thread_entry(ULONG thread_input) {
@@ -74,6 +74,7 @@ void logger_thread_entry(ULONG thread_input) {
       fx_file_create(&sdio_disk, fn);
       fx_file_open(&sdio_disk, &logger_file, fn, FX_OPEN_FOR_WRITE);
       fx_file_seek(&logger_file, 0);
+      SEGGER_RTT_printf(0, "Logger file %s opened\n", fn);
       break;
     }
     fid++;
@@ -81,7 +82,7 @@ void logger_thread_entry(ULONG thread_input) {
 
   // Start the logger
   while (1) {
-    static char buf[128];
+    static char buf[1024];
     uint32_t timestamp = tx_time_get();
     memcpy(buf, &timestamp, sizeof(timestamp));
 
