@@ -26,7 +26,6 @@
 #include "config.h"
 #include "imu.h"
 #include "inverter.h"
-#include "ldps.h"
 #include "wheel.h"
 /* USER CODE END Includes */
 

@@ -8,12 +8,12 @@ Revision: $Rev: 2023.49$
 
 #include "init.h"
 
+#include "adc.h"
 #include "config.h"
 #include "events.h"
 #include "fx_api.h"
 #include "imu.h"
 #include "inverter.h"
-#include "ldps.h"
 #include "wheel.h"
 
 TX_THREAD init_thread;
@@ -21,10 +21,6 @@ TX_THREAD init_thread;
 extern TX_EVENT_FLAGS_GROUP event_flags;
 
 /* System Peripherals and Drivers Instances */
-// Instance of the linear displacement sensors
-#if LDPS_ENABLE
-ldps_t ldps[LDPS_N];
-#endif
 
 // Instance of the wheel sensors
 #if WHEEL_ENABLE
@@ -71,11 +67,27 @@ void init_thread_entry(ULONG thread_input) {
     tx_thread_terminate(tx_thread_identify());
   }
 
-  config_t *config = open_config_instance(0);
-  config_load(config, buf, len);
+#if ADC_ENABLE
+  adc_t *apps_l = open_adc_instance(0);
+  adc_t *apps_r = open_adc_instance(1);
+  adc_t *bpps_l = open_adc_instance(2);
+  adc_t *bpps_r = open_adc_instance(3);
 
-#if LDPS_ENABLE
-  ldps_init(&ldps[0], &config->ldps_cal[0], LDPS_N);
+  adc_start();
+
+  adc_set_buffer_pos(apps_l, 0);
+  adc_set_buffer_pos(apps_r, 1);
+  adc_set_buffer_pos(bpps_l, 2);
+  adc_set_buffer_pos(bpps_r, 3);
+  adc_return_to_zero(apps_l);
+  adc_return_to_zero(apps_r);
+  adc_return_to_zero(bpps_l);
+  adc_return_to_zero(bpps_r);
+
+  config_load(buf, len, apps_l, 0, adc_config_hook, "adc");
+  config_load(buf, len, apps_r, 1, adc_config_hook, "adc");
+  config_load(buf, len, bpps_l, 2, adc_config_hook, "adc");
+  config_load(buf, len, bpps_r, 3, adc_config_hook, "adc");
 #endif
 
 #if IMU_ENABLE

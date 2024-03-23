@@ -11,31 +11,16 @@ Revision: $Rev: 2024.12$
 
 #include <stddef.h>
 
-#ifdef DEBUG
-#include "SEGGER_RTT.h"
-#define CONFIG_DEBUG(...)                                           \
-  {                                                                 \
-    SEGGER_RTT_printf("%s:%s <%s>:", __FILE__, __LINE__, __func__); \
-    SEGGER_RTT_printf(0, __VA_ARGS__);                              \
-  }
-#else
-#define CONFIG_DEBUG(...)
-#endif
+#include "jsmn.h"
 
 #define CONFIG_FILENAME "config.json"
-#define LDPS_ENABLE 1
+#define ADC_ENABLE 0
 #define IMU_ENABLE 1
 #define WHEEL_ENABLE 1
 #define LOGGER_ENABLE 1
 #define INVERTER_ENABLE 1
 
 // Config for ALL peripherals
-
-/* Linear Displacement Sensor configs */
-#if LDPS_ENABLE
-#include "ldps.h"
-#define LDPS_N 4
-#endif
 
 #if WHEEL_ENABLE
 #define WHEEL_N 4
@@ -56,18 +41,14 @@ Revision: $Rev: 2024.12$
 #define INVERTER_PM100DZ
 #endif
 
-typedef struct {
-#if LDPS_ENABLE
-  // Linear displacement sensors (LDPS)
-  ldps_cal_t ldps_cal[LDPS_N];
-#endif
-} config_t;
-
 enum {
   CONFIG_SUCCESS,
   CONFIG_ERR_PARSE,
   CONFIG_ERR_LEN,
 };
 
-config_t* open_config_instance(uint32_t id);
-int config_load(config_t* instance, const char* json, size_t len);
+typedef int (*config_hook_t)(void* instance, void* data, const char* json,
+                             jsmntok_t* tok);
+
+int config_load(const char* json, size_t len, void* instance, void* data,
+                config_hook_t hook, const char* target);

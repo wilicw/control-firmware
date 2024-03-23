@@ -14,8 +14,8 @@ Purpose : Source code for the data logger task. Data acquisition from
             EOL is a 16-bit unsigned integer 0x0D0A.
 
           Sensors IDs and data format are as follows:
-            0x01 - LDPS, each LDPS data is 16-bit unsigned integer
-              [N][LDPS_1][LDPS_2]...[LDPS_N]
+            0x01 - ADC, each ADC data is 16-bit unsigned integer
+              [N][ADC_1][ADC_2]...[ADC_N]
             0x02 - Accelerometer, 3 axes raw data, each axis is 16-bit
               signed integer [X][Y][Z]
             0x03 - Gyroscope, 3 axes raw data, each axis is 16-bit
@@ -30,7 +30,7 @@ Revision: $Rev: 2023.49$
 #include "logger.h"
 
 #include "SEGGER_RTT.h"
-#include "config.h"
+#include "adc.h"
 #include "events.h"
 #include "fx_api.h"
 #include "imu.h"
@@ -44,12 +44,6 @@ extern TX_EVENT_FLAGS_GROUP event_flags;
 // Logger file objects
 extern FX_MEDIA sdio_disk;
 FX_FILE logger_file;
-
-#if LDPS_ENABLE
-// LDPS instance objects
-#include "ldps.h"
-extern ldps_t ldps[LDPS_N];
-#endif
 
 #if WHEEL_ENABLE
 // Wheel instance objects
@@ -93,29 +87,32 @@ void logger_thread_entry(ULONG thread_input) {
     fid++;
   }
 
-  config_t *config = open_config_instance(0);
-
   // Start the logger
   while (1) {
     static char buf[128];
     uint32_t timestamp = tx_time_get();
-    memcpy(buf, &timestamp, 4);
+    memcpy(buf, &timestamp, sizeof(timestamp));
 
-#if LDPS_ENABLE
-    static uint32_t last_ldps_timestamp = 0;
-    if (timestamp - last_ldps_timestamp > TX_TIMER_TICKS_PER_SECOND / 1000) {
+#if ADC_ENABLE
+    static uint32_t last_adc_timestamp = 0;
+    adc_t *adc[] = {open_adc_instance(0), open_adc_instance(1),
+                    open_adc_instance(2), open_adc_instance(3)};
+    const size_t ADC_N = sizeof(adc) / sizeof(adc[0]);
+    const size_t ADC_VALUE_SIZE = sizeof(typeof(adc[0]->value));
+    if (timestamp - last_adc_timestamp > TX_TIMER_TICKS_PER_SECOND / 1000) {
       buf[4] = 0x01;
-      buf[5] = LDPS_N * 2;
+      buf[5] = ADC_N * ADC_VALUE_SIZE;
 
-      for (size_t i = 0; i < LDPS_N; i++) {
-        int16_t v = ldps_read(&ldps[i], &config->ldps_cal[i]);
-        memcpy(buf + 6 + i * 2, &v, 2);
+      for (size_t i = 0; i < ADC_N; i++) {
+        adc_convert(adc[i]);
+        float v = adc[i]->value;
+        memcpy(buf + 6 + i * ADC_VALUE_SIZE, &v, ADC_VALUE_SIZE);
       }
 
-      buf[6 + LDPS_N * 2] = 0x0D;
-      buf[7 + LDPS_N * 2] = 0x0A;
-      logger_output(buf, 8 + LDPS_N * 2);
-      last_ldps_timestamp = timestamp;
+      buf[6 + ADC_N * 2] = 0x0D;
+      buf[7 + ADC_N * 2] = 0x0A;
+      logger_output(buf, 8 + ADC_N * ADC_VALUE_SIZE);
+      last_adc_timestamp = timestamp;
     }
 #endif
 
