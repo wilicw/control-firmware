@@ -28,14 +28,6 @@ Revision: $Rev: 2024.12$
 #define LOGGER_SD
 #endif
 
-/* Inverter configs */
-#if INVERTER_ENABLE
-// Drive wheel number
-#define INVERTER_DRIVE_WHEEL 2
-// Inverter type
-#define INVERTER_PM100DZ
-#endif
-
 enum {
   CONFIG_SUCCESS,
   CONFIG_ERR_PARSE,

@@ -305,7 +305,11 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
 #endif
 
 #if INVERTER_ENABLE
-  inverter_bsp_interrupt((void *)&rx_header, (void *)rx_data);
+  static inverter_t *inverter_R = NULL, *inverter_L = NULL;
+  if (!inverter_R) inverter_R = open_inverter_instance(0);
+  if (!inverter_L) inverter_L = open_inverter_instance(1);
+  inverter_bsp_interrupt(inverter_R, &rx_header, rx_data);
+  inverter_bsp_interrupt(inverter_L, &rx_header, rx_data);
 #endif
 }
 

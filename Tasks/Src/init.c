@@ -21,10 +21,6 @@ extern TX_EVENT_FLAGS_GROUP event_flags;
 
 /* System Peripherals and Drivers Instances */
 
-#if INVERTER_ENABLE
-inverter_t inverter;
-#endif
-
 // Config json file objects
 extern FX_MEDIA sdio_disk;
 FX_FILE config_file;
@@ -95,7 +91,16 @@ void init_thread_entry(ULONG thread_input) {
 #endif
 
 #if INVERTER_ENABLE
-  inverter_init(&inverter);
+  inverter_t *inverter_R = open_inverter_instance(0);
+  inverter_t *inverter_L = open_inverter_instance(1);
+  inverter_R->type = INVERTER_PM100;
+  inverter_R->hw_id = 0xA0;
+  inverter_R->direction = 0x01;
+  inverter_L->type = INVERTER_PM100;
+  inverter_L->hw_id = 0x50;
+  inverter_L->direction = 0x00;
+  inverter_init(inverter_R);
+  inverter_init(inverter_L);
 #endif
 
   tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_CONFIG_LOADED), TX_OR);

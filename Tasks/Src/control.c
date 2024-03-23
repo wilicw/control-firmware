@@ -16,10 +16,6 @@ TX_THREAD control_thread;
 
 extern TX_EVENT_FLAGS_GROUP event_flags;
 
-#if INVERTER_ENABLE
-extern inverter_t inverter;
-#endif
-
 void control_thread_entry(ULONG thread_input) {
   UINT status = TX_SUCCESS;
 
@@ -30,11 +26,14 @@ void control_thread_entry(ULONG thread_input) {
 
   CONTROL_DEBUG("control main loop started\n");
 
-  inverter.value[0] = 0;
-  inverter.value[1] = 0;
+  inverter_t *inverter_R = open_inverter_instance(0);
+  inverter_t *inverter_L = open_inverter_instance(1);
+  inverter_R->torque = 0;
+  inverter_L->torque = 0;
 
   for (int i = 0; i < 100; i++) {
-    inverter_set(&inverter);
+    inverter_send_torque(inverter_R);
+    inverter_send_torque(inverter_L);
     tx_thread_sleep(TX_TIMER_TICKS_PER_SECOND / 4);  // 4Hz
   }
 
@@ -44,9 +43,10 @@ void control_thread_entry(ULONG thread_input) {
   // Operate at 1kHz
   for (;;) {
     // Apply 10Nm torque to each wheel
-    inverter.value[0] = 10;
-    inverter.value[1] = 10;
-    inverter_set(&inverter);
+    inverter_R->torque = 10;
+    inverter_L->torque = 10;
+    inverter_send_torque(inverter_R);
+    inverter_send_torque(inverter_L);
     tx_thread_sleep(TX_TIMER_TICKS_PER_SECOND / 1000);
   }
 
