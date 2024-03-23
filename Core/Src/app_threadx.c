@@ -55,15 +55,6 @@ extern TX_THREAD logger_thread;
 extern TX_THREAD init_thread;
 extern TX_THREAD control_thread;
 
-/* Default ThreadX application
- * It will suspend forever after ThreadX initialization
- * */
-TX_THREAD app_thread;
-void app_thread_entry(ULONG thread_input) {
-  while (1)
-    if (tx_thread_suspend(&app_thread) != TX_SUCCESS)
-      SEGGER_RTT_printf(0, "tx_thread_suspend failed\n");
-}
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -81,19 +72,6 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
   TX_BYTE_POOL *byte_pool = (TX_BYTE_POOL *)memory_ptr;
 
   /* USER CODE BEGIN App_ThreadX_Init */
-  static const ULONG app_memory_size = 256;
-
-  VOID *pointer;
-  ret = tx_byte_allocate(byte_pool, &pointer, app_memory_size, TX_NO_WAIT);
-  if (ret != TX_SUCCESS) {
-    SEGGER_RTT_printf(0, "tx_byte_allocate failed\n");
-    Error_Handler();
-  }
-
-  ret =
-      tx_thread_create(&app_thread, "app_thread", app_thread_entry, 0, pointer,
-                       app_memory_size, TX_MAX_PRIORITIES - 1,
-                       TX_MAX_PRIORITIES - 1, TX_NO_TIME_SLICE, TX_AUTO_START);
 
   /* System Initialization Thread
    * - Priority: 1
@@ -124,9 +102,9 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
 #if LOGGER_ENABLE
   VOID *logger_pointer;
   int logger_priority = 5;
-  tx_byte_allocate(byte_pool, &logger_pointer, app_memory_size, TX_NO_WAIT);
+  tx_byte_allocate(byte_pool, &logger_pointer, 2048, TX_NO_WAIT);
   ret = tx_thread_create(&logger_thread, "logger_thread", logger_thread_entry,
-                         0, logger_pointer, app_memory_size, logger_priority,
+                         0, logger_pointer, 2048, logger_priority,
                          logger_priority, TX_NO_TIME_SLICE, TX_AUTO_START);
 #endif
 
@@ -144,7 +122,7 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
   tx_byte_allocate(byte_pool, &control_pointer, 2048, TX_NO_WAIT);
   ret =
       tx_thread_create(&control_thread, "control_thread", control_thread_entry,
-                       0, control_pointer, app_memory_size, control_priority,
+                       0, control_pointer, 2048, control_priority,
                        control_priority, TX_NO_TIME_SLICE, TX_AUTO_START);
 
   /* USER CODE END App_ThreadX_Init */
@@ -161,6 +139,7 @@ void MX_ThreadX_Init(void) {
   /* USER CODE BEGIN  Before_Kernel_Start */
   /* Event Flags Group Initialization */
   UINT ret = tx_event_flags_create(&event_flags, "event_flags");
+  tx_event_flags_set(&event_flags, 0x0, TX_AND);
   if (ret != TX_SUCCESS) {
     SEGGER_RTT_printf(0, "tx_event_flags_create failed\n");
     Error_Handler();
