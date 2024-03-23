@@ -74,7 +74,7 @@ void init_thread_entry(ULONG thread_input) {
   adc_return_to_zero(bpps_l);
   adc_return_to_zero(bpps_r);
 
-  uint16_t adc_id[4] = {0, 1, 2, 3};
+  uint8_t adc_id[4] = {0, 1, 2, 3};
   config_load(buf, len, apps_l, &adc_id[0], (config_hook_t)adc_config_hook,
               "adc");
   config_load(buf, len, apps_r, &adc_id[1], (config_hook_t)adc_config_hook,

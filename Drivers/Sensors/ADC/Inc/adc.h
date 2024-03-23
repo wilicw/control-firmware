@@ -31,7 +31,7 @@ adc_t *open_adc_instance(uint32_t id);
 void adc_set_buffer_pos(adc_t *adc, size_t pos);
 void adc_convert(adc_t *adc);
 void adc_return_to_zero(adc_t *adc);
-int adc_config_hook(adc_t *instance, uint32_t id, const char *json,
+int adc_config_hook(adc_t *instance, uint8_t *id, const char *json,
                     jsmntok_t *t);
 
 void adc_bsp_start();
