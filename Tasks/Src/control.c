@@ -19,10 +19,11 @@ extern TX_EVENT_FLAGS_GROUP event_flags;
 void control_thread_entry(ULONG thread_input) {
   UINT status = TX_SUCCESS;
 
-  // Wait for the filesystem to be loaded
+  // Wait for the filesystem and config to be loaded
   ULONG recv_events_flags = 0;
-  status = tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_FS_INIT), TX_AND,
-                              &recv_events_flags, TX_WAIT_FOREVER);
+  status = tx_event_flags_get(
+      &event_flags, EVENT_BIT(EVENT_FS_INIT) | EVENT_BIT(EVENT_CONFIG_LOADED),
+      TX_AND, &recv_events_flags, TX_WAIT_FOREVER);
 
   CONTROL_DEBUG("control main loop started\n");
 
