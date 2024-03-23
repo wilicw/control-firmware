@@ -14,18 +14,12 @@ Revision: $Rev: 2023.49$
 #include "fx_api.h"
 #include "imu.h"
 #include "inverter.h"
-#include "wheel.h"
 
 TX_THREAD init_thread;
 
 extern TX_EVENT_FLAGS_GROUP event_flags;
 
 /* System Peripherals and Drivers Instances */
-
-// Instance of the wheel sensors
-#if WHEEL_ENABLE
-wheel_t wheel[WHEEL_N];
-#endif
 
 #if INVERTER_ENABLE
 inverter_t inverter;
@@ -93,10 +87,6 @@ void init_thread_entry(ULONG thread_input) {
 #if IMU_ENABLE
   imu_t *imu = open_imu_instance(0);
   imu_set_type(imu, IMU_MTI600);
-#endif
-
-#if WHEEL_ENABLE
-  wheel_init(wheel, WHEEL_N);
 #endif
 
 #if INVERTER_ENABLE

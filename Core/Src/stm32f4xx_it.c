@@ -26,7 +26,6 @@
 #include "config.h"
 #include "imu.h"
 #include "inverter.h"
-#include "wheel.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -310,9 +309,5 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
 #endif
 }
 
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
-#if WHEEL_ENABLE
-  wheel_bsp_interrupt((void *)htim);
-#endif
-}
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {}
 /* USER CODE END 1 */

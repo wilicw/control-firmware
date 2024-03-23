@@ -16,15 +16,10 @@ Revision: $Rev: 2024.12$
 #define CONFIG_FILENAME "config.json"
 #define ADC_ENABLE 0
 #define IMU_ENABLE 1
-#define WHEEL_ENABLE 1
 #define LOGGER_ENABLE 1
 #define INVERTER_ENABLE 1
 
 // Config for ALL peripherals
-
-#if WHEEL_ENABLE
-#define WHEEL_N 4
-#endif
 
 /* Logger configs */
 #if LOGGER_ENABLE

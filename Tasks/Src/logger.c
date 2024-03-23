@@ -20,8 +20,6 @@ Purpose : Source code for the data logger task. Data acquisition from
               signed integer [X][Y][Z]
             0x03 - Gyroscope, 3 axes raw data, each axis is 16-bit
               signed integer [X][Y][Z]
-            0x04 - Wheel speed, 4 wheels, each wheel is 32-bit float
-              [W1][W2][W3][W4] (in RPM)
 
 Revision: $Rev: 2023.49$
 ----------------------------------------------------------------------
@@ -44,12 +42,6 @@ extern TX_EVENT_FLAGS_GROUP event_flags;
 // Logger file objects
 extern FX_MEDIA sdio_disk;
 FX_FILE logger_file;
-
-#if WHEEL_ENABLE
-// Wheel instance objects
-#include "wheel.h"
-extern wheel_t wheel[WHEEL_N];
-#endif
 
 static inline void logger_output(char *buf, size_t len) {
 #ifdef LOGGER_SD
@@ -144,19 +136,6 @@ void logger_thread_entry(ULONG thread_input) {
       buf[13] = 0x0A;
       logger_output(buf, 14);
       last_gyro_timestamp = imu->gyro.timestamp;
-    }
-#endif
-
-#if WHEEL_ENABLE
-    static uint32_t last_wheel_timestamp = 0;
-    if (timestamp - last_wheel_timestamp > TX_TIMER_TICKS_PER_SECOND / 1000) {
-      buf[4] = 0x04;
-      for (size_t i = 0; i < WHEEL_N; i++)
-        memcpy(buf + 5 + i * 4, &wheel[i].rpm, 4);
-      buf[WHEEL_N * 4 + 5] = 0x0D;
-      buf[WHEEL_N * 4 + 6] = 0x0A;
-      logger_output(buf, WHEEL_N * 4 + 7);
-      last_wheel_timestamp = timestamp;
     }
 #endif
 
