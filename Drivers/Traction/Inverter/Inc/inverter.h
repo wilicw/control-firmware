@@ -25,7 +25,5 @@ void inverter_init(inverter_t *instance);
 void inverter_send_torque(inverter_t *instance);
 
 void inverter_bsp_init(inverter_t *instance);
-void inverter_bsp_set_hw_id(inverter_t *instance);
-void inverter_bsp_set_direction(inverter_t *instance);
 void inverter_bsp_send_torque(inverter_t *instance);
 void inverter_bsp_interrupt(inverter_t *instance, void *arg1, void *arg2);
