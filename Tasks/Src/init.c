@@ -78,10 +78,15 @@ void init_thread_entry(ULONG thread_input) {
   adc_return_to_zero(bpps_l);
   adc_return_to_zero(bpps_r);
 
-  config_load(buf, len, apps_l, 0, adc_config_hook, "adc");
-  config_load(buf, len, apps_r, 1, adc_config_hook, "adc");
-  config_load(buf, len, bpps_l, 2, adc_config_hook, "adc");
-  config_load(buf, len, bpps_r, 3, adc_config_hook, "adc");
+  uint16_t adc_id[4] = {0, 1, 2, 3};
+  config_load(buf, len, apps_l, &adc_id[0], (config_hook_t)adc_config_hook,
+              "adc");
+  config_load(buf, len, apps_r, &adc_id[1], (config_hook_t)adc_config_hook,
+              "adc");
+  config_load(buf, len, bpps_l, &adc_id[2], (config_hook_t)adc_config_hook,
+              "adc");
+  config_load(buf, len, bpps_r, &adc_id[3], (config_hook_t)adc_config_hook,
+              "adc");
 #endif
 
 #if IMU_ENABLE

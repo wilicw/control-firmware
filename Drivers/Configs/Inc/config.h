@@ -14,7 +14,7 @@ Revision: $Rev: 2024.12$
 #include "jsmn.h"
 
 #define CONFIG_FILENAME "config.json"
-#define ADC_ENABLE 0
+#define ADC_ENABLE 1
 #define IMU_ENABLE 1
 #define LOGGER_ENABLE 1
 #define INVERTER_ENABLE 1
