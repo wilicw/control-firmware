@@ -23,9 +23,8 @@ void adc_set_buffer_pos(adc_t *adc, size_t pos) {
 }
 
 void adc_convert(adc_t *adc) {
-  adc->value = ((float)(*adc->buffer_ptr) - adc->cal.offset) * adc->cal.scale;
+  adc->value = ((float)((int32_t)*adc->buffer_ptr - (int32_t)adc->cal.offset)) *
+               adc->cal.scale;
 }
 
-void adc_return_to_zero(adc_t *adc) {
-  adc->cal.offset = (float)(*adc->buffer_ptr);
-}
+void adc_return_to_zero(adc_t *adc) { adc->cal.offset = *adc->buffer_ptr; }
