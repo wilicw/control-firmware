@@ -57,6 +57,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define RTD_INPUT_Pin GPIO_PIN_2
+#define RTD_INPUT_GPIO_Port GPIOE
 #define WheelSpeed2_Pin GPIO_PIN_1
 #define WheelSpeed2_GPIO_Port GPIOB
 #define WheelSpeed3_Pin GPIO_PIN_13

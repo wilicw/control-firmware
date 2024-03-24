@@ -96,11 +96,8 @@ void logger_thread_entry(ULONG thread_input) {
       buf[4] = 0x01;
       buf[5] = ADC_N * ADC_VALUE_SIZE;
 
-      for (size_t i = 0; i < ADC_N; i++) {
-        adc_convert(adc[i]);
-        float v = adc[i]->value;
-        memcpy(buf + 6 + i * ADC_VALUE_SIZE, &v, ADC_VALUE_SIZE);
-      }
+      for (size_t i = 0; i < ADC_N; i++)
+        memcpy(buf + 6 + i * ADC_VALUE_SIZE, &adc[i]->value, ADC_VALUE_SIZE);
 
       buf[6 + ADC_N * 2] = 0x0D;
       buf[7 + ADC_N * 2] = 0x0A;
