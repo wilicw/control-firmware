@@ -43,7 +43,7 @@ extern TX_EVENT_FLAGS_GROUP event_flags;
 
 // Logger file objects
 extern FX_MEDIA sdio_disk;
-static FX_FILE logger_file;
+static FX_FILE logger_file = {.fx_file_name = NULL};
 
 static inline void logger_output(char *buf, size_t len) {
 #ifdef LOGGER_SD
@@ -70,17 +70,19 @@ void logger_thread_entry(ULONG thread_input) {
     tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_LOGGING), TX_OR,
                        &recv_events_flags, TX_NO_WAIT);
     if (recv_events_flags & EVENT_BIT(EVENT_LOGGING)) {
-      int fid = 0;
-      char fn[32];
-      do {
-        sprintf(fn, LOGGER_FN_PATTERN, fid++);
-        status = fx_file_create(&sdio_disk, fn);
-      } while (status != FX_SUCCESS);
+      if (unlikely(!logger_file.fx_file_name)) {
+        int fid = 0;
+        char fn[32];
+        do {
+          sprintf(fn, LOGGER_FN_PATTERN, fid++);
+          status = fx_file_create(&sdio_disk, fn);
+        } while (status != FX_SUCCESS);
 
-      fx_file_open(&sdio_disk, &logger_file, fn, FX_OPEN_FOR_WRITE);
-      fx_file_seek(&logger_file, 0);
-      SEGGER_RTT_printf(0, "Logger file %s opened\n", fn);
-      HAL_GPIO_WritePin(REC_OUTPUT_GPIO_Port, REC_OUTPUT_Pin, GPIO_PIN_SET);
+        fx_file_open(&sdio_disk, &logger_file, fn, FX_OPEN_FOR_WRITE);
+        fx_file_seek(&logger_file, 0);
+        SEGGER_RTT_printf(0, "Logger file %s opened\n", fn);
+        HAL_GPIO_WritePin(REC_OUTPUT_GPIO_Port, REC_OUTPUT_Pin, GPIO_PIN_SET);
+      }
     } else {
       fx_media_flush(&sdio_disk);
       fx_file_close(&logger_file);
