@@ -13,6 +13,9 @@ Revision: $Rev: 2024.12$
 
 #include "jsmn.h"
 
+#define likely(x) __builtin_expect(!!(x), 1)
+#define unlikely(x) __builtin_expect(!!(x), 0)
+
 #define CONFIG_FILENAME "config.json"
 #define ADC_ENABLE 1
 #define IMU_ENABLE 1

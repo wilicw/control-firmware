@@ -67,6 +67,8 @@ void Error_Handler(void);
 #define PRECHARGE_INPUT_EXTI_IRQn EXTI4_IRQn
 #define RTD_OUTPUT_Pin GPIO_PIN_6
 #define RTD_OUTPUT_GPIO_Port GPIOA
+#define FAULT_OUTPUT_Pin GPIO_PIN_7
+#define FAULT_OUTPUT_GPIO_Port GPIOA
 #define PRECHARGE_OUTPUT_Pin GPIO_PIN_5
 #define PRECHARGE_OUTPUT_GPIO_Port GPIOC
 #define WheelSpeed2_Pin GPIO_PIN_1
