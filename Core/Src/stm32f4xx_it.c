@@ -176,6 +176,19 @@ void EXTI3_IRQHandler(void) {
 }
 
 /**
+ * @brief This function handles EXTI line4 interrupt.
+ */
+void EXTI4_IRQHandler(void) {
+  /* USER CODE BEGIN EXTI4_IRQn 0 */
+
+  /* USER CODE END EXTI4_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(PRECHARGE_INPUT_Pin);
+  /* USER CODE BEGIN EXTI4_IRQn 1 */
+
+  /* USER CODE END EXTI4_IRQn 1 */
+}
+
+/**
  * @brief This function handles CAN1 TX interrupts.
  */
 void CAN1_TX_IRQHandler(void) {
@@ -344,6 +357,14 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
       tx_event_flags_set(&event_flags, ~EVENT_BIT(EVENT_LOGGING), TX_AND);
     else
       tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_LOGGING), TX_OR);
+  } else if (GPIO_Pin == PRECHARGE_INPUT_Pin) {
+    uint8_t state =
+        HAL_GPIO_ReadPin(PRECHARGE_INPUT_GPIO_Port, PRECHARGE_INPUT_Pin);
+    if (state == GPIO_PIN_SET)
+      tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_PRECHARGE), TX_OR);
+    else
+      tx_event_flags_set(&event_flags, ~EVENT_BIT(EVENT_PRECHARGE), TX_AND);
+    HAL_GPIO_WritePin(PRECHARGE_OUTPUT_GPIO_Port, PRECHARGE_OUTPUT_Pin, state);
   }
 }
 /* USER CODE END 1 */

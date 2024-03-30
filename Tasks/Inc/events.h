@@ -15,6 +15,7 @@ enum {
   EVENT_FS_INIT = 0,
   EVENT_CONFIG_LOADED,
   EVENT_LOGGING,
+  EVENT_PRECHARGE,
 };
 
 #endif
