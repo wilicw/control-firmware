@@ -24,8 +24,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "config.h"
+#include "events.h"
 #include "imu.h"
 #include "inverter.h"
+#include "tx_api.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,7 +47,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+extern TX_EVENT_FLAGS_GROUP event_flags;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -159,6 +161,19 @@ void DebugMon_Handler(void) {
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32f4xx.s).                    */
 /******************************************************************************/
+
+/**
+ * @brief This function handles EXTI line3 interrupt.
+ */
+void EXTI3_IRQHandler(void) {
+  /* USER CODE BEGIN EXTI3_IRQn 0 */
+
+  /* USER CODE END EXTI3_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(REC_INPUT_Pin);
+  /* USER CODE BEGIN EXTI3_IRQn 1 */
+
+  /* USER CODE END EXTI3_IRQn 1 */
+}
 
 /**
  * @brief This function handles CAN1 TX interrupts.
@@ -314,4 +329,21 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
 }
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {}
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+  if (GPIO_Pin == REC_INPUT_Pin) {
+    static uint32_t last_time = 0;
+    uint32_t now = HAL_GetTick();
+    if (now - last_time < 100) return;
+    last_time = now;
+
+    ULONG ev_flags = 0;
+    tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_LOGGING), TX_OR, &ev_flags,
+                       TX_NO_WAIT);
+    if (ev_flags & EVENT_BIT(EVENT_LOGGING))
+      tx_event_flags_set(&event_flags, ~EVENT_BIT(EVENT_LOGGING), TX_AND);
+    else
+      tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_LOGGING), TX_OR);
+  }
+}
 /* USER CODE END 1 */

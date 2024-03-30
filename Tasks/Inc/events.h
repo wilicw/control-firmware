@@ -14,6 +14,7 @@ Revision: $Rev: 2023.49$
 enum {
   EVENT_FS_INIT = 0,
   EVENT_CONFIG_LOADED,
+  EVENT_LOGGING,
 };
 
 #endif

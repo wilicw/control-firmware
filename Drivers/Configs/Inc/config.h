@@ -26,6 +26,7 @@ Revision: $Rev: 2024.12$
 // Logger interface type (multiple can be defined)
 #define LOGGER_USB_SERIAL
 #define LOGGER_SD
+#define LOGGER_FN_PATTERN "ncku-fsae-log-%04d.log"
 #endif
 
 enum {

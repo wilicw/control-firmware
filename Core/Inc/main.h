@@ -59,8 +59,15 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define RTD_INPUT_Pin GPIO_PIN_2
 #define RTD_INPUT_GPIO_Port GPIOE
+#define REC_INPUT_Pin GPIO_PIN_3
+#define REC_INPUT_GPIO_Port GPIOE
+#define REC_INPUT_EXTI_IRQn EXTI3_IRQn
+#define RTD_OUTPUT_Pin GPIO_PIN_6
+#define RTD_OUTPUT_GPIO_Port GPIOA
 #define WheelSpeed2_Pin GPIO_PIN_1
 #define WheelSpeed2_GPIO_Port GPIOB
+#define REC_OUTPUT_Pin GPIO_PIN_7
+#define REC_OUTPUT_GPIO_Port GPIOE
 #define WheelSpeed3_Pin GPIO_PIN_13
 #define WheelSpeed3_GPIO_Port GPIOD
 #define WheelSpeed4_Pin GPIO_PIN_15

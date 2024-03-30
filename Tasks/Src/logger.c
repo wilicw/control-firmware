@@ -33,6 +33,7 @@ Revision: $Rev: 2023.49$
 #include "events.h"
 #include "fx_api.h"
 #include "imu.h"
+#include "main.h"
 #include "stddef.h"
 #include "usbd_cdc_if.h"
 
@@ -42,7 +43,7 @@ extern TX_EVENT_FLAGS_GROUP event_flags;
 
 // Logger file objects
 extern FX_MEDIA sdio_disk;
-FX_FILE logger_file;
+static FX_FILE logger_file;
 
 static inline void logger_output(char *buf, size_t len) {
 #ifdef LOGGER_SD
@@ -58,30 +59,38 @@ void logger_thread_entry(ULONG thread_input) {
 
   // Wait for the filesystem and config to be loaded
   ULONG recv_events_flags = 0;
-  status = tx_event_flags_get(
-      &event_flags, EVENT_BIT(EVENT_FS_INIT) | EVENT_BIT(EVENT_CONFIG_LOADED),
-      TX_AND, &recv_events_flags, TX_WAIT_FOREVER);
+  status = tx_event_flags_get(&event_flags,
+                              EVENT_BIT(EVENT_FS_INIT) |
+                                  EVENT_BIT(EVENT_CONFIG_LOADED) |
+                                  EVENT_BIT(EVENT_LOGGING),
+                              TX_AND, &recv_events_flags, TX_WAIT_FOREVER);
 
-  LOGGER_DEBUG("Logger thread started\n");
-
-  int fid = 0;
   while (1) {
-    char fn[128];
-    sprintf(fn, "fsae-%04d.log", fid);
-    status = fx_file_open(&sdio_disk, &logger_file, fn, FX_OPEN_FOR_WRITE);
-    if (status != FX_SUCCESS) {
-      fx_file_close(&logger_file);
-      fx_file_create(&sdio_disk, fn);
+    recv_events_flags = 0;
+    tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_LOGGING), TX_OR,
+                       &recv_events_flags, TX_NO_WAIT);
+    if (recv_events_flags & EVENT_BIT(EVENT_LOGGING)) {
+      int fid = 0;
+      char fn[32];
+      do {
+        sprintf(fn, LOGGER_FN_PATTERN, fid++);
+        status = fx_file_create(&sdio_disk, fn);
+      } while (status != FX_SUCCESS);
+
       fx_file_open(&sdio_disk, &logger_file, fn, FX_OPEN_FOR_WRITE);
       fx_file_seek(&logger_file, 0);
       SEGGER_RTT_printf(0, "Logger file %s opened\n", fn);
-      break;
+      HAL_GPIO_WritePin(REC_OUTPUT_GPIO_Port, REC_OUTPUT_Pin, GPIO_PIN_SET);
+    } else {
+      fx_media_flush(&sdio_disk);
+      fx_file_close(&logger_file);
+      logger_file.fx_file_name = NULL;
+      HAL_GPIO_WritePin(REC_OUTPUT_GPIO_Port, REC_OUTPUT_Pin, GPIO_PIN_RESET);
+      // Wait for the logging event to be set again
+      tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_LOGGING), TX_AND,
+                         &recv_events_flags, TX_WAIT_FOREVER);
     }
-    fid++;
-  }
 
-  // Start the logger
-  while (1) {
     static char buf[1024];
     uint32_t timestamp = tx_time_get();
     memcpy(buf, &timestamp, sizeof(timestamp));
