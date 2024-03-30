@@ -22,6 +22,7 @@ typedef struct {
 typedef struct {
   uint16_t *buffer_ptr;
   float value;
+  float alpha;
   adc_cal_t cal;
 } adc_t;
 

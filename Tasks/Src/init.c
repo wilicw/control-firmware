@@ -63,6 +63,11 @@ void init_thread_entry(ULONG thread_input) {
   adc_t *bpps_l = open_adc_instance(2);
   adc_t *bpps_r = open_adc_instance(3);
 
+  apps_l->alpha = 0.1;
+  apps_r->alpha = 0.1;
+  bpps_l->alpha = 1.0;
+  bpps_r->alpha = 1.0;
+
   adc_start();
 
   adc_set_buffer_pos(apps_l, 0);
