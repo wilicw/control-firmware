@@ -20,6 +20,11 @@ Purpose : Source code for the data logger task. Data acquisition from
               signed integer [X][Y][Z]
             0x03 - Gyroscope, 3 axes raw data, each axis is 16-bit
               signed integer [X][Y][Z]
+            0x04 - Inverter, 2 inverters, each inverter data is 16-bit
+              signed integer [INV_1][INV_2], each inverter data is constructed
+              as:
+                [torque][speed][voltge][current]
+              each field is 16-bit unsigned/signed integer.
 
 Revision: $Rev: 2023.49$
 ----------------------------------------------------------------------
@@ -33,6 +38,7 @@ Revision: $Rev: 2023.49$
 #include "events.h"
 #include "fx_api.h"
 #include "imu.h"
+#include "inverter.h"
 #include "main.h"
 #include "stddef.h"
 #include "usbd_cdc_if.h"
@@ -145,6 +151,31 @@ void logger_thread_entry(ULONG thread_input) {
       buf[13] = 0x0A;
       logger_output(buf, 14);
       last_gyro_timestamp = imu->gyro.timestamp;
+    }
+#endif
+
+#if INVERTER_ENABLE
+    inverter_t *inverter[] = {open_inverter_instance(0),
+                              open_inverter_instance(1)};
+    const size_t INVERTER_N = sizeof(inverter) / sizeof(inverter[0]);
+    const size_t INVERTER_VALUE_SIZE = sizeof(uint16_t) * 4;
+    static uint32_t last_inverter_timestamp = 0;
+    if (timestamp - last_inverter_timestamp >
+        TX_TIMER_TICKS_PER_SECOND / 1000) {
+      buf[4] = 0x04;
+      buf[5] = INVERTER_N * INVERTER_VALUE_SIZE;
+
+      for (size_t i = 0; i < INVERTER_N; i++) {
+        memcpy(buf + 6 + i * INVERTER_VALUE_SIZE, &inverter[i]->torque, 2);
+        memcpy(buf + 8 + i * INVERTER_VALUE_SIZE, &inverter[i]->speed, 2);
+        memcpy(buf + 10 + i * INVERTER_VALUE_SIZE, &inverter[i]->voltage, 2);
+        memcpy(buf + 12 + i * INVERTER_VALUE_SIZE, &inverter[i]->current, 2);
+      }
+
+      buf[6 + INVERTER_N * INVERTER_VALUE_SIZE] = 0x0D;
+      buf[7 + INVERTER_N * INVERTER_VALUE_SIZE] = 0x0A;
+      logger_output(buf, 8 + INVERTER_N * INVERTER_VALUE_SIZE);
+      last_inverter_timestamp = timestamp;
     }
 #endif
 
