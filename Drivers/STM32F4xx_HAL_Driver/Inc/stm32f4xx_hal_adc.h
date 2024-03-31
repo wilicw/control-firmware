@@ -223,8 +223,8 @@ typedef struct {
                              value.  This parameter must be a 12-bit value. */
   uint32_t Channel;       /*!< Configures ADC channel for the analog watchdog.
                                This parameter has an effect only if watchdog mode is
-                             configured on single channel       This parameter can be
-                             a       value of @ref ADC_channels */
+                             configured on single channel       This parameter can be a
+                             value of @ref ADC_channels */
   FunctionalState ITMode; /*!< Specifies whether the analog watchdog is
                              configured is interrupt mode or in polling mode.
                                This parameter can be set to ENABLE or DISABLE */
@@ -253,7 +253,7 @@ typedef struct {
 /* States of ADC group regular */
 #define HAL_ADC_STATE_REG_BUSY                                                 \
   0x00000100U /*!< A conversion on group regular is ongoing or can occur       \
-                 (either by continuous mode, external trigger, low power auto  \
+                 (either by continuous mode, external trigger, low power auto                                              \
                  power-on (if feature available), multimode ADC master control \
                  (if feature available)) */
 #define HAL_ADC_STATE_REG_EOC \
@@ -261,10 +261,10 @@ typedef struct {
 #define HAL_ADC_STATE_REG_OVR 0x00000400U /*!< Overrun occurrence */
 
 /* States of ADC group injected */
-#define HAL_ADC_STATE_INJ_BUSY                                               \
-  0x00001000U /*!< A conversion on group injected is ongoing or can occur    \
-                 (either by auto-injection mode, external trigger, low power \
-                 auto power-on (if feature available), multimode ADC master  \
+#define HAL_ADC_STATE_INJ_BUSY                                              \
+  0x00001000U /*!< A conversion on group injected is ongoing or can occur   \
+                 (either by auto-injection mode, external trigger, low power                                                \
+                 auto power-on (if feature available), multimode ADC master \
                  control (if feature available)) */
 #define HAL_ADC_STATE_INJ_EOC \
   0x00002000U /*!< Conversion data available on group injected */
@@ -990,7 +990,7 @@ uint32_t HAL_ADC_GetError(ADC_HandleTypeDef* hadc);
  * @retval None
  */
 #define ADC_SQR3_RK(_CHANNELNB_, _RANKNB_) \
-  (((uint32_t)((uint16_t)(_CHANNELNB_))) << (5U * ((_RANKNB_)-1U)))
+  (((uint32_t)((uint16_t)(_CHANNELNB_))) << (5U * ((_RANKNB_) - 1U)))
 
 /**
  * @brief  Set the selected regular channel rank for rank between 7 and 12.
@@ -999,7 +999,7 @@ uint32_t HAL_ADC_GetError(ADC_HandleTypeDef* hadc);
  * @retval None
  */
 #define ADC_SQR2_RK(_CHANNELNB_, _RANKNB_) \
-  (((uint32_t)((uint16_t)(_CHANNELNB_))) << (5U * ((_RANKNB_)-7U)))
+  (((uint32_t)((uint16_t)(_CHANNELNB_))) << (5U * ((_RANKNB_) - 7U)))
 
 /**
  * @brief  Set the selected regular channel rank for rank between 13 and 16.
@@ -1008,7 +1008,7 @@ uint32_t HAL_ADC_GetError(ADC_HandleTypeDef* hadc);
  * @retval None
  */
 #define ADC_SQR1_RK(_CHANNELNB_, _RANKNB_) \
-  (((uint32_t)((uint16_t)(_CHANNELNB_))) << (5U * ((_RANKNB_)-13U)))
+  (((uint32_t)((uint16_t)(_CHANNELNB_))) << (5U * ((_RANKNB_) - 13U)))
 
 /**
  * @brief  Enable ADC continuous conversion mode.
@@ -1024,7 +1024,7 @@ uint32_t HAL_ADC_GetError(ADC_HandleTypeDef* hadc);
  * @retval None
  */
 #define ADC_CR1_DISCONTINUOUS(_NBR_DISCONTINUOUSCONV_) \
-  (((_NBR_DISCONTINUOUSCONV_)-1U) << ADC_CR1_DISCNUM_Pos)
+  (((_NBR_DISCONTINUOUSCONV_) - 1U) << ADC_CR1_DISCNUM_Pos)
 
 /**
  * @brief  Enable ADC scan mode.

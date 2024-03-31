@@ -254,9 +254,8 @@ typedef struct {
  */
 #define LL_DMA_MODE_NORMAL 0x00000000U     /*!< Normal Mode                  */
 #define LL_DMA_MODE_CIRCULAR DMA_SxCR_CIRC /*!< Circular Mode */
-#define LL_DMA_MODE_PFCTRL                          \
-  DMA_SxCR_PFCTRL /*!< Peripheral flow control mode \
-                   */
+#define LL_DMA_MODE_PFCTRL DMA_SxCR_PFCTRL /*!< Peripheral flow control mode \
+                                            */
 /**
  * @}
  */
@@ -338,9 +337,8 @@ typedef struct {
 #define LL_DMA_PRIORITY_LOW 0x00000000U      /*!< Priority level : Low       */
 #define LL_DMA_PRIORITY_MEDIUM DMA_SxCR_PL_0 /*!< Priority level : Medium */
 #define LL_DMA_PRIORITY_HIGH DMA_SxCR_PL_1   /*!< Priority level : High      */
-#define LL_DMA_PRIORITY_VERYHIGH              \
-  DMA_SxCR_PL /*!< Priority level : Very_High \
-               */
+#define LL_DMA_PRIORITY_VERYHIGH DMA_SxCR_PL /*!< Priority level : Very_High \
+                                              */
 /**
  * @}
  */
@@ -348,18 +346,15 @@ typedef struct {
 /** @defgroup DMA_LL_EC_CHANNEL CHANNEL
  * @{
  */
-#define LL_DMA_CHANNEL_0 0x00000000U /* Select Channel0 of DMA Instance */
-#define LL_DMA_CHANNEL_1                              \
-  DMA_SxCR_CHSEL_0 /* Select Channel1 of DMA Instance \
-                    */
-#define LL_DMA_CHANNEL_2                              \
-  DMA_SxCR_CHSEL_1 /* Select Channel2 of DMA Instance \
-                    */
+#define LL_DMA_CHANNEL_0 0x00000000U      /* Select Channel0 of DMA Instance */
+#define LL_DMA_CHANNEL_1 DMA_SxCR_CHSEL_0 /* Select Channel1 of DMA Instance \
+                                           */
+#define LL_DMA_CHANNEL_2 DMA_SxCR_CHSEL_1 /* Select Channel2 of DMA Instance \
+                                           */
 #define LL_DMA_CHANNEL_3 \
-  (DMA_SxCR_CHSEL_0 | DMA_SxCR_CHSEL_1) /* Select Channel3 of DMA Instance */
-#define LL_DMA_CHANNEL_4                              \
-  DMA_SxCR_CHSEL_2 /* Select Channel4 of DMA Instance \
-                    */
+  (DMA_SxCR_CHSEL_0 | DMA_SxCR_CHSEL_1)   /* Select Channel3 of DMA Instance */
+#define LL_DMA_CHANNEL_4 DMA_SxCR_CHSEL_2 /* Select Channel4 of DMA Instance \
+                                           */
 #define LL_DMA_CHANNEL_5 \
   (DMA_SxCR_CHSEL_2 | DMA_SxCR_CHSEL_0) /* Select Channel5 of DMA Instance */
 #define LL_DMA_CHANNEL_6 \
@@ -368,9 +363,8 @@ typedef struct {
   (DMA_SxCR_CHSEL_2 | DMA_SxCR_CHSEL_1 | \
    DMA_SxCR_CHSEL_0) /* Select Channel7 of DMA Instance */
 #if defined(DMA_SxCR_CHSEL_3)
-#define LL_DMA_CHANNEL_8                              \
-  DMA_SxCR_CHSEL_3 /* Select Channel8 of DMA Instance \
-                    */
+#define LL_DMA_CHANNEL_8 DMA_SxCR_CHSEL_3 /* Select Channel8 of DMA Instance \
+                                           */
 #define LL_DMA_CHANNEL_9 \
   (DMA_SxCR_CHSEL_3 | DMA_SxCR_CHSEL_0) /* Select Channel9 of DMA Instance */
 #define LL_DMA_CHANNEL_10 \

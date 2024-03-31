@@ -171,9 +171,8 @@ typedef struct {
 #define LL_RCC_CSR_SFTRSTF RCC_CSR_SFTRSTF   /*!< Software Reset flag */
 #define LL_RCC_CSR_IWDGRSTF \
   RCC_CSR_IWDGRSTF /*!< Independent Watchdog reset flag */
-#define LL_RCC_CSR_WWDGRSTF                        \
-  RCC_CSR_WWDGRSTF /*!< Window watchdog reset flag \
-                    */
+#define LL_RCC_CSR_WWDGRSTF RCC_CSR_WWDGRSTF /*!< Window watchdog reset flag \
+                                              */
 #if defined(RCC_CSR_BORRSTF)
 #define LL_RCC_CSR_BORRSTF RCC_CSR_BORRSTF /*!< BOR reset flag */
 #endif                                     /* RCC_CSR_BORRSTF */
@@ -186,21 +185,16 @@ typedef struct {
  * LL_RCC_WriteReg functions
  * @{
  */
-#define LL_RCC_CIR_LSIRDYIE                        \
-  RCC_CIR_LSIRDYIE /*!< LSI Ready Interrupt Enable \
-                    */
-#define LL_RCC_CIR_LSERDYIE                        \
-  RCC_CIR_LSERDYIE /*!< LSE Ready Interrupt Enable \
-                    */
-#define LL_RCC_CIR_HSIRDYIE                        \
-  RCC_CIR_HSIRDYIE /*!< HSI Ready Interrupt Enable \
-                    */
-#define LL_RCC_CIR_HSERDYIE                        \
-  RCC_CIR_HSERDYIE /*!< HSE Ready Interrupt Enable \
-                    */
-#define LL_RCC_CIR_PLLRDYIE                        \
-  RCC_CIR_PLLRDYIE /*!< PLL Ready Interrupt Enable \
-                    */
+#define LL_RCC_CIR_LSIRDYIE RCC_CIR_LSIRDYIE /*!< LSI Ready Interrupt Enable \
+                                              */
+#define LL_RCC_CIR_LSERDYIE RCC_CIR_LSERDYIE /*!< LSE Ready Interrupt Enable \
+                                              */
+#define LL_RCC_CIR_HSIRDYIE RCC_CIR_HSIRDYIE /*!< HSI Ready Interrupt Enable \
+                                              */
+#define LL_RCC_CIR_HSERDYIE RCC_CIR_HSERDYIE /*!< HSE Ready Interrupt Enable \
+                                              */
+#define LL_RCC_CIR_PLLRDYIE RCC_CIR_PLLRDYIE /*!< PLL Ready Interrupt Enable \
+                                              */
 #if defined(RCC_PLLI2S_SUPPORT)
 #define LL_RCC_CIR_PLLI2SRDYIE \
   RCC_CIR_PLLI2SRDYIE /*!< PLLI2S Ready Interrupt Enable */
@@ -250,21 +244,18 @@ typedef struct {
 /** @defgroup RCC_LL_EC_SYSCLK_DIV  AHB prescaler
  * @{
  */
-#define LL_RCC_SYSCLK_DIV_1 RCC_CFGR_HPRE_DIV1   /*!< SYSCLK not divided */
-#define LL_RCC_SYSCLK_DIV_2 RCC_CFGR_HPRE_DIV2   /*!< SYSCLK divided by 2 */
-#define LL_RCC_SYSCLK_DIV_4 RCC_CFGR_HPRE_DIV4   /*!< SYSCLK divided by 4 */
-#define LL_RCC_SYSCLK_DIV_8 RCC_CFGR_HPRE_DIV8   /*!< SYSCLK divided by 8 */
-#define LL_RCC_SYSCLK_DIV_16 RCC_CFGR_HPRE_DIV16 /*!< SYSCLK divided by 16 */
-#define LL_RCC_SYSCLK_DIV_64 RCC_CFGR_HPRE_DIV64 /*!< SYSCLK divided by 64 */
-#define LL_RCC_SYSCLK_DIV_128                     \
-  RCC_CFGR_HPRE_DIV128 /*!< SYSCLK divided by 128 \
-                        */
-#define LL_RCC_SYSCLK_DIV_256                     \
-  RCC_CFGR_HPRE_DIV256 /*!< SYSCLK divided by 256 \
-                        */
-#define LL_RCC_SYSCLK_DIV_512                     \
-  RCC_CFGR_HPRE_DIV512 /*!< SYSCLK divided by 512 \
-                        */
+#define LL_RCC_SYSCLK_DIV_1 RCC_CFGR_HPRE_DIV1     /*!< SYSCLK not divided */
+#define LL_RCC_SYSCLK_DIV_2 RCC_CFGR_HPRE_DIV2     /*!< SYSCLK divided by 2 */
+#define LL_RCC_SYSCLK_DIV_4 RCC_CFGR_HPRE_DIV4     /*!< SYSCLK divided by 4 */
+#define LL_RCC_SYSCLK_DIV_8 RCC_CFGR_HPRE_DIV8     /*!< SYSCLK divided by 8 */
+#define LL_RCC_SYSCLK_DIV_16 RCC_CFGR_HPRE_DIV16   /*!< SYSCLK divided by 16 */
+#define LL_RCC_SYSCLK_DIV_64 RCC_CFGR_HPRE_DIV64   /*!< SYSCLK divided by 64 */
+#define LL_RCC_SYSCLK_DIV_128 RCC_CFGR_HPRE_DIV128 /*!< SYSCLK divided by 128 \
+                                                    */
+#define LL_RCC_SYSCLK_DIV_256 RCC_CFGR_HPRE_DIV256 /*!< SYSCLK divided by 256 \
+                                                    */
+#define LL_RCC_SYSCLK_DIV_512 RCC_CFGR_HPRE_DIV512 /*!< SYSCLK divided by 512 \
+                                                    */
 /**
  * @}
  */
@@ -395,10 +386,9 @@ typedef struct {
    RCC_CFGR_RTCPRE_1) /*!< HSE clock divided by 14 */
 #define LL_RCC_RTC_HSE_DIV_15                                  \
   (RCC_CFGR_RTCPRE_3 | RCC_CFGR_RTCPRE_2 | RCC_CFGR_RTCPRE_1 | \
-   RCC_CFGR_RTCPRE_0) /*!< HSE clock divided by 15 */
-#define LL_RCC_RTC_HSE_DIV_16                    \
-  RCC_CFGR_RTCPRE_4 /*!< HSE clock divided by 16 \
-                     */
+   RCC_CFGR_RTCPRE_0)                           /*!< HSE clock divided by 15 */
+#define LL_RCC_RTC_HSE_DIV_16 RCC_CFGR_RTCPRE_4 /*!< HSE clock divided by 16 \
+                                                 */
 #define LL_RCC_RTC_HSE_DIV_17 \
   (RCC_CFGR_RTCPRE_4 | RCC_CFGR_RTCPRE_0) /*!< HSE clock divided by 17 */
 #define LL_RCC_RTC_HSE_DIV_18 \
@@ -927,10 +917,9 @@ typedef struct {
 #define LL_RCC_RNG_CLKSOURCE \
   LL_RCC_CK48M_CLKSOURCE /*!< RNG Clock source selection */
 #else
-#define LL_RCC_RNG_CLKSOURCE                       \
-  RCC_PLLCFGR_PLLQ /*!< RNG Clock source selection \
-                    */
-#endif             /* RCC_DCKCFGR_CK48MSEL || RCC_DCKCFGR2_CK48MSEL */
+#define LL_RCC_RNG_CLKSOURCE RCC_PLLCFGR_PLLQ /*!< RNG Clock source selection \
+                                               */
+#endif /* RCC_DCKCFGR_CK48MSEL || RCC_DCKCFGR2_CK48MSEL */
 /**
  * @}
  */
@@ -944,10 +933,9 @@ typedef struct {
 #define LL_RCC_USB_CLKSOURCE \
   LL_RCC_CK48M_CLKSOURCE /*!< USB Clock source selection */
 #else
-#define LL_RCC_USB_CLKSOURCE                       \
-  RCC_PLLCFGR_PLLQ /*!< USB Clock source selection \
-                    */
-#endif             /* RCC_DCKCFGR_CK48MSEL || RCC_DCKCFGR2_CK48MSEL */
+#define LL_RCC_USB_CLKSOURCE RCC_PLLCFGR_PLLQ /*!< USB Clock source selection \
+                                               */
+#endif /* RCC_DCKCFGR_CK48MSEL || RCC_DCKCFGR2_CK48MSEL */
 /**
  * @}
  */
@@ -1051,9 +1039,8 @@ typedef struct {
 /** @defgroup RCC_LL_EC_RTC_CLKSOURCE  RTC clock source selection
  * @{
  */
-#define LL_RCC_RTC_CLKSOURCE_NONE             \
-  0x00000000U /*!< No clock used as RTC clock \
-               */
+#define LL_RCC_RTC_CLKSOURCE_NONE 0x00000000U /*!< No clock used as RTC clock \
+                                               */
 #define LL_RCC_RTC_CLKSOURCE_LSE \
   RCC_BDCR_RTCSEL_0 /*!< LSE oscillator clock used as RTC clock */
 #define LL_RCC_RTC_CLKSOURCE_LSI \
@@ -4410,7 +4397,7 @@ typedef struct {
  */
 #define __LL_RCC_CALC_HCLK_FREQ(__SYSCLKFREQ__, __AHBPRESCALER__) \
   ((__SYSCLKFREQ__) >>                                            \
-   AHBPrescTable[((__AHBPRESCALER__)&RCC_CFGR_HPRE) >> RCC_CFGR_HPRE_Pos])
+   AHBPrescTable[((__AHBPRESCALER__) & RCC_CFGR_HPRE) >> RCC_CFGR_HPRE_Pos])
 
 /**
  * @brief  Helper macro to calculate the PCLK1 frequency (ABP1)

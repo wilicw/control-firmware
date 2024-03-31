@@ -61,19 +61,20 @@ typedef struct {
                                This parameter can be a value of @ref
                              TIM_ClockDivision */
 
-  uint32_t RepetitionCounter; /*!< Specifies the repetition counter value. Each
-                                 time the RCR downcounter reaches zero, an
-                                 update event is generated and counting restarts
-                                 from the RCR value (N). This means in PWM mode
-                                 that (N+1) corresponds to:
-                                       - the number of PWM periods in
-                                 edge-aligned mode
-                                       - the number of half PWM period in
-                                 center-aligned mode GP timers: this parameter
-                                 must be a number between Min_Data = 0x00 and
-                                 Max_Data = 0xFF. Advanced timers: this
-                                 parameter must be a number between Min_Data =
-                                 0x0000 and Max_Data = 0xFFFF. */
+  uint32_t
+      RepetitionCounter; /*!< Specifies the repetition counter value. Each time
+                            the RCR downcounter reaches zero, an update event is
+                            generated and counting restarts from the RCR value
+                            (N). This means in PWM mode that (N+1) corresponds
+                            to:
+                                  - the number of PWM periods in edge-aligned
+                            mode
+                                  - the number of half PWM period in
+                            center-aligned mode GP timers: this parameter must
+                            be a number between Min_Data = 0x00 and Max_Data =
+                            0xFF. Advanced timers: this parameter must be a
+                            number between Min_Data = 0x0000 and Max_Data =
+                            0xFFFF. */
 
   uint32_t AutoReloadPreload; /*!< Specifies the auto-reload preload.
                                   This parameter can be a value of @ref
@@ -624,10 +625,9 @@ typedef void (*pTIM_CallbackTypeDef)(
   TIM_EGR_CC4G /*!< A capture/compare event is generated on channel 4 */
 #define TIM_EVENTSOURCE_COM \
   TIM_EGR_COMG /*!< A commutation event is generated */
-#define TIM_EVENTSOURCE_TRIGGER                                            \
-  TIM_EGR_TG                             /*!< A trigger event is generated \
-                                          */
-#define TIM_EVENTSOURCE_BREAK TIM_EGR_BG /*!< A break event is generated */
+#define TIM_EVENTSOURCE_TRIGGER TIM_EGR_TG /*!< A trigger event is generated \
+                                            */
+#define TIM_EVENTSOURCE_BREAK TIM_EGR_BG   /*!< A break event is generated */
 /**
  * @}
  */
@@ -648,10 +648,9 @@ typedef void (*pTIM_CallbackTypeDef)(
 /** @defgroup TIM_ETR_Polarity TIM ETR Polarity
  * @{
  */
-#define TIM_ETRPOLARITY_INVERTED TIM_SMCR_ETP /*!< Polarity for ETR source */
-#define TIM_ETRPOLARITY_NONINVERTED        \
-  0x00000000U /*!< Polarity for ETR source \
-               */
+#define TIM_ETRPOLARITY_INVERTED TIM_SMCR_ETP   /*!< Polarity for ETR source */
+#define TIM_ETRPOLARITY_NONINVERTED 0x00000000U /*!< Polarity for ETR source \
+                                                 */
 /**
  * @}
  */
@@ -742,9 +741,8 @@ typedef void (*pTIM_CallbackTypeDef)(
 /** @defgroup TIM_Output_Compare_Polarity TIM Output Compare Polarity
  * @{
  */
-#define TIM_OCPOLARITY_HIGH                        \
-  0x00000000U /*!< Capture/Compare output polarity \
-               */
+#define TIM_OCPOLARITY_HIGH 0x00000000U /*!< Capture/Compare output polarity \
+                                         */
 #define TIM_OCPOLARITY_LOW \
   TIM_CCER_CC1P /*!< Capture/Compare output polarity  */
 /**
@@ -981,7 +979,8 @@ typedef void (*pTIM_CallbackTypeDef)(
 /** @defgroup TIM_Clock_Source TIM Clock Source
  * @{
  */
-#define TIM_CLOCKSOURCE_INTERNAL TIM_SMCR_ETPS_0 /*!< Internal clock source */
+#define TIM_CLOCKSOURCE_INTERNAL \
+  TIM_SMCR_ETPS_0 /*!< Internal clock source */
 #define TIM_CLOCKSOURCE_ETRMODE1 \
   TIM_TS_ETRF /*!< External clock source mode 1 (ETRF)                   */
 #define TIM_CLOCKSOURCE_ETRMODE2 \
@@ -1118,9 +1117,8 @@ typedef void (*pTIM_CallbackTypeDef)(
 /** @defgroup TIM_Break_Polarity TIM Break Input Polarity
  * @{
  */
-#define TIM_BREAKPOLARITY_LOW                    \
-  0x00000000U /*!< Break input BRK is active low \
-               */
+#define TIM_BREAKPOLARITY_LOW 0x00000000U /*!< Break input BRK is active low \
+                                           */
 #define TIM_BREAKPOLARITY_HIGH \
   TIM_BDTR_BKP /*!< Break input BRK is active high */
 /**
@@ -1202,10 +1200,10 @@ typedef void (*pTIM_CallbackTypeDef)(
   TIM_CCMR1_OC1M_0 /*!< Set channel to active level on match   */
 #define TIM_OCMODE_INACTIVE \
   TIM_CCMR1_OC1M_1 /*!< Set channel to inactive level on match */
-#define TIM_OCMODE_TOGGLE (TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0) /*!< Toggle */
-#define TIM_OCMODE_PWM1                                 \
-  (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1) /*!< PWM mode 1 \
-                                         */
+#define TIM_OCMODE_TOGGLE \
+  (TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0) /*!< Toggle */
+#define TIM_OCMODE_PWM1 \
+  (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1) /*!< PWM mode 1 */
 #define TIM_OCMODE_PWM2 \
   (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_0) /*!< PWM mode 2 */
 #define TIM_OCMODE_FORCED_ACTIVE \
@@ -1380,10 +1378,9 @@ typedef void (*pTIM_CallbackTypeDef)(
 /** @defgroup Channel_CC_State TIM Capture/Compare Channel State
  * @{
  */
-#define TIM_CCx_ENABLE 0x00000001U /*!< Input or output channel is enabled */
-#define TIM_CCx_DISABLE                                \
-  0x00000000U /*!< Input or output channel is disabled \
-               */
+#define TIM_CCx_ENABLE 0x00000001U  /*!< Input or output channel is enabled */
+#define TIM_CCx_DISABLE 0x00000000U /*!< Input or output channel is disabled \
+                                     */
 #define TIM_CCxN_ENABLE \
   0x00000004U /*!< Complementary output channel is enabled */
 #define TIM_CCxN_DISABLE \
@@ -2008,8 +2005,9 @@ typedef void (*pTIM_CallbackTypeDef)(
    ((__BASE__) == TIM_DMABASE_CCR2) || ((__BASE__) == TIM_DMABASE_CCR3) ||   \
    ((__BASE__) == TIM_DMABASE_CCR4) || ((__BASE__) == TIM_DMABASE_BDTR))
 
-#define IS_TIM_EVENT_SOURCE(__SOURCE__) \
-  ((((__SOURCE__)&0xFFFFFF00U) == 0x00000000U) && ((__SOURCE__) != 0x00000000U))
+#define IS_TIM_EVENT_SOURCE(__SOURCE__)             \
+  ((((__SOURCE__) & 0xFFFFFF00U) == 0x00000000U) && \
+   ((__SOURCE__) != 0x00000000U))
 
 #define IS_TIM_COUNTER_MODE(__MODE__)                \
   (((__MODE__) == TIM_COUNTERMODE_UP) ||             \
@@ -2073,8 +2071,9 @@ typedef void (*pTIM_CallbackTypeDef)(
    ((__MODE__) == TIM_ENCODERMODE_TI2) || \
    ((__MODE__) == TIM_ENCODERMODE_TI12))
 
-#define IS_TIM_DMA_SOURCE(__SOURCE__) \
-  ((((__SOURCE__)&0xFFFF80FFU) == 0x00000000U) && ((__SOURCE__) != 0x00000000U))
+#define IS_TIM_DMA_SOURCE(__SOURCE__)               \
+  ((((__SOURCE__) & 0xFFFF80FFU) == 0x00000000U) && \
+   ((__SOURCE__) != 0x00000000U))
 
 #define IS_TIM_CHANNELS(__CHANNEL__)                                       \
   (((__CHANNEL__) == TIM_CHANNEL_1) || ((__CHANNEL__) == TIM_CHANNEL_2) || \

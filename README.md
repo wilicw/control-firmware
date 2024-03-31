@@ -78,6 +78,7 @@ car to success on the track.
 - [ninja](https://ninja-build.org/)
 - [STM32CubeMX](https://www.st.com/en/development-tools/stm32cubemx.html)
 - [pyocd](https://pyocd.io/)
+- [clang-format >= 18](https://clang.llvm.org/docs/ClangFormat.html)
 
 ## Build
 

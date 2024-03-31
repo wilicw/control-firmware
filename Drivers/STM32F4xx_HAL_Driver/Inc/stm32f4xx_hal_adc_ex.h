@@ -440,7 +440,7 @@ HAL_StatusTypeDef HAL_ADCEx_MultiModeConfigChannel(
     defined(STM32F412Cx)
 #define IS_ADC_CHANNEL(CHANNEL) ((CHANNEL) <= ADC_CHANNEL_18)
 #endif /* STM32F405xx || STM32F415xx || STM32F407xx || STM32F417xx || \
-          STM32F401xC || STM32F401xE || STM32F410xx || STM32F412Zx || \
+          STM32F401xC || STM32F401xE || STM32F410xx || STM32F412Zx ||                                        \
           STM32F412Vx || STM32F412Rx || STM32F412Cx */
 
 #if defined(STM32F411xE) || defined(STM32F413xx) || defined(STM32F423xx) || \

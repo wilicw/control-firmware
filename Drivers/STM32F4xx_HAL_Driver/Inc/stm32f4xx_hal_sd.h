@@ -304,7 +304,8 @@ typedef void (*pSD_CallbackTypeDef)(SD_HandleTypeDef *hsd);
  * Structure definition
  * @{
  */
-#define HAL_SD_ERROR_NONE SDMMC_ERROR_NONE /*!< No error */
+#define HAL_SD_ERROR_NONE \
+  SDMMC_ERROR_NONE /*!< No error */
 #define HAL_SD_ERROR_CMD_CRC_FAIL                                        \
   SDMMC_ERROR_CMD_CRC_FAIL /*!< Command response received (but CRC check \
                               failed)              */
@@ -313,9 +314,8 @@ typedef void (*pSD_CallbackTypeDef)(SD_HandleTypeDef *hsd);
                              */
 #define HAL_SD_ERROR_CMD_RSP_TIMEOUT \
   SDMMC_ERROR_CMD_RSP_TIMEOUT /*!< Command response timeout */
-#define HAL_SD_ERROR_DATA_TIMEOUT            \
-  SDMMC_ERROR_DATA_TIMEOUT /*!< Data timeout \
-                            */
+#define HAL_SD_ERROR_DATA_TIMEOUT \
+  SDMMC_ERROR_DATA_TIMEOUT /*!< Data timeout */
 #define HAL_SD_ERROR_TX_UNDERRUN \
   SDMMC_ERROR_TX_UNDERRUN /*!< Transmit FIFO underrun */
 #define HAL_SD_ERROR_RX_OVERRUN \
@@ -324,7 +324,7 @@ typedef void (*pSD_CallbackTypeDef)(SD_HandleTypeDef *hsd);
   SDMMC_ERROR_ADDR_MISALIGNED /*!< Misaligned address */
 #define HAL_SD_ERROR_BLOCK_LEN_ERR                                           \
   SDMMC_ERROR_BLOCK_LEN_ERR /*!< Transferred block length is not allowed for \
-                               the card or the number of transferred bytes   \
+                               the card or the number of transferred bytes                                                 \
                                does not match the block length   */
 #define HAL_SD_ERROR_ERASE_SEQ_ERR                                         \
   SDMMC_ERROR_ERASE_SEQ_ERR /*!< An error in the sequence of erase command \
@@ -334,9 +334,9 @@ typedef void (*pSD_CallbackTypeDef)(SD_HandleTypeDef *hsd);
 #define HAL_SD_ERROR_WRITE_PROT_VIOLATION                                  \
   SDMMC_ERROR_WRITE_PROT_VIOLATION /*!< Attempt to program a write protect \
                                       block                      */
-#define HAL_SD_ERROR_LOCK_UNLOCK_FAILED                                        \
-  SDMMC_ERROR_LOCK_UNLOCK_FAILED /*!< Sequence or password error has been      \
-                                    detected in unlock command or if there was \
+#define HAL_SD_ERROR_LOCK_UNLOCK_FAILED                                   \
+  SDMMC_ERROR_LOCK_UNLOCK_FAILED /*!< Sequence or password error has been \
+                                    detected in unlock command or if there was                                                  \
                                     an attempt to access a locked card    */
 #define HAL_SD_ERROR_COM_CRC_FAILED \
   SDMMC_ERROR_COM_CRC_FAILED /*!< CRC check of the previous command failed */
@@ -364,7 +364,7 @@ typedef void (*pSD_CallbackTypeDef)(SD_HandleTypeDef *hsd);
                                    internal ECC          */
 #define HAL_SD_ERROR_ERASE_RESET                                           \
   SDMMC_ERROR_ERASE_RESET /*!< Erase sequence was cleared before executing \
-                             because an out of erase sequence command was  \
+                             because an out of erase sequence command was                                             \
                              received                        */
 #define HAL_SD_ERROR_AKE_SEQ_ERR \
   SDMMC_ERROR_AKE_SEQ_ERR /*!< Error in sequence of authentication */
@@ -383,8 +383,10 @@ typedef void (*pSD_CallbackTypeDef)(SD_HandleTypeDef *hsd);
                                    */
 #define HAL_SD_ERROR_BUSY \
   SDMMC_ERROR_BUSY /*!< Error when transfer process is busy */
-#define HAL_SD_ERROR_DMA SDMMC_ERROR_DMA /*!< Error while DMA transfer */
-#define HAL_SD_ERROR_TIMEOUT SDMMC_ERROR_TIMEOUT /*!< Timeout error */
+#define HAL_SD_ERROR_DMA \
+  SDMMC_ERROR_DMA /*!< Error while DMA transfer */
+#define HAL_SD_ERROR_TIMEOUT \
+  SDMMC_ERROR_TIMEOUT /*!< Timeout error */
 
 #if defined(USE_HAL_SD_REGISTER_CALLBACKS) && \
     (USE_HAL_SD_REGISTER_CALLBACKS == 1U)

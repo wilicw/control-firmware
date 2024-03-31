@@ -60,7 +60,8 @@ extern "C" {
                    */
 #define GPIO_AF0_SWJ \
   ((uint8_t)0x00) /* SWJ (SWD and JTAG) Alternate Function mapping */
-#define GPIO_AF0_TRACE ((uint8_t)0x00) /* TRACE Alternate Function mapping */
+#define GPIO_AF0_TRACE \
+  ((uint8_t)0x00) /* TRACE Alternate Function mapping */
 
 /**
  * @brief   AF 1 selection
@@ -133,13 +134,12 @@ extern "C" {
 /**
  * @brief   AF 8 selection
  */
-#define GPIO_AF8_UART4 ((uint8_t)0x08) /* UART4 Alternate Function mapping  */
-#define GPIO_AF8_UART5 ((uint8_t)0x08) /* UART5 Alternate Function mapping  */
-#define GPIO_AF8_USART6                                                     \
-  ((uint8_t)0x08)                      /* USART6 Alternate Function mapping \
-                                        */
-#define GPIO_AF8_UART7 ((uint8_t)0x08) /* UART7 Alternate Function mapping  */
-#define GPIO_AF8_UART8 ((uint8_t)0x08) /* UART8 Alternate Function mapping  */
+#define GPIO_AF8_UART4 ((uint8_t)0x08)  /* UART4 Alternate Function mapping  */
+#define GPIO_AF8_UART5 ((uint8_t)0x08)  /* UART5 Alternate Function mapping  */
+#define GPIO_AF8_USART6 ((uint8_t)0x08) /* USART6 Alternate Function mapping \
+                                         */
+#define GPIO_AF8_UART7 ((uint8_t)0x08)  /* UART7 Alternate Function mapping  */
+#define GPIO_AF8_UART8 ((uint8_t)0x08)  /* UART8 Alternate Function mapping  */
 
 /**
  * @brief   AF 9 selection
@@ -154,19 +154,16 @@ extern "C" {
 /**
  * @brief   AF 10 selection
  */
-#define GPIO_AF10_OTG_FS                               \
-  ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
-                   */
-#define GPIO_AF10_OTG_HS                               \
-  ((uint8_t)0x0A) /* OTG_HS Alternate Function mapping \
-                   */
+#define GPIO_AF10_OTG_FS ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
+                                          */
+#define GPIO_AF10_OTG_HS ((uint8_t)0x0A) /* OTG_HS Alternate Function mapping \
+                                          */
 
 /**
  * @brief   AF 11 selection
  */
-#define GPIO_AF11_ETH                                    \
-  ((uint8_t)0x0B) /* ETHERNET Alternate Function mapping \
-                   */
+#define GPIO_AF11_ETH ((uint8_t)0x0B) /* ETHERNET Alternate Function mapping \
+                                       */
 
 /**
  * @brief   AF 12 selection
@@ -186,9 +183,8 @@ extern "C" {
 /**
  * @brief   AF 14 selection
  */
-#define GPIO_AF14_LTDC                                  \
-  ((uint8_t)0x0E) /* LCD-TFT Alternate Function mapping \
-                   */
+#define GPIO_AF14_LTDC ((uint8_t)0x0E) /* LCD-TFT Alternate Function mapping \
+                                        */
 
 /**
  * @brief   AF 15 selection
@@ -212,7 +208,8 @@ extern "C" {
                    */
 #define GPIO_AF0_SWJ \
   ((uint8_t)0x00) /* SWJ (SWD and JTAG) Alternate Function mapping */
-#define GPIO_AF0_TRACE ((uint8_t)0x00) /* TRACE Alternate Function mapping */
+#define GPIO_AF0_TRACE \
+  ((uint8_t)0x00) /* TRACE Alternate Function mapping */
 
 /**
  * @brief   AF 1 selection
@@ -287,13 +284,12 @@ extern "C" {
 /**
  * @brief   AF 8 selection
  */
-#define GPIO_AF8_UART4 ((uint8_t)0x08) /* UART4 Alternate Function mapping  */
-#define GPIO_AF8_UART5 ((uint8_t)0x08) /* UART5 Alternate Function mapping  */
-#define GPIO_AF8_USART6                                                     \
-  ((uint8_t)0x08)                      /* USART6 Alternate Function mapping \
-                                        */
-#define GPIO_AF8_UART7 ((uint8_t)0x08) /* UART7 Alternate Function mapping  */
-#define GPIO_AF8_UART8 ((uint8_t)0x08) /* UART8 Alternate Function mapping  */
+#define GPIO_AF8_UART4 ((uint8_t)0x08)  /* UART4 Alternate Function mapping  */
+#define GPIO_AF8_UART5 ((uint8_t)0x08)  /* UART5 Alternate Function mapping  */
+#define GPIO_AF8_USART6 ((uint8_t)0x08) /* USART6 Alternate Function mapping \
+                                         */
+#define GPIO_AF8_UART7 ((uint8_t)0x08)  /* UART7 Alternate Function mapping  */
+#define GPIO_AF8_UART8 ((uint8_t)0x08)  /* UART8 Alternate Function mapping  */
 
 /**
  * @brief   AF 9 selection
@@ -307,19 +303,16 @@ extern "C" {
 /**
  * @brief   AF 10 selection
  */
-#define GPIO_AF10_OTG_FS                               \
-  ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
-                   */
-#define GPIO_AF10_OTG_HS                               \
-  ((uint8_t)0x0A) /* OTG_HS Alternate Function mapping \
-                   */
+#define GPIO_AF10_OTG_FS ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
+                                          */
+#define GPIO_AF10_OTG_HS ((uint8_t)0x0A) /* OTG_HS Alternate Function mapping \
+                                          */
 
 /**
  * @brief   AF 11 selection
  */
-#define GPIO_AF11_ETH                                    \
-  ((uint8_t)0x0B) /* ETHERNET Alternate Function mapping \
-                   */
+#define GPIO_AF11_ETH ((uint8_t)0x0B) /* ETHERNET Alternate Function mapping \
+                                       */
 
 /**
  * @brief   AF 12 selection
@@ -358,7 +351,8 @@ extern "C" {
                    */
 #define GPIO_AF0_SWJ \
   ((uint8_t)0x00) /* SWJ (SWD and JTAG) Alternate Function mapping */
-#define GPIO_AF0_TRACE ((uint8_t)0x00) /* TRACE Alternate Function mapping */
+#define GPIO_AF0_TRACE \
+  ((uint8_t)0x00) /* TRACE Alternate Function mapping */
 
 /**
  * @brief   AF 1 selection
@@ -421,11 +415,10 @@ extern "C" {
 /**
  * @brief   AF 8 selection
  */
-#define GPIO_AF8_UART4 ((uint8_t)0x08) /* UART4 Alternate Function mapping  */
-#define GPIO_AF8_UART5 ((uint8_t)0x08) /* UART5 Alternate Function mapping  */
-#define GPIO_AF8_USART6                                \
-  ((uint8_t)0x08) /* USART6 Alternate Function mapping \
-                   */
+#define GPIO_AF8_UART4 ((uint8_t)0x08)  /* UART4 Alternate Function mapping  */
+#define GPIO_AF8_UART5 ((uint8_t)0x08)  /* UART5 Alternate Function mapping  */
+#define GPIO_AF8_USART6 ((uint8_t)0x08) /* USART6 Alternate Function mapping \
+                                         */
 
 /**
  * @brief   AF 9 selection
@@ -439,19 +432,16 @@ extern "C" {
 /**
  * @brief   AF 10 selection
  */
-#define GPIO_AF10_OTG_FS                               \
-  ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
-                   */
-#define GPIO_AF10_OTG_HS                               \
-  ((uint8_t)0x0A) /* OTG_HS Alternate Function mapping \
-                   */
+#define GPIO_AF10_OTG_FS ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
+                                          */
+#define GPIO_AF10_OTG_HS ((uint8_t)0x0A) /* OTG_HS Alternate Function mapping \
+                                          */
 
 /**
  * @brief   AF 11 selection
  */
-#define GPIO_AF11_ETH                                    \
-  ((uint8_t)0x0B) /* ETHERNET Alternate Function mapping \
-                   */
+#define GPIO_AF11_ETH ((uint8_t)0x0B) /* ETHERNET Alternate Function mapping \
+                                       */
 
 /**
  * @brief   AF 12 selection
@@ -490,7 +480,8 @@ extern "C" {
                    */
 #define GPIO_AF0_SWJ \
   ((uint8_t)0x00) /* SWJ (SWD and JTAG) Alternate Function mapping */
-#define GPIO_AF0_TRACE ((uint8_t)0x00) /* TRACE Alternate Function mapping */
+#define GPIO_AF0_TRACE \
+  ((uint8_t)0x00) /* TRACE Alternate Function mapping */
 
 /**
  * @brief   AF 1 selection
@@ -553,11 +544,10 @@ extern "C" {
 /**
  * @brief   AF 8 selection
  */
-#define GPIO_AF8_UART4 ((uint8_t)0x08) /* UART4 Alternate Function mapping  */
-#define GPIO_AF8_UART5 ((uint8_t)0x08) /* UART5 Alternate Function mapping  */
-#define GPIO_AF8_USART6                                \
-  ((uint8_t)0x08) /* USART6 Alternate Function mapping \
-                   */
+#define GPIO_AF8_UART4 ((uint8_t)0x08)  /* UART4 Alternate Function mapping  */
+#define GPIO_AF8_UART5 ((uint8_t)0x08)  /* UART5 Alternate Function mapping  */
+#define GPIO_AF8_USART6 ((uint8_t)0x08) /* USART6 Alternate Function mapping \
+                                         */
 
 /**
  * @brief   AF 9 selection
@@ -571,12 +561,10 @@ extern "C" {
 /**
  * @brief   AF 10 selection
  */
-#define GPIO_AF10_OTG_FS                               \
-  ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
-                   */
-#define GPIO_AF10_OTG_HS                               \
-  ((uint8_t)0x0A) /* OTG_HS Alternate Function mapping \
-                   */
+#define GPIO_AF10_OTG_FS ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
+                                          */
+#define GPIO_AF10_OTG_HS ((uint8_t)0x0A) /* OTG_HS Alternate Function mapping \
+                                          */
 
 /**
  * @brief   AF 12 selection
@@ -611,7 +599,8 @@ extern "C" {
                    */
 #define GPIO_AF0_SWJ \
   ((uint8_t)0x00) /* SWJ (SWD and JTAG) Alternate Function mapping */
-#define GPIO_AF0_TRACE ((uint8_t)0x00) /* TRACE Alternate Function mapping */
+#define GPIO_AF0_TRACE \
+  ((uint8_t)0x00) /* TRACE Alternate Function mapping */
 
 /**
  * @brief   AF 1 selection
@@ -675,9 +664,8 @@ extern "C" {
 /**
  * @brief   AF 8 selection
  */
-#define GPIO_AF8_USART6                                \
-  ((uint8_t)0x08) /* USART6 Alternate Function mapping \
-                   */
+#define GPIO_AF8_USART6 ((uint8_t)0x08) /* USART6 Alternate Function mapping \
+                                         */
 
 /**
  * @brief   AF 9 selection
@@ -688,9 +676,8 @@ extern "C" {
 /**
  * @brief   AF 10 selection
  */
-#define GPIO_AF10_OTG_FS                               \
-  ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
-                   */
+#define GPIO_AF10_OTG_FS ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
+                                          */
 
 /**
  * @brief   AF 12 selection
@@ -720,7 +707,8 @@ extern "C" {
                    */
 #define GPIO_AF0_SWJ \
   ((uint8_t)0x00) /* SWJ (SWD and JTAG) Alternate Function mapping */
-#define GPIO_AF0_TRACE ((uint8_t)0x00) /* TRACE Alternate Function mapping */
+#define GPIO_AF0_TRACE \
+  ((uint8_t)0x00) /* TRACE Alternate Function mapping */
 
 /**
  * @brief   AF 1 selection
@@ -798,16 +786,13 @@ extern "C" {
 /**
  * @brief   AF 8 selection
  */
-#define GPIO_AF8_USART6                                \
-  ((uint8_t)0x08) /* USART6 Alternate Function mapping \
-                   */
-#define GPIO_AF8_USART3                                \
-  ((uint8_t)0x08) /* USART3 Alternate Function mapping \
-                   */
-#define GPIO_AF8_DFSDM1                                                    \
-  ((uint8_t)0x08)                     /* DFSDM1 Alternate Function mapping \
-                                       */
-#define GPIO_AF8_CAN1 ((uint8_t)0x08) /* CAN1 Alternate Function mapping   */
+#define GPIO_AF8_USART6 ((uint8_t)0x08) /* USART6 Alternate Function mapping \
+                                         */
+#define GPIO_AF8_USART3 ((uint8_t)0x08) /* USART3 Alternate Function mapping \
+                                         */
+#define GPIO_AF8_DFSDM1 ((uint8_t)0x08) /* DFSDM1 Alternate Function mapping \
+                                         */
+#define GPIO_AF8_CAN1 ((uint8_t)0x08)   /* CAN1 Alternate Function mapping   */
 
 /**
  * @brief   AF 9 selection
@@ -826,14 +811,12 @@ extern "C" {
 /**
  * @brief   AF 10 selection
  */
-#define GPIO_AF10_OTG_FS                               \
-  ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
-                   */
-#define GPIO_AF10_DFSDM1                                                    \
-  ((uint8_t)0x0A)                      /* DFSDM1 Alternate Function mapping \
-                                        */
-#define GPIO_AF10_QSPI ((uint8_t)0x0A) /* QSPI Alternate Function mapping   */
-#define GPIO_AF10_FMC ((uint8_t)0x0A)  /* FMC Alternate Function mapping    */
+#define GPIO_AF10_OTG_FS ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
+                                          */
+#define GPIO_AF10_DFSDM1 ((uint8_t)0x0A) /* DFSDM1 Alternate Function mapping \
+                                          */
+#define GPIO_AF10_QSPI ((uint8_t)0x0A)   /* QSPI Alternate Function mapping   */
+#define GPIO_AF10_FMC ((uint8_t)0x0A)    /* FMC Alternate Function mapping    */
 
 /**
  * @brief   AF 12 selection
@@ -861,16 +844,16 @@ extern "C" {
   ((uint8_t)0x00) /* MCO (MCO1 and MCO2) Alternate Function mapping */
 #define GPIO_AF0_SWJ \
   ((uint8_t)0x00) /* SWJ (SWD and JTAG) Alternate Function mapping */
-#define GPIO_AF0_TRACE ((uint8_t)0x00) /* TRACE Alternate Function mapping */
+#define GPIO_AF0_TRACE \
+  ((uint8_t)0x00) /* TRACE Alternate Function mapping */
 
 /**
  * @brief   AF 1 selection
  */
-#define GPIO_AF1_TIM1 ((uint8_t)0x01) /* TIM1 Alternate Function mapping */
-#define GPIO_AF1_TIM2 ((uint8_t)0x01) /* TIM2 Alternate Function mapping */
-#define GPIO_AF1_LPTIM1                                \
-  ((uint8_t)0x01) /* LPTIM1 Alternate Function mapping \
-                   */
+#define GPIO_AF1_TIM1 ((uint8_t)0x01)   /* TIM1 Alternate Function mapping */
+#define GPIO_AF1_TIM2 ((uint8_t)0x01)   /* TIM2 Alternate Function mapping */
+#define GPIO_AF1_LPTIM1 ((uint8_t)0x01) /* LPTIM1 Alternate Function mapping \
+                                         */
 
 /**
  * @brief   AF 2 selection
@@ -882,13 +865,12 @@ extern "C" {
 /**
  * @brief   AF 3 selection
  */
-#define GPIO_AF3_TIM8 ((uint8_t)0x03)  /* TIM8 Alternate Function mapping  */
-#define GPIO_AF3_TIM9 ((uint8_t)0x03)  /* TIM9 Alternate Function mapping  */
-#define GPIO_AF3_TIM10 ((uint8_t)0x03) /* TIM10 Alternate Function mapping */
-#define GPIO_AF3_TIM11 ((uint8_t)0x03) /* TIM11 Alternate Function mapping */
-#define GPIO_AF3_DFSDM2                                \
-  ((uint8_t)0x03) /* DFSDM2 Alternate Function mapping \
-                   */
+#define GPIO_AF3_TIM8 ((uint8_t)0x03)   /* TIM8 Alternate Function mapping  */
+#define GPIO_AF3_TIM9 ((uint8_t)0x03)   /* TIM9 Alternate Function mapping  */
+#define GPIO_AF3_TIM10 ((uint8_t)0x03)  /* TIM10 Alternate Function mapping */
+#define GPIO_AF3_TIM11 ((uint8_t)0x03)  /* TIM11 Alternate Function mapping */
+#define GPIO_AF3_DFSDM2 ((uint8_t)0x03) /* DFSDM2 Alternate Function mapping \
+                                         */
 
 /**
  * @brief   AF 4 selection
@@ -951,20 +933,17 @@ extern "C" {
 /**
  * @brief   AF 8 selection
  */
-#define GPIO_AF8_USART6                                \
-  ((uint8_t)0x08) /* USART6 Alternate Function mapping \
-                   */
-#define GPIO_AF8_USART3                                                     \
-  ((uint8_t)0x08)                      /* USART3 Alternate Function mapping \
-                                        */
-#define GPIO_AF8_UART4 ((uint8_t)0x08) /* UART4 Alternate Function mapping  */
-#define GPIO_AF8_UART5 ((uint8_t)0x08) /* UART5 Alternate Function mapping  */
-#define GPIO_AF8_UART7 ((uint8_t)0x08) /* UART8 Alternate Function mapping  */
-#define GPIO_AF8_UART8 ((uint8_t)0x08) /* UART8 Alternate Function mapping  */
-#define GPIO_AF8_DFSDM1                                                    \
-  ((uint8_t)0x08)                     /* DFSDM1 Alternate Function mapping \
-                                       */
-#define GPIO_AF8_CAN1 ((uint8_t)0x08) /* CAN1 Alternate Function mapping   */
+#define GPIO_AF8_USART6 ((uint8_t)0x08) /* USART6 Alternate Function mapping \
+                                         */
+#define GPIO_AF8_USART3 ((uint8_t)0x08) /* USART3 Alternate Function mapping \
+                                         */
+#define GPIO_AF8_UART4 ((uint8_t)0x08)  /* UART4 Alternate Function mapping  */
+#define GPIO_AF8_UART5 ((uint8_t)0x08)  /* UART5 Alternate Function mapping  */
+#define GPIO_AF8_UART7 ((uint8_t)0x08)  /* UART8 Alternate Function mapping  */
+#define GPIO_AF8_UART8 ((uint8_t)0x08)  /* UART8 Alternate Function mapping  */
+#define GPIO_AF8_DFSDM1 ((uint8_t)0x08) /* DFSDM1 Alternate Function mapping \
+                                         */
+#define GPIO_AF8_CAN1 ((uint8_t)0x08)   /* CAN1 Alternate Function mapping   */
 
 /**
  * @brief   AF 9 selection
@@ -983,29 +962,25 @@ extern "C" {
 /**
  * @brief   AF 10 selection
  */
-#define GPIO_AF10_SAI1 ((uint8_t)0x0A) /* SAI1 Alternate Function mapping   */
-#define GPIO_AF10_OTG_FS                               \
-  ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
-                   */
-#define GPIO_AF10_DFSDM1                               \
-  ((uint8_t)0x0A) /* DFSDM1 Alternate Function mapping \
-                   */
-#define GPIO_AF10_DFSDM2                                                    \
-  ((uint8_t)0x0A)                      /* DFSDM2 Alternate Function mapping \
-                                        */
-#define GPIO_AF10_QSPI ((uint8_t)0x0A) /* QSPI Alternate Function mapping   */
-#define GPIO_AF10_FSMC ((uint8_t)0x0A) /* FSMC Alternate Function mapping   */
+#define GPIO_AF10_SAI1 ((uint8_t)0x0A)   /* SAI1 Alternate Function mapping   */
+#define GPIO_AF10_OTG_FS ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
+                                          */
+#define GPIO_AF10_DFSDM1 ((uint8_t)0x0A) /* DFSDM1 Alternate Function mapping \
+                                          */
+#define GPIO_AF10_DFSDM2 ((uint8_t)0x0A) /* DFSDM2 Alternate Function mapping \
+                                          */
+#define GPIO_AF10_QSPI ((uint8_t)0x0A)   /* QSPI Alternate Function mapping   */
+#define GPIO_AF10_FSMC ((uint8_t)0x0A)   /* FSMC Alternate Function mapping   */
 
 /**
  * @brief   AF 11 selection
  */
-#define GPIO_AF11_UART4 ((uint8_t)0x0B) /* UART4 Alternate Function mapping */
-#define GPIO_AF11_UART5 ((uint8_t)0x0B) /* UART5 Alternate Function mapping */
-#define GPIO_AF11_UART9 ((uint8_t)0x0B) /* UART9 Alternate Function mapping */
-#define GPIO_AF11_UART10                                                    \
-  ((uint8_t)0x0B)                      /* UART10 Alternate Function mapping \
-                                        */
-#define GPIO_AF11_CAN3 ((uint8_t)0x0B) /* CAN3 Alternate Function mapping   */
+#define GPIO_AF11_UART4 ((uint8_t)0x0B)  /* UART4 Alternate Function mapping  */
+#define GPIO_AF11_UART5 ((uint8_t)0x0B)  /* UART5 Alternate Function mapping  */
+#define GPIO_AF11_UART9 ((uint8_t)0x0B)  /* UART9 Alternate Function mapping  */
+#define GPIO_AF11_UART10 ((uint8_t)0x0B) /* UART10 Alternate Function mapping \
+                                          */
+#define GPIO_AF11_CAN3 ((uint8_t)0x0B)   /* CAN3 Alternate Function mapping   */
 
 /**
  * @brief   AF 12 selection
@@ -1039,7 +1014,8 @@ extern "C" {
                    */
 #define GPIO_AF0_SWJ \
   ((uint8_t)0x00) /* SWJ (SWD and JTAG) Alternate Function mapping */
-#define GPIO_AF0_TRACE ((uint8_t)0x00) /* TRACE Alternate Function mapping */
+#define GPIO_AF0_TRACE \
+  ((uint8_t)0x00) /* TRACE Alternate Function mapping */
 
 /**
  * @brief   AF 1 selection
@@ -1111,9 +1087,8 @@ extern "C" {
 /**
  * @brief   AF 8 selection
  */
-#define GPIO_AF8_USART6                                \
-  ((uint8_t)0x08) /* USART6 Alternate Function mapping \
-                   */
+#define GPIO_AF8_USART6 ((uint8_t)0x08) /* USART6 Alternate Function mapping \
+                                         */
 
 /**
  * @brief   AF 9 selection
@@ -1125,9 +1100,8 @@ extern "C" {
 /**
  * @brief   AF 10 selection
  */
-#define GPIO_AF10_OTG_FS                               \
-  ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
-                   */
+#define GPIO_AF10_OTG_FS ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
+                                          */
 
 /**
  * @brief   AF 12 selection
@@ -1155,15 +1129,15 @@ extern "C" {
                    */
 #define GPIO_AF0_SWJ \
   ((uint8_t)0x00) /* SWJ (SWD and JTAG) Alternate Function mapping */
-#define GPIO_AF0_TRACE ((uint8_t)0x00) /* TRACE Alternate Function mapping */
+#define GPIO_AF0_TRACE \
+  ((uint8_t)0x00) /* TRACE Alternate Function mapping */
 
 /**
  * @brief   AF 1 selection
  */
-#define GPIO_AF1_TIM1 ((uint8_t)0x01) /* TIM1 Alternate Function mapping */
-#define GPIO_AF1_LPTIM1                                \
-  ((uint8_t)0x01) /* LPTIM1 Alternate Function mapping \
-                   */
+#define GPIO_AF1_TIM1 ((uint8_t)0x01)   /* TIM1 Alternate Function mapping */
+#define GPIO_AF1_LPTIM1 ((uint8_t)0x01) /* LPTIM1 Alternate Function mapping \
+                                         */
 
 /**
  * @brief   AF 2 selection
@@ -1215,9 +1189,8 @@ extern "C" {
 /**
  * @brief   AF 8 selection
  */
-#define GPIO_AF8_USART6                                \
-  ((uint8_t)0x08) /* USART6 Alternate Function mapping \
-                   */
+#define GPIO_AF8_USART6 ((uint8_t)0x08) /* USART6 Alternate Function mapping \
+                                         */
 
 /**
  * @brief   AF 9 selection
@@ -1247,7 +1220,8 @@ extern "C" {
                    */
 #define GPIO_AF0_SWJ \
   ((uint8_t)0x00) /* SWJ (SWD and JTAG) Alternate Function mapping */
-#define GPIO_AF0_TRACE ((uint8_t)0x00) /* TRACE Alternate Function mapping */
+#define GPIO_AF0_TRACE \
+  ((uint8_t)0x00) /* TRACE Alternate Function mapping */
 
 /**
  * @brief   AF 1 selection
@@ -1326,11 +1300,10 @@ extern "C" {
 /**
  * @brief   AF 8 selection
  */
-#define GPIO_AF8_UART4 ((uint8_t)0x08) /* UART4 Alternate Function mapping  */
-#define GPIO_AF8_UART5 ((uint8_t)0x08) /* UART5 Alternate Function mapping  */
-#define GPIO_AF8_USART6                                \
-  ((uint8_t)0x08) /* USART6 Alternate Function mapping \
-                   */
+#define GPIO_AF8_UART4 ((uint8_t)0x08)  /* UART4 Alternate Function mapping  */
+#define GPIO_AF8_UART5 ((uint8_t)0x08)  /* UART5 Alternate Function mapping  */
+#define GPIO_AF8_USART6 ((uint8_t)0x08) /* USART6 Alternate Function mapping \
+                                         */
 #define GPIO_AF8_SPDIFRX \
   ((uint8_t)0x08)                     /* SPDIFRX Alternate Function mapping  */
 #define GPIO_AF8_SAI2 ((uint8_t)0x08) /* SAI2 Alternate Function mapping   */
@@ -1348,21 +1321,18 @@ extern "C" {
 /**
  * @brief   AF 10 selection
  */
-#define GPIO_AF10_OTG_FS                               \
-  ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
-                   */
-#define GPIO_AF10_OTG_HS                                                    \
-  ((uint8_t)0x0A)                      /* OTG_HS Alternate Function mapping \
-                                        */
-#define GPIO_AF10_SAI2 ((uint8_t)0x0A) /* SAI2 Alternate Function mapping   */
-#define GPIO_AF10_QSPI ((uint8_t)0x0A) /* QSPI Alternate Function mapping  */
+#define GPIO_AF10_OTG_FS ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
+                                          */
+#define GPIO_AF10_OTG_HS ((uint8_t)0x0A) /* OTG_HS Alternate Function mapping \
+                                          */
+#define GPIO_AF10_SAI2 ((uint8_t)0x0A)   /* SAI2 Alternate Function mapping   */
+#define GPIO_AF10_QSPI ((uint8_t)0x0A)   /* QSPI Alternate Function mapping  */
 
 /**
  * @brief   AF 11 selection
  */
-#define GPIO_AF11_ETH                                    \
-  ((uint8_t)0x0B) /* ETHERNET Alternate Function mapping \
-                   */
+#define GPIO_AF11_ETH ((uint8_t)0x0B) /* ETHERNET Alternate Function mapping \
+                                       */
 
 /**
  * @brief   AF 12 selection
@@ -1402,7 +1372,8 @@ extern "C" {
                    */
 #define GPIO_AF0_SWJ \
   ((uint8_t)0x00) /* SWJ (SWD and JTAG) Alternate Function mapping */
-#define GPIO_AF0_TRACE ((uint8_t)0x00) /* TRACE Alternate Function mapping */
+#define GPIO_AF0_TRACE \
+  ((uint8_t)0x00) /* TRACE Alternate Function mapping */
 
 /**
  * @brief   AF 1 selection
@@ -1475,13 +1446,12 @@ extern "C" {
 /**
  * @brief   AF 8 selection
  */
-#define GPIO_AF8_UART4 ((uint8_t)0x08) /* UART4 Alternate Function mapping  */
-#define GPIO_AF8_UART5 ((uint8_t)0x08) /* UART5 Alternate Function mapping  */
-#define GPIO_AF8_USART6                                                     \
-  ((uint8_t)0x08)                      /* USART6 Alternate Function mapping \
-                                        */
-#define GPIO_AF8_UART7 ((uint8_t)0x08) /* UART7 Alternate Function mapping  */
-#define GPIO_AF8_UART8 ((uint8_t)0x08) /* UART8 Alternate Function mapping  */
+#define GPIO_AF8_UART4 ((uint8_t)0x08)  /* UART4 Alternate Function mapping  */
+#define GPIO_AF8_UART5 ((uint8_t)0x08)  /* UART5 Alternate Function mapping  */
+#define GPIO_AF8_USART6 ((uint8_t)0x08) /* USART6 Alternate Function mapping \
+                                         */
+#define GPIO_AF8_UART7 ((uint8_t)0x08)  /* UART7 Alternate Function mapping  */
+#define GPIO_AF8_UART8 ((uint8_t)0x08)  /* UART8 Alternate Function mapping  */
 
 /**
  * @brief   AF 9 selection
@@ -1497,20 +1467,17 @@ extern "C" {
 /**
  * @brief   AF 10 selection
  */
-#define GPIO_AF10_OTG_FS                               \
-  ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
-                   */
-#define GPIO_AF10_OTG_HS                                                    \
-  ((uint8_t)0x0A)                      /* OTG_HS Alternate Function mapping \
-                                        */
-#define GPIO_AF10_QSPI ((uint8_t)0x0A) /* QSPI Alternate Function mapping   */
+#define GPIO_AF10_OTG_FS ((uint8_t)0x0A) /* OTG_FS Alternate Function mapping \
+                                          */
+#define GPIO_AF10_OTG_HS ((uint8_t)0x0A) /* OTG_HS Alternate Function mapping \
+                                          */
+#define GPIO_AF10_QSPI ((uint8_t)0x0A)   /* QSPI Alternate Function mapping   */
 
 /**
  * @brief   AF 11 selection
  */
-#define GPIO_AF11_ETH                                    \
-  ((uint8_t)0x0B) /* ETHERNET Alternate Function mapping \
-                   */
+#define GPIO_AF11_ETH ((uint8_t)0x0B) /* ETHERNET Alternate Function mapping \
+                                       */
 
 /**
  * @brief   AF 12 selection
@@ -1531,9 +1498,8 @@ extern "C" {
 /**
  * @brief   AF 14 selection
  */
-#define GPIO_AF14_LTDC                                  \
-  ((uint8_t)0x0E) /* LCD-TFT Alternate Function mapping \
-                   */
+#define GPIO_AF14_LTDC ((uint8_t)0x0E) /* LCD-TFT Alternate Function mapping \
+                                        */
 
 /**
  * @brief   AF 15 selection

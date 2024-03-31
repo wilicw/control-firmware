@@ -486,10 +486,9 @@ PCD_StateTypeDef HAL_PCD_GetState(PCD_HandleTypeDef *hpcd);
 #endif                                    /* defined USB_OTG_DOEPINT_NAK */
 
 #ifndef USB_OTG_DOEPMSK_NAKM
-#define USB_OTG_DOEPMSK_NAKM                       \
-  (0x1UL << 13) /*!< OUT Packet NAK interrupt mask \
-                 */
-#endif          /* defined USB_OTG_DOEPMSK_NAKM */
+#define USB_OTG_DOEPMSK_NAKM (0x1UL << 13) /*!< OUT Packet NAK interrupt mask \
+                                            */
+#endif                                     /* defined USB_OTG_DOEPMSK_NAKM */
 
 #ifndef USB_OTG_DOEPINT_STPKTRX
 #define USB_OTG_DOEPINT_STPKTRX \

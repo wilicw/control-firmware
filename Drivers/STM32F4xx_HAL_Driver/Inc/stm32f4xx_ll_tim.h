@@ -561,18 +561,14 @@ typedef struct {
 #define LL_TIM_SR_COMIF TIM_SR_COMIF /*!< COM interrupt flag */
 #define LL_TIM_SR_TIF TIM_SR_TIF     /*!< Trigger interrupt flag */
 #define LL_TIM_SR_BIF TIM_SR_BIF     /*!< Break interrupt flag */
-#define LL_TIM_SR_CC1OF                                \
-  TIM_SR_CC1OF /*!< Capture/Compare 1 overcapture flag \
-                */
-#define LL_TIM_SR_CC2OF                                \
-  TIM_SR_CC2OF /*!< Capture/Compare 2 overcapture flag \
-                */
-#define LL_TIM_SR_CC3OF                                \
-  TIM_SR_CC3OF /*!< Capture/Compare 3 overcapture flag \
-                */
-#define LL_TIM_SR_CC4OF                                \
-  TIM_SR_CC4OF /*!< Capture/Compare 4 overcapture flag \
-                */
+#define LL_TIM_SR_CC1OF TIM_SR_CC1OF /*!< Capture/Compare 1 overcapture flag \
+                                      */
+#define LL_TIM_SR_CC2OF TIM_SR_CC2OF /*!< Capture/Compare 2 overcapture flag \
+                                      */
+#define LL_TIM_SR_CC3OF TIM_SR_CC3OF /*!< Capture/Compare 3 overcapture flag \
+                                      */
+#define LL_TIM_SR_CC4OF TIM_SR_CC4OF /*!< Capture/Compare 4 overcapture flag \
+                                      */
 /**
  * @}
  */
@@ -649,10 +645,9 @@ typedef struct {
 /** @defgroup TIM_LL_EC_COUNTERMODE Counter Mode
  * @{
  */
-#define LL_TIM_COUNTERMODE_UP 0x00000000U /*!<Counter used as upcounter */
-#define LL_TIM_COUNTERMODE_DOWN                \
-  TIM_CR1_DIR /*!< Counter used as downcounter \
-               */
+#define LL_TIM_COUNTERMODE_UP 0x00000000U   /*!<Counter used as upcounter */
+#define LL_TIM_COUNTERMODE_DOWN TIM_CR1_DIR /*!< Counter used as downcounter \
+                                             */
 #define LL_TIM_COUNTERMODE_CENTER_DOWN                                      \
   TIM_CR1_CMS_0 /*!< The counter counts up and down alternatively. Output   \
                    compare interrupt flags of output channels  are set only \
@@ -1040,27 +1035,23 @@ typedef struct {
  */
 #define LL_TIM_ETR_FILTER_FDIV1 \
   0x00000000U /*!< No filter, sampling is done at fDTS */
-#define LL_TIM_ETR_FILTER_FDIV1_N2           \
-  TIM_SMCR_ETF_0 /*!< fSAMPLING=fCK_INT, N=2 \
-                  */
-#define LL_TIM_ETR_FILTER_FDIV1_N4           \
-  TIM_SMCR_ETF_1 /*!< fSAMPLING=fCK_INT, N=4 \
-                  */
+#define LL_TIM_ETR_FILTER_FDIV1_N2 TIM_SMCR_ETF_0 /*!< fSAMPLING=fCK_INT, N=2 \
+                                                   */
+#define LL_TIM_ETR_FILTER_FDIV1_N4 TIM_SMCR_ETF_1 /*!< fSAMPLING=fCK_INT, N=4 \
+                                                   */
 #define LL_TIM_ETR_FILTER_FDIV1_N8 \
-  (TIM_SMCR_ETF_1 | TIM_SMCR_ETF_0) /*!< fSAMPLING=fCK_INT, N=8 */
-#define LL_TIM_ETR_FILTER_FDIV2_N6          \
-  TIM_SMCR_ETF_2 /*!< fSAMPLING=fDTS/2, N=6 \
-                  */
+  (TIM_SMCR_ETF_1 | TIM_SMCR_ETF_0)               /*!< fSAMPLING=fCK_INT, N=8 */
+#define LL_TIM_ETR_FILTER_FDIV2_N6 TIM_SMCR_ETF_2 /*!< fSAMPLING=fDTS/2, N=6 \
+                                                   */
 #define LL_TIM_ETR_FILTER_FDIV2_N8 \
   (TIM_SMCR_ETF_2 | TIM_SMCR_ETF_0) /*!< fSAMPLING=fDTS/2, N=8 */
 #define LL_TIM_ETR_FILTER_FDIV4_N6 \
   (TIM_SMCR_ETF_2 | TIM_SMCR_ETF_1) /*!< fSAMPLING=fDTS/4, N=6 */
 #define LL_TIM_ETR_FILTER_FDIV4_N8   \
   (TIM_SMCR_ETF_2 | TIM_SMCR_ETF_1 | \
-   TIM_SMCR_ETF_0) /*!< fSAMPLING=fDTS/4, N=8 */
-#define LL_TIM_ETR_FILTER_FDIV8_N6          \
-  TIM_SMCR_ETF_3 /*!< fSAMPLING=fDTS/8, N=8 \
-                  */
+   TIM_SMCR_ETF_0)                                /*!< fSAMPLING=fDTS/4, N=8 */
+#define LL_TIM_ETR_FILTER_FDIV8_N6 TIM_SMCR_ETF_3 /*!< fSAMPLING=fDTS/8, N=8 \
+                                                   */
 #define LL_TIM_ETR_FILTER_FDIV8_N8 \
   (TIM_SMCR_ETF_3 | TIM_SMCR_ETF_0) /*!< fSAMPLING=fDTS/16, N=5 */
 #define LL_TIM_ETR_FILTER_FDIV16_N5 \
@@ -1075,10 +1066,9 @@ typedef struct {
    TIM_SMCR_ETF_0) /*!< fSAMPLING=fDTS/32, N=5 */
 #define LL_TIM_ETR_FILTER_FDIV32_N6  \
   (TIM_SMCR_ETF_3 | TIM_SMCR_ETF_2 | \
-   TIM_SMCR_ETF_1) /*!< fSAMPLING=fDTS/32, N=6 */
-#define LL_TIM_ETR_FILTER_FDIV32_N8        \
-  TIM_SMCR_ETF /*!< fSAMPLING=fDTS/32, N=8 \
-                */
+   TIM_SMCR_ETF_1)                               /*!< fSAMPLING=fDTS/32, N=6 */
+#define LL_TIM_ETR_FILTER_FDIV32_N8 TIM_SMCR_ETF /*!< fSAMPLING=fDTS/32, N=8 \
+                                                  */
 /**
  * @}
  */
@@ -1397,39 +1387,42 @@ typedef struct {
  * @param  __DT__ deadtime duration (in ns)
  * @retval DTG[0:7]
  */
-#define __LL_TIM_CALC_DEADTIME(__TIMCLK__, __CKD__, __DT__)                   \
-  ((((uint64_t)((__DT__)*1000U)) <                                            \
-    ((DT_DELAY_1 + 1U) * TIM_CALC_DTS((__TIMCLK__), (__CKD__))))              \
-       ? (uint8_t)(((uint64_t)((__DT__)*1000U) /                              \
-                    TIM_CALC_DTS((__TIMCLK__), (__CKD__))) &                  \
-                   DT_DELAY_1)                                                \
-   : (((uint64_t)((__DT__)*1000U)) < ((64U + (DT_DELAY_2 + 1U)) * 2U *        \
-                                      TIM_CALC_DTS((__TIMCLK__), (__CKD__)))) \
-       ? (uint8_t)(DT_RANGE_2 |                                               \
-                   ((uint8_t)((uint8_t)((((uint64_t)((__DT__)*1000U)) /       \
-                                         TIM_CALC_DTS((__TIMCLK__),           \
-                                                      (__CKD__))) >>          \
-                                        1U) -                                 \
-                              (uint8_t)64) &                                  \
-                    DT_DELAY_2))                                              \
-   : (((uint64_t)((__DT__)*1000U)) < ((32U + (DT_DELAY_3 + 1U)) * 8U *        \
-                                      TIM_CALC_DTS((__TIMCLK__), (__CKD__)))) \
-       ? (uint8_t)(DT_RANGE_3 |                                               \
-                   ((uint8_t)((uint8_t)(((((uint64_t)(__DT__)*1000U)) /       \
-                                         TIM_CALC_DTS((__TIMCLK__),           \
-                                                      (__CKD__))) >>          \
-                                        3U) -                                 \
-                              (uint8_t)32) &                                  \
-                    DT_DELAY_3))                                              \
-   : (((uint64_t)((__DT__)*1000U)) < ((32U + (DT_DELAY_4 + 1U)) * 16U *       \
-                                      TIM_CALC_DTS((__TIMCLK__), (__CKD__)))) \
-       ? (uint8_t)(DT_RANGE_4 |                                               \
-                   ((uint8_t)((uint8_t)(((((uint64_t)(__DT__)*1000U)) /       \
-                                         TIM_CALC_DTS((__TIMCLK__),           \
-                                                      (__CKD__))) >>          \
-                                        4U) -                                 \
-                              (uint8_t)32) &                                  \
-                    DT_DELAY_4))                                              \
+#define __LL_TIM_CALC_DEADTIME(__TIMCLK__, __CKD__, __DT__)               \
+  ((((uint64_t)((__DT__) * 1000U)) <                                      \
+    ((DT_DELAY_1 + 1U) * TIM_CALC_DTS((__TIMCLK__), (__CKD__))))          \
+       ? (uint8_t)(((uint64_t)((__DT__) * 1000U) /                        \
+                    TIM_CALC_DTS((__TIMCLK__), (__CKD__))) &              \
+                   DT_DELAY_1)                                            \
+   : (((uint64_t)((__DT__) * 1000U)) <                                    \
+      ((64U + (DT_DELAY_2 + 1U)) * 2U *                                   \
+       TIM_CALC_DTS((__TIMCLK__), (__CKD__))))                            \
+       ? (uint8_t)(DT_RANGE_2 |                                           \
+                   ((uint8_t)((uint8_t)((((uint64_t)((__DT__) * 1000U)) / \
+                                         TIM_CALC_DTS((__TIMCLK__),       \
+                                                      (__CKD__))) >>      \
+                                        1U) -                             \
+                              (uint8_t)64) &                              \
+                    DT_DELAY_2))                                          \
+   : (((uint64_t)((__DT__) * 1000U)) <                                    \
+      ((32U + (DT_DELAY_3 + 1U)) * 8U *                                   \
+       TIM_CALC_DTS((__TIMCLK__), (__CKD__))))                            \
+       ? (uint8_t)(DT_RANGE_3 |                                           \
+                   ((uint8_t)((uint8_t)(((((uint64_t)(__DT__) * 1000U)) / \
+                                         TIM_CALC_DTS((__TIMCLK__),       \
+                                                      (__CKD__))) >>      \
+                                        3U) -                             \
+                              (uint8_t)32) &                              \
+                    DT_DELAY_3))                                          \
+   : (((uint64_t)((__DT__) * 1000U)) <                                    \
+      ((32U + (DT_DELAY_4 + 1U)) * 16U *                                  \
+       TIM_CALC_DTS((__TIMCLK__), (__CKD__))))                            \
+       ? (uint8_t)(DT_RANGE_4 |                                           \
+                   ((uint8_t)((uint8_t)(((((uint64_t)(__DT__) * 1000U)) / \
+                                         TIM_CALC_DTS((__TIMCLK__),       \
+                                                      (__CKD__))) >>      \
+                                        4U) -                             \
+                              (uint8_t)32) &                              \
+                    DT_DELAY_4))                                          \
        : 0U)
 
 /**

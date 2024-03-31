@@ -187,11 +187,10 @@ typedef struct {
                          This parameter must be a number between Min_Data = 0
                        and Max_Data = 1      */
 
-  uint8_t
-      speed; /*!< USB Host Channel speed.
-                  This parameter can be any value of @ref HCD_Device_Speed:
-                                                          (HCD_DEVICE_SPEED_xxx)
-              */
+  uint8_t speed; /*!< USB Host Channel speed.
+                      This parameter can be any value of @ref HCD_Device_Speed:
+                                                              (HCD_DEVICE_SPEED_xxx)
+                  */
 
   uint8_t do_ping; /*!< Enable or disable the use of the PING protocol for HS
                       mode.                */
@@ -438,19 +437,19 @@ typedef struct {
 #define USBx_DEVICE ((USB_OTG_DeviceTypeDef *)(USBx_BASE + USB_OTG_DEVICE_BASE))
 #define USBx_INEP(i)                                                    \
   ((USB_OTG_INEndpointTypeDef *)(USBx_BASE + USB_OTG_IN_ENDPOINT_BASE + \
-                                 ((i)*USB_OTG_EP_REG_SIZE)))
+                                 ((i) * USB_OTG_EP_REG_SIZE)))
 
 #define USBx_OUTEP(i)                                                     \
   ((USB_OTG_OUTEndpointTypeDef *)(USBx_BASE + USB_OTG_OUT_ENDPOINT_BASE + \
-                                  ((i)*USB_OTG_EP_REG_SIZE)))
+                                  ((i) * USB_OTG_EP_REG_SIZE)))
 
 #define USBx_DFIFO(i) \
-  *(__IO uint32_t *)(USBx_BASE + USB_OTG_FIFO_BASE + ((i)*USB_OTG_FIFO_SIZE))
+  *(__IO uint32_t *)(USBx_BASE + USB_OTG_FIFO_BASE + ((i) * USB_OTG_FIFO_SIZE))
 
 #define USBx_HOST ((USB_OTG_HostTypeDef *)(USBx_BASE + USB_OTG_HOST_BASE))
 #define USBx_HC(i)                                                        \
   ((USB_OTG_HostChannelTypeDef *)(USBx_BASE + USB_OTG_HOST_CHANNEL_BASE + \
-                                  ((i)*USB_OTG_HOST_CHANNEL_SIZE)))
+                                  ((i) * USB_OTG_HOST_CHANNEL_SIZE)))
 
 #endif /* defined (USB_OTG_FS) || defined (USB_OTG_HS) */
 
