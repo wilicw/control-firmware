@@ -82,7 +82,7 @@ static inline void control_running() {
   /* NOTE: If precharge pin goes low (HV is below 60V), disable the torque
            output.
   */
-  if (recv_events_flags & EVENT_BIT(EVENT_PRECHARGE)) {
+  if (!(recv_events_flags & EVENT_BIT(EVENT_PRECHARGE))) {
     inverter_R->torque = 0;
     inverter_L->torque = 0;
     return;
