@@ -15,7 +15,9 @@ Revision: $Rev: 2024.11$
 #include "stm32f4xx_hal_gpio.h"
 #include "tx_port.h"
 
-static const float MAX_TORQUE = 30.0f;
+static const float TORQUE_FACTOR = 10.0f;
+static const float MAX_TORQUE = 30 * TORQUE_FACTOR;
+
 TX_THREAD control_thread;
 extern TX_EVENT_FLAGS_GROUP event_flags;
 static control_state_t control_state = CONTROL_STOPPED;
@@ -31,7 +33,7 @@ static inline void control_stopped() {
   inverter_R->torque = 0;
   inverter_L->torque = 0;
 
-  static const float CALIBRATION_APPS = 10.0f;
+  static const float CALIBRATION_APPS = 30.0f;
   static const float RTD_BPPS = 50.0f;
   uint8_t apps_triggered =
       apps_l->value < -CALIBRATION_APPS && apps_r->value > CALIBRATION_APPS;
@@ -89,7 +91,7 @@ static inline void control_running() {
   }
 
   inverter_R->torque = inverter_L->torque =
-      (-apps_l->value + apps_r->value) / 2;
+      (-apps_l->value + apps_r->value) / 2 / TORQUE_FACTOR;
 }
 
 void control_thread_entry(ULONG thread_input) {
@@ -111,6 +113,8 @@ void control_thread_entry(ULONG thread_input) {
   inverter_R = open_inverter_instance(0);
   inverter_L = open_inverter_instance(1);
 
+  control_state = CONTROL_STOPPED;
+
   while (1) {
     adc_convert(apps_l);
     adc_convert(apps_r);
@@ -119,7 +123,7 @@ void control_thread_entry(ULONG thread_input) {
 
     recv_events_flags = 0;
     tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_PRECHARGE), TX_OR,
-                       &recv_events_flags, TX_WAIT_FOREVER);
+                       &recv_events_flags, TX_NO_WAIT);
 
     switch (control_state) {
       case CONTROL_STOPPED:
