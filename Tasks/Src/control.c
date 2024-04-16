@@ -9,6 +9,7 @@ Revision: $Rev: 2024.11$
 #include "control.h"
 
 #include "adc.h"
+#include "config.h"
 #include "events.h"
 #include "inverter.h"
 #include "main.h"
@@ -16,7 +17,8 @@ Revision: $Rev: 2024.11$
 #include "tx_port.h"
 
 static const float TORQUE_FACTOR = 10.0f;
-static const float MAX_TORQUE = 30 * TORQUE_FACTOR;
+static const float MAX_TORQUE = 150 * TORQUE_FACTOR;
+static const float REGEN_TORQUE = (REGEN_ENABLE ? -30 : 0) * TORQUE_FACTOR;
 
 TX_THREAD control_thread;
 extern TX_EVENT_FLAGS_GROUP event_flags;
@@ -33,7 +35,7 @@ static inline void control_stopped() {
   inverter_R->torque = 0;
   inverter_L->torque = 0;
 
-  static const float CALIBRATION_APPS = 30.0f;
+  static const float CALIBRATION_APPS = 0.1 * MAX_TORQUE;
   static const float RTD_BPPS = 50.0f;
   uint8_t apps_triggered =
       apps_l->value < -CALIBRATION_APPS && apps_r->value > CALIBRATION_APPS;
@@ -53,8 +55,9 @@ static inline void control_stopped() {
 
 static inline void control_calibrate() {
   // Calibrate the APPS and Steering wheel sensors
-  apps_l->cal.scale *= -MAX_TORQUE / apps_l->value;
-  apps_r->cal.scale *= MAX_TORQUE / apps_r->value;
+  const static float MAX_PEDAL_POSITION = MAX_TORQUE - REGEN_TORQUE;
+  apps_l->cal.scale *= -MAX_PEDAL_POSITION / apps_l->value;
+  apps_r->cal.scale *= MAX_PEDAL_POSITION / apps_r->value;
 
   if (HAL_GPIO_ReadPin(RTD_INPUT_GPIO_Port, RTD_INPUT_Pin) == GPIO_PIN_SET)
     control_state = CONTROL_STOPPED;
@@ -71,16 +74,6 @@ static inline void control_rtd() {
 }
 
 static inline void control_running() {
-  /* NOTE: Disable the torque output if the APPS is less than 5% of the maximum
-           torque output.
-  */
-  if (apps_l->value >= -MAX_TORQUE * 0.05f &&
-      apps_r->value <= MAX_TORQUE * 0.05f) {
-    inverter_R->torque = 0;
-    inverter_L->torque = 0;
-    return;
-  }
-
   /* NOTE: If precharge pin goes low (HV is below 60V), disable the torque
            output.
   */
@@ -90,8 +83,21 @@ static inline void control_running() {
     return;
   }
 
+  /* NOTE: Disable the torque output if the APPS is less than 5% of the maximum
+           torque output.
+  */
+  if (apps_l->value >= -MAX_TORQUE * 0.05f &&
+      apps_r->value <= MAX_TORQUE * 0.05f) {
+    inverter_R->torque = 0;
+    inverter_L->torque = 0;
+  }
+
+  /* TODO: EV.3.3.3 The powertrain must not regenerate energy when vehicle speed
+   *       is between 0 and 5 km/hr
+   */
+
   inverter_R->torque = inverter_L->torque =
-      (-apps_l->value + apps_r->value) / 2 / TORQUE_FACTOR;
+      ((-apps_l->value + apps_r->value) / 2 + REGEN_TORQUE) / TORQUE_FACTOR;
 }
 
 void control_thread_entry(ULONG thread_input) {

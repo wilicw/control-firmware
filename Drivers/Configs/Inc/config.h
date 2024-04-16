@@ -21,6 +21,7 @@ Revision: $Rev: 2024.12$
 #define IMU_ENABLE 1
 #define LOGGER_ENABLE 1
 #define INVERTER_ENABLE 1
+#define REGEN_ENABLE 1
 
 #define LOGGER_FN_PATTERN "ncku-fsae-log-%04d.log"
 
