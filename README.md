@@ -20,6 +20,8 @@ This project aims to provide a robust and efficient solution for managing the va
 [Instagram](https://www.instagram.com/nckuformularacing/) |
 [Youtube](https://www.youtube.com/@nckuformularacing4968/)
 
+## [CAN Bus Address Summary](https://hackmd.io/@nckufs/control-fw-can-bus-table)
+
 ## Project's File Structure
 
 ### AZURE_RTOS
