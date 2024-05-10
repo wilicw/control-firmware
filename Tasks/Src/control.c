@@ -121,6 +121,10 @@ void control_thread_entry(ULONG thread_input) {
 
   control_state = CONTROL_STOPPED;
 
+  if (HAL_GPIO_ReadPin(PRECHARGE_INPUT_GPIO_Port, PRECHARGE_INPUT_Pin) ==
+      GPIO_PIN_SET)
+    tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_PRECHARGE), TX_OR);
+
   while (1) {
     adc_convert(apps_l);
     adc_convert(apps_r);
