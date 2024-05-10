@@ -27,6 +27,7 @@
 #include "events.h"
 #include "imu.h"
 #include "inverter.h"
+#include "steering.h"
 #include "tx_api.h"
 /* USER CODE END Includes */
 
@@ -338,6 +339,12 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
   if (!inverter_L) inverter_L = open_inverter_instance(1);
   inverter_bsp_interrupt(inverter_R, &rx_header, rx_data);
   inverter_bsp_interrupt(inverter_L, &rx_header, rx_data);
+#endif
+
+#if STEERING_ENABLE
+  static steering_t *steering = NULL;
+  if (!steering) steering = open_steering_instance(0);
+  steering_bsp_interrupt(steering, &rx_header, rx_data);
 #endif
 }
 

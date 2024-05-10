@@ -25,6 +25,10 @@ Purpose : Source code for the data logger task. Data acquisition from
               as:
                 [torque][speed][voltge][current]
               each field is 16-bit unsigned/signed integer.
+            0x05 - Steering wheel angle sensor, 16-bit signed integet [angle]
+              and 8-bit signed integer [speed]
+              as:
+                [angle][speed]
 
 Revision: $Rev: 2023.49$
 ----------------------------------------------------------------------
@@ -41,6 +45,7 @@ Revision: $Rev: 2023.49$
 #include "inverter.h"
 #include "main.h"
 #include "stddef.h"
+#include "steering.h"
 #include "usbd_cdc_if.h"
 
 TX_THREAD logger_thread;
@@ -176,6 +181,21 @@ void logger_thread_entry(ULONG thread_input) {
       buf[7 + INVERTER_N * INVERTER_VALUE_SIZE] = 0x0A;
       logger_output(buf, 8 + INVERTER_N * INVERTER_VALUE_SIZE);
       last_inverter_timestamp = timestamp;
+    }
+#endif
+
+#if STEERING_ENABLE
+    steering_t *steering = open_steering_instance(0);
+    static uint32_t last_steering_timestamp = 0;
+    if (steering->timestamp != last_steering_timestamp) {
+      buf[4] = 0x05;
+      buf[5] = 0x03;
+      memcpy(buf + 6, &steering->angle, 2);
+      memcpy(buf + 8, &steering->speed, 1);
+      buf[9] = 0x0D;
+      buf[10] = 0x0A;
+      logger_output(buf, 10);
+      last_steering_timestamp = steering->timestamp;
     }
 #endif
 
