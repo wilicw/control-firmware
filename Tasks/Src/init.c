@@ -14,6 +14,8 @@ Revision: $Rev: 2023.49$
 #include "fx_api.h"
 #include "imu.h"
 #include "inverter.h"
+#include "stm32f4xx_hal.h"
+#include "wheel.h"
 
 TX_THREAD init_thread;
 
@@ -93,6 +95,37 @@ void init_thread_entry(ULONG thread_input) {
 #if IMU_ENABLE
   imu_t *imu = open_imu_instance(0);
   imu_set_type(imu, IMU_MTI600);
+#endif
+
+#if WHEEL_ENABLE
+  extern TIM_HandleTypeDef htim3;
+  extern TIM_HandleTypeDef htim4;
+
+  wheel_t *fl_wheel = open_wheel_instance(0);
+  wheel_t *fr_wheel = open_wheel_instance(1);
+  wheel_t *rl_wheel = open_wheel_instance(2);
+  wheel_t *rr_wheel = open_wheel_instance(3);
+
+  fl_wheel->hw.handler = &htim3;
+  fl_wheel->hw.channel = TIM_CHANNEL_2;
+  fl_wheel->ticks_pre_rev = 18;
+
+  fr_wheel->hw.handler = &htim3;
+  fr_wheel->hw.channel = TIM_CHANNEL_4;
+  fr_wheel->ticks_pre_rev = 18;
+
+  rl_wheel->hw.handler = &htim4;
+  rl_wheel->hw.channel = TIM_CHANNEL_2;
+  rl_wheel->ticks_pre_rev = 18;
+
+  rr_wheel->hw.handler = &htim4;
+  rr_wheel->hw.channel = TIM_CHANNEL_4;
+  rr_wheel->ticks_pre_rev = 18;
+
+  wheel_init(fl_wheel);
+  wheel_init(fr_wheel);
+  wheel_init(rl_wheel);
+  wheel_init(rr_wheel);
 #endif
 
 #if INVERTER_ENABLE

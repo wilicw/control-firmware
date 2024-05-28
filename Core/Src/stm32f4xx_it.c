@@ -29,6 +29,7 @@
 #include "inverter.h"
 #include "steering.h"
 #include "tx_api.h"
+#include "wheel.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -348,7 +349,21 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
 #endif
 }
 
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {}
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
+#if WHEEL_ENABLE
+  static wheel_t *fl_wheel = NULL, *fr_wheel = NULL, *rl_wheel = NULL,
+                 *rr_wheel = NULL;
+  if (!fl_wheel) fl_wheel = open_wheel_instance(0);
+  if (!fr_wheel) fr_wheel = open_wheel_instance(1);
+  if (!rl_wheel) rl_wheel = open_wheel_instance(2);
+  if (!rr_wheel) rr_wheel = open_wheel_instance(3);
+
+  wheel_bsp_interrupt(fl_wheel, htim);
+  wheel_bsp_interrupt(fr_wheel, htim);
+  wheel_bsp_interrupt(rl_wheel, htim);
+  wheel_bsp_interrupt(rr_wheel, htim);
+#endif
+}
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
   if (GPIO_Pin == REC_INPUT_Pin) {

@@ -47,6 +47,7 @@ Revision: $Rev: 2023.49$
 #include "stddef.h"
 #include "steering.h"
 #include "usbd_cdc_if.h"
+#include "wheel.h"
 
 TX_THREAD logger_thread;
 
@@ -196,6 +197,28 @@ void logger_thread_entry(ULONG thread_input) {
       buf[10] = 0x0A;
       logger_output(buf, 10);
       last_steering_timestamp = steering->timestamp;
+    }
+#endif
+
+#if WHEEL_ENABLE
+    wheel_t *fl_wheel = open_wheel_instance(0);
+    wheel_t *fr_wheel = open_wheel_instance(1);
+    wheel_t *rl_wheel = open_wheel_instance(2);
+    wheel_t *rr_wheel = open_wheel_instance(3);
+    static uint32_t last_wheel_timestamp = 0;
+
+    if (timestamp - last_inverter_timestamp >
+        TX_TIMER_TICKS_PER_SECOND / 1000) {
+      buf[4] = 0x06;
+      buf[5] = 0x02;
+      memcpy(buf + 6, &fl_wheel->rpm, 2);
+      memcpy(buf + 8, &fr_wheel->rpm, 2);
+      memcpy(buf + 10, &rl_wheel->rpm, 2);
+      memcpy(buf + 12, &rr_wheel->rpm, 2);
+      buf[14] = 0x0D;
+      buf[15] = 0x0A;
+      logger_output(buf, 16);
+      last_wheel_timestamp = timestamp;
     }
 #endif
 
