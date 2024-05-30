@@ -29,6 +29,10 @@ Purpose : Source code for the data logger task. Data acquisition from
               and 8-bit signed integer [speed]
               as:
                 [angle][speed]
+            0x06 - Wheel speed sensor, 4 wheel speed sensors, each sensor data
+              is 32-bit float [RPM]
+              as:
+                [FL][FR][RL][RR]
 
 Revision: $Rev: 2023.49$
 ----------------------------------------------------------------------
@@ -210,14 +214,14 @@ void logger_thread_entry(ULONG thread_input) {
     if (timestamp - last_inverter_timestamp >
         TX_TIMER_TICKS_PER_SECOND / 1000) {
       buf[4] = 0x06;
-      buf[5] = 0x02;
-      memcpy(buf + 6, &fl_wheel->rpm, 2);
-      memcpy(buf + 8, &fr_wheel->rpm, 2);
-      memcpy(buf + 10, &rl_wheel->rpm, 2);
-      memcpy(buf + 12, &rr_wheel->rpm, 2);
-      buf[14] = 0x0D;
-      buf[15] = 0x0A;
-      logger_output(buf, 16);
+      buf[5] = 0x10;
+      memcpy(buf + 6, &fl_wheel->rpm, 4);
+      memcpy(buf + 10, &fr_wheel->rpm, 4);
+      memcpy(buf + 14, &rl_wheel->rpm, 4);
+      memcpy(buf + 18, &rr_wheel->rpm, 4);
+      buf[22] = 0x0D;
+      buf[23] = 0x0A;
+      logger_output(buf, 24);
       last_wheel_timestamp = timestamp;
     }
 #endif
