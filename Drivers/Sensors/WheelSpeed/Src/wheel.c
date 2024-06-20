@@ -1,7 +1,4 @@
-
 #include "wheel.h"
-
-#include "utils.h"
 
 #define MAX_INSTANCE 4
 
@@ -12,12 +9,14 @@ wheel_t *open_wheel_instance(uint32_t id) {
   return &wheel_instance[id];
 }
 
-void wheel_init(wheel_t *wheel) {
-  if (!wheel) return;
-  wheel_bsp_init(wheel);
+void wheel_init(wheel_t *w) {
+  if (!w) return;
+  w->invalid = 1;
+  wheel_bsp_init(w);
 }
 
-void wheel_update(wheel_t *wheel) {
-  uint32_t delta_t = INTERVAL_16U(wheel->tick, wheel->last_tick);
-  wheel->rpm = 6000000.0 / wheel->ticks_pre_rev / delta_t;
+void wheel_update(wheel_t *w) {
+  if (!w) return;
+  uint16_t delta_t = INTERVAL_16U(w->tick, w->last_tick);
+  w->rpm = TO_RPM(w->ticks_pre_rev, delta_t);
 }

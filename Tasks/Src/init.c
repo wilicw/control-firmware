@@ -101,31 +101,31 @@ void init_thread_entry(ULONG thread_input) {
   extern TIM_HandleTypeDef htim3;
   extern TIM_HandleTypeDef htim4;
 
-  wheel_t *fl_wheel = open_wheel_instance(0);
-  wheel_t *fr_wheel = open_wheel_instance(1);
-  wheel_t *rl_wheel = open_wheel_instance(2);
-  wheel_t *rr_wheel = open_wheel_instance(3);
+  wheel_t *wheel_fl = open_wheel_instance(0);
+  wheel_t *wheel_fr = open_wheel_instance(1);
+  wheel_t *wheel_rl = open_wheel_instance(2);
+  wheel_t *wheel_rr = open_wheel_instance(3);
 
-  fl_wheel->hw.handler = &htim3;
-  fl_wheel->hw.channel = TIM_CHANNEL_2;
-  fl_wheel->ticks_pre_rev = 18;
+  wheel_fl->hw.handler = &htim3;
+  wheel_fl->hw.channel = TIM_CHANNEL_2;
+  wheel_fl->ticks_pre_rev = 36;
 
-  fr_wheel->hw.handler = &htim3;
-  fr_wheel->hw.channel = TIM_CHANNEL_4;
-  fr_wheel->ticks_pre_rev = 18;
+  wheel_fr->hw.handler = &htim3;
+  wheel_fr->hw.channel = TIM_CHANNEL_4;
+  wheel_fr->ticks_pre_rev = 36;
 
-  rl_wheel->hw.handler = &htim4;
-  rl_wheel->hw.channel = TIM_CHANNEL_2;
-  rl_wheel->ticks_pre_rev = 18;
+  wheel_rl->hw.handler = &htim4;
+  wheel_rl->hw.channel = TIM_CHANNEL_2;
+  wheel_rl->ticks_pre_rev = 18;
 
-  rr_wheel->hw.handler = &htim4;
-  rr_wheel->hw.channel = TIM_CHANNEL_4;
-  rr_wheel->ticks_pre_rev = 18;
+  wheel_rr->hw.handler = &htim4;
+  wheel_rr->hw.channel = TIM_CHANNEL_4;
+  wheel_rr->ticks_pre_rev = 18;
 
-  wheel_init(fl_wheel);
-  wheel_init(fr_wheel);
-  wheel_init(rl_wheel);
-  wheel_init(rr_wheel);
+  wheel_init(wheel_fl);
+  wheel_init(wheel_fr);
+  wheel_init(wheel_rl);
+  wheel_init(wheel_rr);
 #endif
 
 #if INVERTER_ENABLE

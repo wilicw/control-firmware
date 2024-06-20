@@ -24,7 +24,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "SEGGER_RTT.h"
+#include "config.h"
 #include "usb_device.h"
+#include "wheel.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -649,7 +652,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
+#if WHEEL_ENABLE
+  if (htim->Instance != TIM1) {
+    static wheel_t *wheel_fl = NULL, *wheel_fr = NULL, *wheel_rl = NULL,
+                   *wheel_rr = NULL;
+    if (!wheel_fl) wheel_fl = open_wheel_instance(0);
+    if (!wheel_fr) wheel_fr = open_wheel_instance(1);
+    if (!wheel_rl) wheel_rl = open_wheel_instance(2);
+    if (!wheel_rr) wheel_rr = open_wheel_instance(3);
 
+    wheel_bsp_overflow_interrupt(wheel_fl, htim);
+    wheel_bsp_overflow_interrupt(wheel_fr, htim);
+    wheel_bsp_overflow_interrupt(wheel_rl, htim);
+    wheel_bsp_overflow_interrupt(wheel_rr, htim);
+  }
+#endif
   /* USER CODE END Callback 1 */
 }
 
