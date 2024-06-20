@@ -205,20 +205,20 @@ void logger_thread_entry(ULONG thread_input) {
 #endif
 
 #if WHEEL_ENABLE
-    wheel_t *fl_wheel = open_wheel_instance(0);
-    wheel_t *fr_wheel = open_wheel_instance(1);
-    wheel_t *rl_wheel = open_wheel_instance(2);
-    wheel_t *rr_wheel = open_wheel_instance(3);
+    wheel_t *wheel_fl = open_wheel_instance(0);
+    wheel_t *wheel_fr = open_wheel_instance(1);
+    wheel_t *wheel_rl = open_wheel_instance(2);
+    wheel_t *wheel_rr = open_wheel_instance(3);
     static uint32_t last_wheel_timestamp = 0;
 
     if (timestamp - last_inverter_timestamp >
         TX_TIMER_TICKS_PER_SECOND / 1000) {
       buf[4] = 0x06;
       buf[5] = 0x10;
-      memcpy(buf + 6, &fl_wheel->rpm, 4);
-      memcpy(buf + 10, &fr_wheel->rpm, 4);
-      memcpy(buf + 14, &rl_wheel->rpm, 4);
-      memcpy(buf + 18, &rr_wheel->rpm, 4);
+      memcpy(buf + 6, &wheel_fl->rpm, 4);
+      memcpy(buf + 10, &wheel_fr->rpm, 4);
+      memcpy(buf + 14, &wheel_rl->rpm, 4);
+      memcpy(buf + 18, &wheel_rr->rpm, 4);
       buf[22] = 0x0D;
       buf[23] = 0x0A;
       logger_output(buf, 24);
