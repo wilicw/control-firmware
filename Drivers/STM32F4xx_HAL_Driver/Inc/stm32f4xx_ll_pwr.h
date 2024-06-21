@@ -60,9 +60,10 @@ extern "C" {
  * @brief    Flags defines which can be used with LL_PWR_ReadReg function
  * @{
  */
-#define LL_PWR_CSR_WUF PWR_CSR_WUF    /*!< Wakeup flag */
-#define LL_PWR_CSR_SBF PWR_CSR_SBF    /*!< Standby flag */
-#define LL_PWR_CSR_PVDO PWR_CSR_PVDO  /*!< Power voltage detector output flag \
+#define LL_PWR_CSR_WUF PWR_CSR_WUF /*!< Wakeup flag */
+#define LL_PWR_CSR_SBF PWR_CSR_SBF /*!< Standby flag */
+#define LL_PWR_CSR_PVDO                                                       \
+  PWR_CSR_PVDO                        /*!< Power voltage detector output flag \
                                        */
 #define LL_PWR_CSR_VOS PWR_CSR_VOSRDY /*!< Voltage scaling select flag */
 #if defined(PWR_CSR_EWUP)

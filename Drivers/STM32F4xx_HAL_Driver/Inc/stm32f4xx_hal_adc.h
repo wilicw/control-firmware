@@ -223,8 +223,8 @@ typedef struct {
                              value.  This parameter must be a 12-bit value. */
   uint32_t Channel;       /*!< Configures ADC channel for the analog watchdog.
                                This parameter has an effect only if watchdog mode is
-                             configured on single channel       This parameter can be a
-                             value of @ref ADC_channels */
+                             configured on single channel       This parameter can be
+                             a       value of @ref ADC_channels */
   FunctionalState ITMode; /*!< Specifies whether the analog watchdog is
                              configured is interrupt mode or in polling mode.
                                This parameter can be set to ENABLE or DISABLE */
@@ -253,7 +253,7 @@ typedef struct {
 /* States of ADC group regular */
 #define HAL_ADC_STATE_REG_BUSY                                                 \
   0x00000100U /*!< A conversion on group regular is ongoing or can occur       \
-                 (either by continuous mode, external trigger, low power auto                                              \
+                 (either by continuous mode, external trigger, low power auto  \
                  power-on (if feature available), multimode ADC master control \
                  (if feature available)) */
 #define HAL_ADC_STATE_REG_EOC \
@@ -261,10 +261,10 @@ typedef struct {
 #define HAL_ADC_STATE_REG_OVR 0x00000400U /*!< Overrun occurrence */
 
 /* States of ADC group injected */
-#define HAL_ADC_STATE_INJ_BUSY                                              \
-  0x00001000U /*!< A conversion on group injected is ongoing or can occur   \
-                 (either by auto-injection mode, external trigger, low power                                                \
-                 auto power-on (if feature available), multimode ADC master \
+#define HAL_ADC_STATE_INJ_BUSY                                               \
+  0x00001000U /*!< A conversion on group injected is ongoing or can occur    \
+                 (either by auto-injection mode, external trigger, low power \
+                 auto power-on (if feature available), multimode ADC master  \
                  control (if feature available)) */
 #define HAL_ADC_STATE_INJ_EOC \
   0x00002000U /*!< Conversion data available on group injected */

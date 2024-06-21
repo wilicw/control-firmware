@@ -187,10 +187,11 @@ typedef struct {
                          This parameter must be a number between Min_Data = 0
                        and Max_Data = 1      */
 
-  uint8_t speed; /*!< USB Host Channel speed.
-                      This parameter can be any value of @ref HCD_Device_Speed:
-                                                              (HCD_DEVICE_SPEED_xxx)
-                  */
+  uint8_t
+      speed; /*!< USB Host Channel speed.
+                  This parameter can be any value of @ref HCD_Device_Speed:
+                                                          (HCD_DEVICE_SPEED_xxx)
+              */
 
   uint8_t do_ping; /*!< Enable or disable the use of the PING protocol for HS
                       mode.                */

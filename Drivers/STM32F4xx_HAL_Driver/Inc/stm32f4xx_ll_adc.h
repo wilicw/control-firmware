@@ -207,8 +207,9 @@ extern "C" {
                  POSITION_VAL(ADC_CHANNEL_NUMBER_MASK)) */
 
 /* Channel differentiation between external and internal channels */
-#define ADC_CHANNEL_ID_INTERNAL_CH 0x80000000UL /* Marker of internal channel \
-                                                 */
+#define ADC_CHANNEL_ID_INTERNAL_CH           \
+  0x80000000UL /* Marker of internal channel \
+                */
 #define ADC_CHANNEL_ID_INTERNAL_CH_2                                          \
   0x40000000UL /* Marker of internal channel for other ADC instances, in case \
                   of different ADC internal channels mapped on same channel   \

@@ -99,14 +99,13 @@ typedef struct {
                           @note The burst mode is possible only if the address
                         Increment mode is enabled. */
 
-  uint32_t
-      PeriphBurst; /*!< Specifies the Burst transfer configuration for the
-                      peripheral transfers. It specifies the amount of data to
-                      be transferred in a single non interruptible transaction.
-                        This parameter can be a value of @ref
-                      DMA_Peripheral_burst
-                        @note The burst mode is possible only if the address
-                      Increment mode is enabled. */
+  uint32_t PeriphBurst; /*!< Specifies the Burst transfer configuration for the
+                           peripheral transfers. It specifies the amount of data
+                           to be transferred in a single non interruptible
+                           transaction. This parameter can be a value of @ref
+                           DMA_Peripheral_burst
+                             @note The burst mode is possible only if the
+                           address Increment mode is enabled. */
 } DMA_InitTypeDef;
 
 /**
@@ -250,8 +249,9 @@ typedef struct __DMA_HandleTypeDef {
  * @brief    DMA data transfer direction
  * @{
  */
-#define DMA_PERIPH_TO_MEMORY 0x00000000U /*!< Peripheral to memory direction \
-                                          */
+#define DMA_PERIPH_TO_MEMORY                      \
+  0x00000000U /*!< Peripheral to memory direction \
+               */
 #define DMA_MEMORY_TO_PERIPH \
   ((uint32_t)DMA_SxCR_DIR_0) /*!< Memory to peripheral direction */
 #define DMA_MEMORY_TO_MEMORY \

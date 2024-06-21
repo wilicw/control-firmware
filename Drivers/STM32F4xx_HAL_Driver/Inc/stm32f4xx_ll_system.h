@@ -117,12 +117,12 @@ extern "C" {
  */
 #define LL_SYSCFG_BANKMODE_BANK1                                            \
   (uint32_t)0x00000000 /*!< Flash Bank 1 base address mapped at 0x0800 0000 \
-                        (AXI) and 0x0020 0000 (TCM) and Flash Bank 2 base                                                      \
+                        (AXI) and 0x0020 0000 (TCM) and Flash Bank 2 base   \
                         address mapped at 0x0810 0000 (AXI) and 0x0030 0000 \
                         (TCM)*/
 #define LL_SYSCFG_BANKMODE_BANK2                                              \
   SYSCFG_MEMRMP_UFB_MODE /*!< Flash Bank 2 base address mapped at 0x0800 0000 \
-                          (AXI) and 0x0020 0000(TCM) and Flash Bank 1 base                                                        \
+                          (AXI) and 0x0020 0000(TCM) and Flash Bank 1 base    \
                           address mapped at 0x0810 0000 (AXI) and 0x0030      \
                           0000(TCM) */
 /**
@@ -229,7 +229,7 @@ extern "C" {
                            CortexM4 with Break Input of TIM1/8 */
 #define LL_SYSCFG_TIMBREAK_PVD                                                \
   SYSCFG_CFGR2_PVD_LOCK /*!< Enables and locks the PVD connection with TIM1/8 \
-                        Break Input and also the PVDE and PLS bits of the                                        \
+                        Break Input and also the PVDE and PLS bits of the     \
                         Power Control Interface  */
 #endif                  /* SYSCFG_CFGR2_CLL */
 /**
@@ -538,20 +538,26 @@ extern "C" {
 #define LL_FLASH_LATENCY_0 FLASH_ACR_LATENCY_0WS /*!< FLASH Zero wait state */
 #define LL_FLASH_LATENCY_1 FLASH_ACR_LATENCY_1WS /*!< FLASH One wait state */
 #define LL_FLASH_LATENCY_2 FLASH_ACR_LATENCY_2WS /*!< FLASH Two wait states */
-#define LL_FLASH_LATENCY_3 FLASH_ACR_LATENCY_3WS /*!< FLASH Three wait states \
-                                                  */
-#define LL_FLASH_LATENCY_4 FLASH_ACR_LATENCY_4WS /*!< FLASH Four wait states \
+#define LL_FLASH_LATENCY_3                           \
+  FLASH_ACR_LATENCY_3WS /*!< FLASH Three wait states \
+                         */
+#define LL_FLASH_LATENCY_4                                                   \
+  FLASH_ACR_LATENCY_4WS                          /*!< FLASH Four wait states \
                                                   */
 #define LL_FLASH_LATENCY_5 FLASH_ACR_LATENCY_5WS /*!< FLASH five wait state */
 #define LL_FLASH_LATENCY_6 FLASH_ACR_LATENCY_6WS /*!< FLASH six wait state */
-#define LL_FLASH_LATENCY_7 FLASH_ACR_LATENCY_7WS /*!< FLASH seven wait states \
-                                                  */
-#define LL_FLASH_LATENCY_8 FLASH_ACR_LATENCY_8WS /*!< FLASH eight wait states \
-                                                  */
-#define LL_FLASH_LATENCY_9 FLASH_ACR_LATENCY_9WS /*!< FLASH nine wait states \
-                                                  */
-#define LL_FLASH_LATENCY_10 FLASH_ACR_LATENCY_10WS /*!< FLASH ten wait states \
-                                                    */
+#define LL_FLASH_LATENCY_7                           \
+  FLASH_ACR_LATENCY_7WS /*!< FLASH seven wait states \
+                         */
+#define LL_FLASH_LATENCY_8                           \
+  FLASH_ACR_LATENCY_8WS /*!< FLASH eight wait states \
+                         */
+#define LL_FLASH_LATENCY_9                          \
+  FLASH_ACR_LATENCY_9WS /*!< FLASH nine wait states \
+                         */
+#define LL_FLASH_LATENCY_10                         \
+  FLASH_ACR_LATENCY_10WS /*!< FLASH ten wait states \
+                          */
 #define LL_FLASH_LATENCY_11 \
   FLASH_ACR_LATENCY_11WS /*!< FLASH eleven wait states */
 #define LL_FLASH_LATENCY_12 \

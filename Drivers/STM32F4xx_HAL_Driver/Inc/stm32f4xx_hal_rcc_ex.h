@@ -71,15 +71,16 @@ typedef struct {
     defined(STM32F446xx) || defined(STM32F469xx) || defined(STM32F479xx) || \
     defined(STM32F412Zx) || defined(STM32F412Vx) || defined(STM32F412Rx) || \
     defined(STM32F412Cx) || defined(STM32F413xx) || defined(STM32F423xx)
-  uint32_t PLLR; /*!< PLLR: PLL division factor for I2S, SAI, SYSTEM, SPDIFRX
-                    clocks. This parameter is only available in
-                    STM32F410xx/STM32F446xx/STM32F469xx/STM32F479xx and
-                    STM32F412Zx/STM32F412Vx/STM32F412Rx/STM32F412Cx/STM32F413xx/STM32F423xx
-                    devices. This parameter must be a number between Min_Data =
-                    2 and Max_Data = 7     */
-#endif /* STM32F410xx || STM32F446xx || STM32F469xx || STM32F479xx || \
-          STM32F412Zx || STM32F412Vx || STM32F412Rx || STM32F412Cx || \
-          STM32F413xx || STM32F423xx */
+  uint32_t
+      PLLR; /*!< PLLR: PLL division factor for I2S, SAI, SYSTEM, SPDIFRX
+               clocks. This parameter is only available in
+               STM32F410xx/STM32F446xx/STM32F469xx/STM32F479xx and
+               STM32F412Zx/STM32F412Vx/STM32F412Rx/STM32F412Cx/STM32F413xx/STM32F423xx
+               devices. This parameter must be a number between Min_Data =
+               2 and Max_Data = 7     */
+#endif      /* STM32F410xx || STM32F446xx || STM32F469xx || STM32F479xx || \
+               STM32F412Zx || STM32F412Vx || STM32F412Rx || STM32F412Cx || \
+               STM32F413xx || STM32F423xx */
 } RCC_PLLInitTypeDef;
 
 #if defined(STM32F446xx)
@@ -1016,7 +1017,7 @@ typedef struct {
  * @}
  */
 #endif /* STM32F427xx || STM32F437xx || STM32F429xx || STM32F439xx || \
-          STM32F401xC || STM32F401xE || STM32F410xx || STM32F411xE ||                                        \
+          STM32F401xC || STM32F401xE || STM32F410xx || STM32F411xE || \
           STM32F446xx || STM32F469xx || STM32F479xx || STM32F412Zx || \
           STM32F412Vx || STM32F412Rx || STM32F412Cx || STM32F413xx || \
           STM32F423xx */
@@ -1035,7 +1036,7 @@ typedef struct {
  * @}
  */
 #endif /* STM32F410xx || STM32F411xE || STM32F446xx || STM32F469xx || \
-          STM32F479xx || STM32F412Zx || STM32F412Vx || STM32F412Rx ||                                                       \
+          STM32F479xx || STM32F412Zx || STM32F412Vx || STM32F412Rx || \
           STM32F412Cx */
 
 #if defined(STM32F405xx) || defined(STM32F415xx) || defined(STM32F407xx) || \
@@ -8714,7 +8715,7 @@ HAL_StatusTypeDef HAL_RCCEx_DisablePLLSAI(void);
 #define RCC_DCKCFGR_TIMPRE_BB \
   (PERIPH_BB_BASE + (RCC_DCKCFGR_OFFSET * 32U) + (RCC_TIMPRE_BIT_NUMBER * 4U))
 #endif /* STM32F427xx || STM32F437xx || STM32F429xx || STM32F439xx || \
-          STM32F410xx || STM32F401xC || STM32F401xE || STM32F411xE ||                                        \
+          STM32F410xx || STM32F401xC || STM32F401xE || STM32F411xE || \
           STM32F446xx || STM32F469xx || STM32F479xx || STM32F412Zx || \
           STM32F412Vx || STM32F412Rx || STM32F412Cx || STM32F413xx || \
           STM32F423xx */

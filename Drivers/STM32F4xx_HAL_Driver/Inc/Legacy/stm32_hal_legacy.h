@@ -3296,8 +3296,9 @@ extern "C" {
 #define __HAL_RCC_WWDG_CLK_SLEEP_DISABLE __HAL_RCC_WWDG1_CLK_SLEEP_DISABLE
 #define __HAL_RCC_WWDG_CLK_SLEEP_ENABLE __HAL_RCC_WWDG1_CLK_SLEEP_ENABLE
 
-#define __HAL_RCC_WWDG_FORCE_RESET ((void)0U) /* Not available on the \
-                                                 STM32H7*/
+#define __HAL_RCC_WWDG_FORCE_RESET   \
+  ((void)0U) /* Not available on the \
+                STM32H7*/
 #define __HAL_RCC_WWDG_RELEASE_RESET \
   ((void)0U) /* Not available on the STM32H7*/
 

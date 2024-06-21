@@ -67,9 +67,10 @@
 #include <stdint.h>
 
 #ifndef STM32_THREAD_SAFE_STRATEGY
-#define STM32_THREAD_SAFE_STRATEGY 2 /**< Assume strategy 2 if not specified \
-                                      */
-#endif                               /* STM32_THREAD_SAFE_STRATEGY */
+#define STM32_THREAD_SAFE_STRATEGY             \
+  2    /**< Assume strategy 2 if not specified \
+        */
+#endif /* STM32_THREAD_SAFE_STRATEGY */
 
 #ifdef __cplusplus
 extern "C" {

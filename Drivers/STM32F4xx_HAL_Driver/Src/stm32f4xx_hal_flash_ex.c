@@ -518,7 +518,7 @@ HAL_StatusTypeDef HAL_FLASHEx_OB_DeSelectPCROP(void) {
   return HAL_OK;
 }
 #endif /* STM32F427xx || STM32F437xx || STM32F429xx || STM32F439xx || \
-          STM32F401xC || STM32F401xE || STM32F410xx || STM32F411xE ||                                                       \
+          STM32F401xC || STM32F401xE || STM32F410xx || STM32F411xE || \
           STM32F469xx || STM32F479xx || STM32F412Zx || STM32F412Vx || \
           STM32F412Rx || STM32F412Cx || STM32F413xx || STM32F423xx */
 
@@ -1128,8 +1128,8 @@ static HAL_StatusTypeDef FLASH_OB_DisablePCROP(uint32_t Sector) {
 
   return status;
 }
-#endif /* STM32F401xC || STM32F401xE || STM32F411xE || STM32F446xx || \
-          STM32F412Zx || STM32F412Vx || STM32F412Rx || STM32F412Cx STM32F413xx                                                          \
+#endif /* STM32F401xC || STM32F401xE || STM32F411xE || STM32F446xx ||          \
+          STM32F412Zx || STM32F412Vx || STM32F412Rx || STM32F412Cx STM32F413xx \
           || STM32F423xx */
 
 /**
