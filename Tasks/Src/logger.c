@@ -126,8 +126,8 @@ void logger_thread_entry(ULONG thread_input) {
       for (size_t i = 0; i < ADC_N; i++)
         memcpy(buf + 6 + i * ADC_VALUE_SIZE, &adc[i]->value, ADC_VALUE_SIZE);
 
-      buf[6 + ADC_N * 2] = 0x0D;
-      buf[7 + ADC_N * 2] = 0x0A;
+      buf[6 + ADC_N * ADC_VALUE_SIZE] = 0x0D;
+      buf[7 + ADC_N * ADC_VALUE_SIZE] = 0x0A;
       logger_output(buf, 8 + ADC_N * ADC_VALUE_SIZE);
       last_adc_timestamp = timestamp;
     }
@@ -199,7 +199,7 @@ void logger_thread_entry(ULONG thread_input) {
       memcpy(buf + 8, &steering->speed, 1);
       buf[9] = 0x0D;
       buf[10] = 0x0A;
-      logger_output(buf, 10);
+      logger_output(buf, 11);
       last_steering_timestamp = steering->timestamp;
     }
 #endif
@@ -211,8 +211,7 @@ void logger_thread_entry(ULONG thread_input) {
     wheel_t *wheel_rr = open_wheel_instance(3);
     static uint32_t last_wheel_timestamp = 0;
 
-    if (timestamp - last_inverter_timestamp >
-        TX_TIMER_TICKS_PER_SECOND / 1000) {
+    if (timestamp - last_wheel_timestamp > TX_TIMER_TICKS_PER_SECOND / 1000) {
       buf[4] = 0x06;
       buf[5] = 0x10;
       memcpy(buf + 6, &wheel_fl->rpm, 4);
