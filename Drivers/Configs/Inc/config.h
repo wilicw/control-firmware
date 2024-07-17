@@ -24,6 +24,7 @@ Revision: $Rev: 2024.12$
 #define REGEN_ENABLE 1
 #define STEERING_ENABLE 1
 #define WHEEL_ENABLE 1
+#define GNSS_ENABLE 1
 
 #define LOGGER_FN_PATTERN "ncku-fsae-log-%04d.log"
 

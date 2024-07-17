@@ -23,13 +23,17 @@
 #include "main.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "SEGGER_RTT.h"
 #include "config.h"
 #include "events.h"
+#include "gnss.h"
 #include "imu.h"
 #include "inverter.h"
 #include "steering.h"
+#include "stm32f4xx_hal_uart.h"
 #include "tx_api.h"
 #include "wheel.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -70,6 +74,8 @@ extern DMA_HandleTypeDef hdma_sdio_tx;
 extern SD_HandleTypeDef hsd;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
+extern DMA_HandleTypeDef hdma_usart1_rx;
+extern UART_HandleTypeDef huart1;
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern TIM_HandleTypeDef htim1;
 
@@ -257,6 +263,19 @@ void TIM4_IRQHandler(void) {
 }
 
 /**
+ * @brief This function handles USART1 global interrupt.
+ */
+void USART1_IRQHandler(void) {
+  /* USER CODE BEGIN USART1_IRQn 0 */
+
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
+
+  /* USER CODE END USART1_IRQn 1 */
+}
+
+/**
  * @brief This function handles SDIO global interrupt.
  */
 void SDIO_IRQHandler(void) {
@@ -280,6 +299,19 @@ void DMA2_Stream0_IRQHandler(void) {
   /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
 
   /* USER CODE END DMA2_Stream0_IRQn 1 */
+}
+
+/**
+ * @brief This function handles DMA2 stream2 global interrupt.
+ */
+void DMA2_Stream2_IRQHandler(void) {
+  /* USER CODE BEGIN DMA2_Stream2_IRQn 0 */
+
+  /* USER CODE END DMA2_Stream2_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart1_rx);
+  /* USER CODE BEGIN DMA2_Stream2_IRQn 1 */
+
+  /* USER CODE END DMA2_Stream2_IRQn 1 */
 }
 
 /**
@@ -388,5 +420,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
       tx_event_flags_set(&event_flags, ~EVENT_BIT(EVENT_PRECHARGE), TX_AND);
     HAL_GPIO_WritePin(PRECHARGE_OUTPUT_GPIO_Port, PRECHARGE_OUTPUT_Pin, state);
   }
+}
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t size) {
+#if GNSS_ENABLE
+  static gnss_t *gnss = NULL;
+  if (!gnss) gnss = open_gnss_instance(0);
+  gnss_bsp_interrupt(gnss, huart->pRxBuffPtr, size);
+#endif
 }
 /* USER CODE END 1 */

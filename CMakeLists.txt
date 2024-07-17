@@ -86,6 +86,7 @@ include_directories(
   Core/SEGGER_RTT/Config
   Drivers/Sensors/ADC/Inc
   Drivers/Sensors/IMU/Inc
+  Drivers/Sensors/GNSS/Inc
   Drivers/Configs/Inc
   Tasks/Inc
   USB_DEVICE/App

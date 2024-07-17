@@ -33,6 +33,13 @@ Purpose : Source code for the data logger task. Data acquisition from
               is 32-bit float [RPM]
               as:
                 [FL][FR][RL][RR]
+            0x07 - GNSS, 32-bit unsigned integer [timestamp in UTC],
+              64-bit unsigned integer [latitude] DDMM.mm -> 00DDMMmm
+              64-bit unsigned integer [longitude], DDDMM.mm -> 0DDDMMmm
+              32-bit float [altitude] in meters,
+              32-bit float [speed] in kph
+              as:
+                [latitude][longitude][altitude][speed]
 
 Revision: $Rev: 2023.49$
 ----------------------------------------------------------------------
@@ -50,6 +57,8 @@ Revision: $Rev: 2023.49$
 #include "main.h"
 #include "stddef.h"
 #include "steering.h"
+#include "string.h"
+#include "gnss.h"
 #include "usbd_cdc_if.h"
 #include "wheel.h"
 
@@ -222,6 +231,24 @@ void logger_thread_entry(ULONG thread_input) {
       buf[23] = 0x0A;
       logger_output(buf, 24);
       last_wheel_timestamp = timestamp;
+    }
+#endif
+
+#if GNSS_ENABLE
+    gnss_t *gnss = open_gnss_instance(0);
+    static uint32_t last_gnss_timestamp = 0;
+    if (gnss->timestamp != last_gnss_timestamp && gnss->valid) {
+      buf[4] = 0x07;
+      buf[5] = 0x1C;
+      memcpy(buf + 6, &gnss->timestamp, 4);
+      memcpy(buf + 10, &gnss->latitude, 8);
+      memcpy(buf + 18, &gnss->longitude, 8);
+      memcpy(buf + 26, &gnss->altitude, 4);
+      memcpy(buf + 30, &gnss->speed, 4);
+      buf[34] = 0x0D;
+      buf[35] = 0x0A;
+      logger_output(buf, 36);
+      last_gnss_timestamp = gnss->timestamp;
     }
 #endif
 

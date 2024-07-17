@@ -12,9 +12,11 @@ Revision: $Rev: 2023.49$
 #include "config.h"
 #include "events.h"
 #include "fx_api.h"
+#include "gnss.h"
 #include "imu.h"
 #include "inverter.h"
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_uart.h"
 #include "wheel.h"
 
 TX_THREAD init_thread;
@@ -139,6 +141,13 @@ void init_thread_entry(ULONG thread_input) {
   inverter_L->direction = 0x00;
   inverter_init(inverter_R);
   inverter_init(inverter_L);
+#endif
+
+#if GNSS_ENABLE
+  extern UART_HandleTypeDef huart1;
+  gnss_t *gnss = open_gnss_instance(0);
+  gnss->hw.handler = &huart1;
+  gnss_init(gnss);
 #endif
 
   tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_CONFIG_LOADED), TX_OR);
