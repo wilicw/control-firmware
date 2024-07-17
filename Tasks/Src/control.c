@@ -98,6 +98,14 @@ static inline void control_running() {
 
   inverter_R->torque = inverter_L->torque =
       ((-apps_l->value + apps_r->value) / 2 + REGEN_TORQUE) / TORQUE_FACTOR;
+  inverter_R->torque =
+      (inverter_R->torque > MAX_TORQUE) ? MAX_TORQUE : inverter_R->torque;
+  inverter_L->torque =
+      (inverter_L->torque > MAX_TORQUE) ? MAX_TORQUE : inverter_L->torque;
+  inverter_R->torque =
+      (inverter_R->torque < REGEN_TORQUE) ? REGEN_TORQUE : inverter_R->torque;
+  inverter_L->torque =
+      (inverter_L->torque < REGEN_TORQUE) ? REGEN_TORQUE : inverter_L->torque;
 }
 
 void control_thread_entry(ULONG thread_input) {
