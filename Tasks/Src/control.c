@@ -47,7 +47,7 @@ static inline void control_stopped() {
   if (HAL_GPIO_ReadPin(RTD_INPUT_GPIO_Port, RTD_INPUT_Pin) == GPIO_PIN_RESET) {
     if (apps_triggered && !bpps_triggered) {
       control_state = CONTROL_CALIBRATE;
-    } else if (!apps_triggered && bpps_triggered && precharge_complete) {
+    } else if (!apps_triggered && bpps_triggered) {
       control_state = CONTROL_RTD;
     }
   }
@@ -77,11 +77,11 @@ static inline void control_running() {
   /* NOTE: If precharge pin goes low (HV is below 60V), disable the torque
            output.
   */
-  if (!(recv_events_flags & EVENT_BIT(EVENT_PRECHARGE))) {
-    inverter_R->torque = 0;
-    inverter_L->torque = 0;
-    return;
-  }
+  // if (!(recv_events_flags & EVENT_BIT(EVENT_PRECHARGE))) {
+  //   inverter_R->torque = 0;
+  //   inverter_L->torque = 0;
+  //   return;
+  // }
 
   /* NOTE: Disable the torque output if the APPS is less than 5% of the maximum
            torque output.
