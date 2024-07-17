@@ -21,7 +21,7 @@ Revision: $Rev: 2024.12$
 #define IMU_ENABLE 1
 #define LOGGER_ENABLE 1
 #define INVERTER_ENABLE 1
-#define REGEN_ENABLE 0
+#define REGEN_ENABLE 1
 #define STEERING_ENABLE 1
 #define WHEEL_ENABLE 1
 
