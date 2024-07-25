@@ -19,6 +19,7 @@ Revision: $Rev: 2024.11$
 static const float TORQUE_FACTOR = 10.0f;
 static const float MAX_TORQUE = 150 * TORQUE_FACTOR;
 static const float REGEN_TORQUE = (REGEN_ENABLE ? -30 : 0) * TORQUE_FACTOR;
+static const float BSE_MAX = 75.0f;
 
 TX_THREAD control_thread;
 extern TX_EVENT_FLAGS_GROUP event_flags;
@@ -65,6 +66,10 @@ static inline void control_calibrate() {
 
 static inline void control_rtd() {
   // Ready to drive
+
+  bpps_l->cal.scale *= BSE_MAX / bpps_l->value;
+  bpps_r->cal.scale *= BSE_MAX / bpps_r->value;
+
   HAL_GPIO_WritePin(RTD_OUTPUT_GPIO_Port, RTD_OUTPUT_Pin, GPIO_PIN_SET);
   for (int i = 0; i < 1500; i++) {
     HAL_GPIO_TogglePin(BUZZER_OUTPUT_GPIO_Port, BUZZER_OUTPUT_Pin);
@@ -74,7 +79,7 @@ static inline void control_rtd() {
 }
 
 static inline void control_running() {
-  /* NOTE: If precharge pin goes low (HV is below 60V), disable the torque
+  /* NOTE: If precharge pin goes low (TS is below 60V), disable the torque
            output.
   */
   // if (!(recv_events_flags & EVENT_BIT(EVENT_PRECHARGE))) {
@@ -83,6 +88,27 @@ static inline void control_running() {
   //   return;
   // }
 
+  /* NOTE:
+   * T.4.3.3 (...skip) Any failure of the BSE or BSE wiring that persists
+   * more than 100 msec must be detectable by the controller and treated like an
+   * implausibility and power to the (IC) electronic throttle / (EV) Motor(s)
+   * must be immediately stopped completely.
+   * -
+   * T.4.3.4 When an analogue signal is used, the BSE sensors will be considered
+   * to have failed when they achieve an open circuit or short circuit condition
+   * which generates a signal outside of the normal operating range, for example
+   * <0.5 V or >4.5 V.
+   */
+
+  if (bpps_l->value >= bpps_r->value * 1.1f ||
+      bpps_r->value >= bpps_l->value * 1.1f || bpps_l->value < -1 ||
+      bpps_r->value < -1 || bpps_l->value > BSE_MAX * 1.1f ||
+      bpps_r->value > BSE_MAX * 1.1f) {
+    inverter_R->torque = 0;
+    inverter_L->torque = 0;
+    return;
+  }
+
   /* NOTE: Disable the torque output if the APPS is less than 5% of the maximum
            torque output.
   */
@@ -90,6 +116,7 @@ static inline void control_running() {
       apps_r->value <= MAX_TORQUE * 0.05f) {
     inverter_R->torque = 0;
     inverter_L->torque = 0;
+    return;
   }
 
   /* TODO: EV.3.3.3 The powertrain must not regenerate energy when vehicle speed
