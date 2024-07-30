@@ -83,11 +83,13 @@ static inline void control_rtd() {
 
 static inline void control_running() {
   const float __COMMAND_TORQUE =
-      ((-apps_l->value + apps_r->value) / 2 + REGEN_TORQUE) / TORQUE_FACTOR;
+      (-apps_l->value + apps_r->value) / 2 + REGEN_TORQUE;
   const float COMMAND_TORQUE =
-      __COMMAND_TORQUE > MAX_TORQUE
-          ? MAX_TORQUE
-          : (__COMMAND_TORQUE < REGEN_TORQUE ? REGEN_TORQUE : __COMMAND_TORQUE);
+      (__COMMAND_TORQUE > MAX_TORQUE
+           ? MAX_TORQUE
+           : (__COMMAND_TORQUE < REGEN_TORQUE ? REGEN_TORQUE
+                                              : __COMMAND_TORQUE)) /
+      TORQUE_FACTOR;
   const float COMMAND_BREAK = (bpps_l->value + bpps_r->value) / 2;
 
   /* WARN: BYPASS the rule while recoding */
