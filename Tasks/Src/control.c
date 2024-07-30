@@ -104,10 +104,9 @@ static inline void control_running() {
      * operating range, for example <0.5 V or >4.5 V.
      */
 
-    if (bpps_l->value >= bpps_r->value * 1.1f ||
-        bpps_r->value >= bpps_l->value * 1.1f || bpps_l->value < -1 ||
-        bpps_r->value < -1 || bpps_l->value > BSE_MAX * 1.1f ||
-        bpps_r->value > BSE_MAX * 1.1f) {
+    if (bpps_l->value < -5 || bpps_r->value < -5 ||
+        bpps_l->value > BSE_MAX * 1.1f || bpps_r->value > BSE_MAX * 1.1f) {
+      SEGGER_RTT_printf(0, "Fault T4.3.3 or T4.3.4\n");
       inverter_R->torque = inverter_L->torque = 0;
       return;
     }
