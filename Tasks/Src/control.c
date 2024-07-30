@@ -122,8 +122,10 @@ static inline void control_running() {
     static uint8_t ev471_triggered = 0;
     if (!ev471_triggered && COMMAND_BREAK > 25 &&
         COMMAND_TORQUE >= MAX_TORQUE * 0.15f) {
+      SEGGER_RTT_printf(0, "Fault EV4.7.2\n");
       inverter_R->torque = inverter_L->torque = 0;
       ev471_triggered = 1;
+      return;
     }
     if (ev471_triggered && COMMAND_TORQUE <= MAX_TORQUE * 0.05f) {
       ev471_triggered = 0;
