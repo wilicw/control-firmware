@@ -175,8 +175,9 @@ void control_thread_entry(ULONG thread_input) {
     adc_convert(bpps_r);
 
     recv_events_flags = 0;
-    tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_PRECHARGE), TX_OR,
-                       &recv_events_flags, TX_NO_WAIT);
+    tx_event_flags_get(&event_flags,
+                       EVENT_BIT(EVENT_PRECHARGE) | EVENT_BIT(EVENT_LOGGING),
+                       TX_OR, &recv_events_flags, TX_NO_WAIT);
 
     switch (control_state) {
       case CONTROL_STOPPED:
