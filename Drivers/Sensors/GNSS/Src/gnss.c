@@ -26,17 +26,17 @@ static inline void gnss_parser(gnss_t *instance, uint8_t *data, size_t len) {
 
     token = strtok_r(NULL, ",", &saveptr);
     if (token[0] == 0) return;
-    instance->latitude = ((uint64_t)token[0] << 40) |
-                         ((uint64_t)token[1] << 32) | (token[2] << 24) |
-                         (token[3] < 16) | (token[4] << 8) | token[5];
+    instance->latitude = STR2DIG(token[0]) * 60000 + STR2DIG(token[1]) * 6000 +
+                         STR2DIG(token[2]) * 1000 + STR2DIG(token[3]) * 100 +
+                         STR2DIG(token[5]) * 10 + STR2DIG(token[6]);
     strtok_r(NULL, ",", &saveptr);
 
     token = strtok_r(NULL, ",", &saveptr);
     if (token[0] == 0) return;
-    instance->longitude = ((uint64_t)token[0] << 48) |
-                          ((uint64_t)token[1] << 40) |
-                          ((uint64_t)token[2] << 32) | (token[3] < 24) |
-                          (token[4] << 16) | (token[5] << 8) | token[6];
+    instance->longitude =
+        STR2DIG(token[0]) * 600000 + STR2DIG(token[1]) * 60000 +
+        STR2DIG(token[2]) * 10000 + STR2DIG(token[3]) * 1000 +
+        STR2DIG(token[4]) * 100 + STR2DIG(token[6]) * 10 + STR2DIG(token[7]);
     strtok_r(NULL, ",", &saveptr);
 
     token = strtok_r(NULL, ",", &saveptr);

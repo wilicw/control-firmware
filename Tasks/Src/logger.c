@@ -34,8 +34,8 @@ Purpose : Source code for the data logger task. Data acquisition from
               as:
                 [FL][FR][RL][RR]
             0x07 - GNSS, 32-bit unsigned integer [timestamp in UTC],
-              64-bit unsigned integer [latitude] DDMM.mm -> 00DDMMmm
-              64-bit unsigned integer [longitude], DDDMM.mm -> 0DDDMMmm
+              64-bit unsigned integer [latitude] in minutes * 100
+              64-bit unsigned integer [longitude] in minutes * 100
               32-bit float [altitude] in meters,
               32-bit float [speed] in kph
               as:
@@ -52,13 +52,13 @@ Revision: $Rev: 2023.49$
 #include "config.h"
 #include "events.h"
 #include "fx_api.h"
+#include "gnss.h"
 #include "imu.h"
 #include "inverter.h"
 #include "main.h"
 #include "stddef.h"
 #include "steering.h"
 #include "string.h"
-#include "gnss.h"
 #include "usbd_cdc_if.h"
 #include "wheel.h"
 
