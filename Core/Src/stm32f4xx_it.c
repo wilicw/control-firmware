@@ -30,6 +30,7 @@
 #include "imu.h"
 #include "inverter.h"
 #include "steering.h"
+#include "stm32f407xx.h"
 #include "stm32f4xx_hal_uart.h"
 #include "tx_api.h"
 #include "wheel.h"
@@ -401,7 +402,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
   if (GPIO_Pin == REC_INPUT_Pin) {
     static uint32_t last_time = 0;
     uint32_t now = HAL_GetTick();
-    if (now - last_time < 100) return;
+    if (now - last_time < 1000) return;
     last_time = now;
 
     ULONG ev_flags = 0;

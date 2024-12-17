@@ -294,10 +294,10 @@
  * @{
  */
 /* Private function prototypes -----------------------------------------------*/
-static void ADC_Init(ADC_HandleTypeDef* hadc);
-static void ADC_DMAConvCplt(DMA_HandleTypeDef* hdma);
-static void ADC_DMAError(DMA_HandleTypeDef* hdma);
-static void ADC_DMAHalfConvCplt(DMA_HandleTypeDef* hdma);
+static void ADC_Init(ADC_HandleTypeDef *hadc);
+static void ADC_DMAConvCplt(DMA_HandleTypeDef *hdma);
+static void ADC_DMAError(DMA_HandleTypeDef *hdma);
+static void ADC_DMAHalfConvCplt(DMA_HandleTypeDef *hdma);
 /**
  * @}
  */
@@ -337,7 +337,7 @@ functions
  *         the configuration information for the specified ADC.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADC_Init(ADC_HandleTypeDef* hadc) {
+HAL_StatusTypeDef HAL_ADC_Init(ADC_HandleTypeDef *hadc) {
   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
 
   /* Check ADC handle */
@@ -427,7 +427,7 @@ HAL_StatusTypeDef HAL_ADC_Init(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADC_DeInit(ADC_HandleTypeDef* hadc) {
+HAL_StatusTypeDef HAL_ADC_DeInit(ADC_HandleTypeDef *hadc) {
   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
 
   /* Check ADC handle */
@@ -499,7 +499,7 @@ HAL_StatusTypeDef HAL_ADC_DeInit(ADC_HandleTypeDef* hadc) {
  * @param  pCallback pointer to the Callback function
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADC_RegisterCallback(ADC_HandleTypeDef* hadc,
+HAL_StatusTypeDef HAL_ADC_RegisterCallback(ADC_HandleTypeDef *hadc,
                                            HAL_ADC_CallbackIDTypeDef CallbackID,
                                            pADC_CallbackTypeDef pCallback) {
   HAL_StatusTypeDef status = HAL_OK;
@@ -602,7 +602,7 @@ HAL_StatusTypeDef HAL_ADC_RegisterCallback(ADC_HandleTypeDef* hadc,
  * @retval HAL status
  */
 HAL_StatusTypeDef HAL_ADC_UnRegisterCallback(
-    ADC_HandleTypeDef* hadc, HAL_ADC_CallbackIDTypeDef CallbackID) {
+    ADC_HandleTypeDef *hadc, HAL_ADC_CallbackIDTypeDef CallbackID) {
   HAL_StatusTypeDef status = HAL_OK;
 
   if ((hadc->State & HAL_ADC_STATE_READY) != 0UL) {
@@ -680,7 +680,7 @@ HAL_StatusTypeDef HAL_ADC_UnRegisterCallback(
  *         the configuration information for the specified ADC.
  * @retval None
  */
-__weak void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc) {
+__weak void HAL_ADC_MspInit(ADC_HandleTypeDef *hadc) {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hadc);
   /* NOTE : This function Should not be modified, when the callback is needed,
@@ -694,7 +694,7 @@ __weak void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval None
  */
-__weak void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc) {
+__weak void HAL_ADC_MspDeInit(ADC_HandleTypeDef *hadc) {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hadc);
   /* NOTE : This function Should not be modified, when the callback is needed,
@@ -732,9 +732,9 @@ __weak void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADC_Start(ADC_HandleTypeDef* hadc) {
+HAL_StatusTypeDef HAL_ADC_Start(ADC_HandleTypeDef *hadc) {
   __IO uint32_t counter = 0U;
-  ADC_Common_TypeDef* tmpADC_Common;
+  ADC_Common_TypeDef *tmpADC_Common;
 
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(hadc->Init.ContinuousConvMode));
@@ -847,7 +847,7 @@ HAL_StatusTypeDef HAL_ADC_Start(ADC_HandleTypeDef* hadc) {
  *
  * @retval HAL status.
  */
-HAL_StatusTypeDef HAL_ADC_Stop(ADC_HandleTypeDef* hadc) {
+HAL_StatusTypeDef HAL_ADC_Stop(ADC_HandleTypeDef *hadc) {
   /* Check the parameters */
   assert_param(IS_ADC_ALL_INSTANCE(hadc->Instance));
 
@@ -888,7 +888,7 @@ HAL_StatusTypeDef HAL_ADC_Stop(ADC_HandleTypeDef* hadc) {
  * @param  Timeout Timeout value in millisecond.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADC_PollForConversion(ADC_HandleTypeDef* hadc,
+HAL_StatusTypeDef HAL_ADC_PollForConversion(ADC_HandleTypeDef *hadc,
                                             uint32_t Timeout) {
   uint32_t tickstart = 0U;
 
@@ -970,7 +970,7 @@ HAL_StatusTypeDef HAL_ADC_PollForConversion(ADC_HandleTypeDef* hadc,
  * @param  Timeout Timeout value in millisecond.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADC_PollForEvent(ADC_HandleTypeDef* hadc,
+HAL_StatusTypeDef HAL_ADC_PollForEvent(ADC_HandleTypeDef *hadc,
                                        uint32_t EventType, uint32_t Timeout) {
   uint32_t tickstart = 0U;
 
@@ -1029,9 +1029,9 @@ HAL_StatusTypeDef HAL_ADC_PollForEvent(ADC_HandleTypeDef* hadc,
  *         the configuration information for the specified ADC.
  * @retval HAL status.
  */
-HAL_StatusTypeDef HAL_ADC_Start_IT(ADC_HandleTypeDef* hadc) {
+HAL_StatusTypeDef HAL_ADC_Start_IT(ADC_HandleTypeDef *hadc) {
   __IO uint32_t counter = 0U;
-  ADC_Common_TypeDef* tmpADC_Common;
+  ADC_Common_TypeDef *tmpADC_Common;
 
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(hadc->Init.ContinuousConvMode));
@@ -1146,7 +1146,7 @@ HAL_StatusTypeDef HAL_ADC_Start_IT(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval HAL status.
  */
-HAL_StatusTypeDef HAL_ADC_Stop_IT(ADC_HandleTypeDef* hadc) {
+HAL_StatusTypeDef HAL_ADC_Stop_IT(ADC_HandleTypeDef *hadc) {
   /* Check the parameters */
   assert_param(IS_ADC_ALL_INSTANCE(hadc->Instance));
 
@@ -1181,7 +1181,7 @@ HAL_StatusTypeDef HAL_ADC_Stop_IT(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval None
  */
-void HAL_ADC_IRQHandler(ADC_HandleTypeDef* hadc) {
+void HAL_ADC_IRQHandler(ADC_HandleTypeDef *hadc) {
   uint32_t tmp1 = 0U, tmp2 = 0U;
 
   uint32_t tmp_sr = hadc->Instance->SR;
@@ -1336,10 +1336,10 @@ void HAL_ADC_IRQHandler(ADC_HandleTypeDef* hadc) {
  * memory.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADC_Start_DMA(ADC_HandleTypeDef* hadc, uint32_t* pData,
+HAL_StatusTypeDef HAL_ADC_Start_DMA(ADC_HandleTypeDef *hadc, uint32_t *pData,
                                     uint32_t Length) {
   __IO uint32_t counter = 0U;
-  ADC_Common_TypeDef* tmpADC_Common;
+  ADC_Common_TypeDef *tmpADC_Common;
 
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(hadc->Init.ContinuousConvMode));
@@ -1476,7 +1476,7 @@ HAL_StatusTypeDef HAL_ADC_Start_DMA(ADC_HandleTypeDef* hadc, uint32_t* pData,
  *         the configuration information for the specified ADC.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADC_Stop_DMA(ADC_HandleTypeDef* hadc) {
+HAL_StatusTypeDef HAL_ADC_Stop_DMA(ADC_HandleTypeDef *hadc) {
   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
 
   /* Check the parameters */
@@ -1528,7 +1528,7 @@ HAL_StatusTypeDef HAL_ADC_Stop_DMA(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval Converted value
  */
-uint32_t HAL_ADC_GetValue(ADC_HandleTypeDef* hadc) {
+uint32_t HAL_ADC_GetValue(ADC_HandleTypeDef *hadc) {
   /* Return the selected ADC converted value */
   return hadc->Instance->DR;
 }
@@ -1539,7 +1539,7 @@ uint32_t HAL_ADC_GetValue(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval None
  */
-__weak void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
+__weak void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hadc);
   /* NOTE : This function Should not be modified, when the callback is needed,
@@ -1553,7 +1553,7 @@ __weak void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval None
  */
-__weak void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc) {
+__weak void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc) {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hadc);
   /* NOTE : This function Should not be modified, when the callback is needed,
@@ -1568,7 +1568,7 @@ __weak void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval None
  */
-__weak void HAL_ADC_LevelOutOfWindowCallback(ADC_HandleTypeDef* hadc) {
+__weak void HAL_ADC_LevelOutOfWindowCallback(ADC_HandleTypeDef *hadc) {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hadc);
   /* NOTE : This function Should not be modified, when the callback is needed,
@@ -1589,7 +1589,7 @@ __weak void HAL_ADC_LevelOutOfWindowCallback(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval None
  */
-__weak void HAL_ADC_ErrorCallback(ADC_HandleTypeDef* hadc) {
+__weak void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc) {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hadc);
   /* NOTE : This function Should not be modified, when the callback is needed,
@@ -1602,7 +1602,7 @@ __weak void HAL_ADC_ErrorCallback(ADC_HandleTypeDef* hadc) {
  */
 
 /** @defgroup ADC_Exported_Functions_Group3 Peripheral Control functions
- *  @brief   	Peripheral Control functions
+ *  @brief    Peripheral Control functions
  *
 @verbatim
  ===============================================================================
@@ -1626,10 +1626,10 @@ __weak void HAL_ADC_ErrorCallback(ADC_HandleTypeDef* hadc) {
  * @param  sConfig ADC configuration structure.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADC_ConfigChannel(ADC_HandleTypeDef* hadc,
-                                        ADC_ChannelConfTypeDef* sConfig) {
+HAL_StatusTypeDef HAL_ADC_ConfigChannel(ADC_HandleTypeDef *hadc,
+                                        ADC_ChannelConfTypeDef *sConfig) {
   __IO uint32_t counter = 0U;
-  ADC_Common_TypeDef* tmpADC_Common;
+  ADC_Common_TypeDef *tmpADC_Common;
 
   /* Check the parameters */
   assert_param(IS_ADC_CHANNEL(sConfig->Channel));
@@ -1743,7 +1743,7 @@ HAL_StatusTypeDef HAL_ADC_ConfigChannel(ADC_HandleTypeDef* hadc,
  * @retval HAL status
  */
 HAL_StatusTypeDef HAL_ADC_AnalogWDGConfig(
-    ADC_HandleTypeDef* hadc, ADC_AnalogWDGConfTypeDef* AnalogWDGConfig) {
+    ADC_HandleTypeDef *hadc, ADC_AnalogWDGConfTypeDef *AnalogWDGConfig) {
 #ifdef USE_FULL_ASSERT
   uint32_t tmp = 0U;
 #endif /* USE_FULL_ASSERT  */
@@ -1821,7 +1821,7 @@ HAL_StatusTypeDef HAL_ADC_AnalogWDGConfig(
  *         the configuration information for the specified ADC.
  * @retval HAL state
  */
-uint32_t HAL_ADC_GetState(ADC_HandleTypeDef* hadc) {
+uint32_t HAL_ADC_GetState(ADC_HandleTypeDef *hadc) {
   /* Return ADC state */
   return hadc->State;
 }
@@ -1832,7 +1832,7 @@ uint32_t HAL_ADC_GetState(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval ADC Error Code
  */
-uint32_t HAL_ADC_GetError(ADC_HandleTypeDef* hadc) { return hadc->ErrorCode; }
+uint32_t HAL_ADC_GetError(ADC_HandleTypeDef *hadc) { return hadc->ErrorCode; }
 
 /**
  * @}
@@ -1849,8 +1849,8 @@ uint32_t HAL_ADC_GetError(ADC_HandleTypeDef* hadc) { return hadc->ErrorCode; }
  *         the configuration information for the specified ADC.
  * @retval None
  */
-static void ADC_Init(ADC_HandleTypeDef* hadc) {
-  ADC_Common_TypeDef* tmpADC_Common;
+static void ADC_Init(ADC_HandleTypeDef *hadc) {
+  ADC_Common_TypeDef *tmpADC_Common;
 
   /* Set ADC parameters */
   /* Pointer to the common control register to which is belonging hadc    */
@@ -1933,10 +1933,10 @@ static void ADC_Init(ADC_HandleTypeDef* hadc) {
  *                the configuration information for the specified DMA module.
  * @retval None
  */
-static void ADC_DMAConvCplt(DMA_HandleTypeDef* hdma) {
+static void ADC_DMAConvCplt(DMA_HandleTypeDef *hdma) {
   /* Retrieve ADC handle corresponding to current DMA handle */
-  ADC_HandleTypeDef* hadc =
-      (ADC_HandleTypeDef*)((DMA_HandleTypeDef*)hdma)->Parent;
+  ADC_HandleTypeDef *hadc =
+      (ADC_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
 
   /* Update state machine on conversion status if not in error state */
   if (HAL_IS_BIT_CLR(hadc->State,
@@ -1996,9 +1996,9 @@ static void ADC_DMAConvCplt(DMA_HandleTypeDef* hdma) {
  *                the configuration information for the specified DMA module.
  * @retval None
  */
-static void ADC_DMAHalfConvCplt(DMA_HandleTypeDef* hdma) {
-  ADC_HandleTypeDef* hadc =
-      (ADC_HandleTypeDef*)((DMA_HandleTypeDef*)hdma)->Parent;
+static void ADC_DMAHalfConvCplt(DMA_HandleTypeDef *hdma) {
+  ADC_HandleTypeDef *hadc =
+      (ADC_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
   /* Half conversion callback */
 #if (USE_HAL_ADC_REGISTER_CALLBACKS == 1)
   hadc->ConvHalfCpltCallback(hadc);
@@ -2013,9 +2013,9 @@ static void ADC_DMAHalfConvCplt(DMA_HandleTypeDef* hdma) {
  *                the configuration information for the specified DMA module.
  * @retval None
  */
-static void ADC_DMAError(DMA_HandleTypeDef* hdma) {
-  ADC_HandleTypeDef* hadc =
-      (ADC_HandleTypeDef*)((DMA_HandleTypeDef*)hdma)->Parent;
+static void ADC_DMAError(DMA_HandleTypeDef *hdma) {
+  ADC_HandleTypeDef *hadc =
+      (ADC_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
   hadc->State = HAL_ADC_STATE_ERROR_DMA;
   /* Set ADC error code to DMA error */
   hadc->ErrorCode |= HAL_ADC_ERROR_DMA;

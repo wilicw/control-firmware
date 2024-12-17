@@ -1,8 +1,8 @@
 /**************************************************************************/ /**
                                                                               * @file     cmsis_compiler.h
                                                                               * @brief    CMSIS compiler generic header file
-                                                                              * @version  V5.0.4
-                                                                              * @date     10. January 2018
+                                                                              * @version  V5.1.0
+                                                                              * @date     09. October 2018
                                                                               ******************************************************************************/
 /*
  * Copyright (c) 2009-2018 Arm Limited. All rights reserved.
@@ -34,9 +34,16 @@
 #include "cmsis_armcc.h"
 
 /*
- * Arm Compiler 6 (armclang)
+ * Arm Compiler 6.6 LTM (armclang)
  */
-#elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+#elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050) && \
+    (__ARMCC_VERSION < 6100100)
+#include "cmsis_armclang_ltm.h"
+
+/*
+ * Arm Compiler above 6.10.1 (armclang)
+ */
+#elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6100100)
 #include "cmsis_armclang.h"
 
 /*
@@ -117,8 +124,11 @@ __PACKED_STRUCT T_UINT32_READ { uint32_t v; };
 #define __ALIGNED(x) __attribute__((aligned(x)))
 #endif
 #ifndef __RESTRICT
-#warning No compiler specific solution for __RESTRICT. __RESTRICT is ignored.
-#define __RESTRICT
+#define __RESTRICT __restrict
+#endif
+#ifndef __COMPILER_BARRIER
+#warning No compiler specific solution for __COMPILER_BARRIER. __COMPILER_BARRIER is ignored.
+#define __COMPILER_BARRIER() (void)0
 #endif
 
 /*
@@ -194,6 +204,10 @@ __PACKED_STRUCT T_UINT32_READ { uint32_t v; };
 #warning No compiler specific solution for __RESTRICT. __RESTRICT is ignored.
 #define __RESTRICT
 #endif
+#ifndef __COMPILER_BARRIER
+#warning No compiler specific solution for __COMPILER_BARRIER. __COMPILER_BARRIER is ignored.
+#define __COMPILER_BARRIER() (void)0
+#endif
 
 /*
  * COSMIC Compiler
@@ -266,6 +280,10 @@ __PACKED_STRUCT T_UINT32_READ { uint32_t v; };
 #ifndef __RESTRICT
 #warning No compiler specific solution for __RESTRICT. __RESTRICT is ignored.
 #define __RESTRICT
+#endif
+#ifndef __COMPILER_BARRIER
+#warning No compiler specific solution for __COMPILER_BARRIER. __COMPILER_BARRIER is ignored.
+#define __COMPILER_BARRIER() (void)0
 #endif
 
 #else

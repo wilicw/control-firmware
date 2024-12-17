@@ -113,6 +113,7 @@ void logger_thread_entry(ULONG thread_input) {
       fx_file_close(&logger_file);
       logger_file.fx_file_name = NULL;
       HAL_GPIO_WritePin(REC_OUTPUT_GPIO_Port, REC_OUTPUT_Pin, GPIO_PIN_RESET);
+      NVIC_SystemReset();
       // Wait for the logging event to be set again
       tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_LOGGING), TX_AND,
                          &recv_events_flags, TX_WAIT_FOREVER);

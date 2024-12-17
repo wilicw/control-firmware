@@ -116,9 +116,9 @@
  * @{
  */
 /* Private function prototypes -----------------------------------------------*/
-static void ADC_MultiModeDMAConvCplt(DMA_HandleTypeDef* hdma);
-static void ADC_MultiModeDMAError(DMA_HandleTypeDef* hdma);
-static void ADC_MultiModeDMAHalfConvCplt(DMA_HandleTypeDef* hdma);
+static void ADC_MultiModeDMAConvCplt(DMA_HandleTypeDef *hdma);
+static void ADC_MultiModeDMAError(DMA_HandleTypeDef *hdma);
+static void ADC_MultiModeDMAHalfConvCplt(DMA_HandleTypeDef *hdma);
 /**
  * @}
  */
@@ -156,10 +156,10 @@ static void ADC_MultiModeDMAHalfConvCplt(DMA_HandleTypeDef* hdma);
  *         the configuration information for the specified ADC.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADCEx_InjectedStart(ADC_HandleTypeDef* hadc) {
+HAL_StatusTypeDef HAL_ADCEx_InjectedStart(ADC_HandleTypeDef *hadc) {
   __IO uint32_t counter = 0U;
   uint32_t tmp1 = 0U, tmp2 = 0U;
-  ADC_Common_TypeDef* tmpADC_Common;
+  ADC_Common_TypeDef *tmpADC_Common;
 
   /* Process locked */
   __HAL_LOCK(hadc);
@@ -246,10 +246,10 @@ HAL_StatusTypeDef HAL_ADCEx_InjectedStart(ADC_HandleTypeDef* hadc) {
  *
  * @retval HAL status.
  */
-HAL_StatusTypeDef HAL_ADCEx_InjectedStart_IT(ADC_HandleTypeDef* hadc) {
+HAL_StatusTypeDef HAL_ADCEx_InjectedStart_IT(ADC_HandleTypeDef *hadc) {
   __IO uint32_t counter = 0U;
   uint32_t tmp1 = 0U, tmp2 = 0U;
-  ADC_Common_TypeDef* tmpADC_Common;
+  ADC_Common_TypeDef *tmpADC_Common;
 
   /* Process locked */
   __HAL_LOCK(hadc);
@@ -344,7 +344,7 @@ HAL_StatusTypeDef HAL_ADCEx_InjectedStart_IT(ADC_HandleTypeDef* hadc) {
  * @param  hadc ADC handle
  * @retval None
  */
-HAL_StatusTypeDef HAL_ADCEx_InjectedStop(ADC_HandleTypeDef* hadc) {
+HAL_StatusTypeDef HAL_ADCEx_InjectedStop(ADC_HandleTypeDef *hadc) {
   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
 
   /* Check the parameters */
@@ -393,7 +393,7 @@ HAL_StatusTypeDef HAL_ADCEx_InjectedStop(ADC_HandleTypeDef* hadc) {
  * @param  Timeout Timeout value in millisecond.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADCEx_InjectedPollForConversion(ADC_HandleTypeDef* hadc,
+HAL_StatusTypeDef HAL_ADCEx_InjectedPollForConversion(ADC_HandleTypeDef *hadc,
                                                       uint32_t Timeout) {
   uint32_t tickstart = 0U;
 
@@ -458,7 +458,7 @@ HAL_StatusTypeDef HAL_ADCEx_InjectedPollForConversion(ADC_HandleTypeDef* hadc,
  * @param  hadc ADC handle
  * @retval None
  */
-HAL_StatusTypeDef HAL_ADCEx_InjectedStop_IT(ADC_HandleTypeDef* hadc) {
+HAL_StatusTypeDef HAL_ADCEx_InjectedStop_IT(ADC_HandleTypeDef *hadc) {
   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
 
   /* Check the parameters */
@@ -515,7 +515,7 @@ HAL_StatusTypeDef HAL_ADCEx_InjectedStop_IT(ADC_HandleTypeDef* hadc) {
  *            @arg ADC_INJECTED_RANK_4: Injected Channel4 selected
  * @retval None
  */
-uint32_t HAL_ADCEx_InjectedGetValue(ADC_HandleTypeDef* hadc,
+uint32_t HAL_ADCEx_InjectedGetValue(ADC_HandleTypeDef *hadc,
                                     uint32_t InjectedRank) {
   __IO uint32_t tmp = 0U;
 
@@ -560,11 +560,11 @@ uint32_t HAL_ADCEx_InjectedGetValue(ADC_HandleTypeDef* hadc,
  * memory.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADCEx_MultiModeStart_DMA(ADC_HandleTypeDef* hadc,
-                                               uint32_t* pData,
+HAL_StatusTypeDef HAL_ADCEx_MultiModeStart_DMA(ADC_HandleTypeDef *hadc,
+                                               uint32_t *pData,
                                                uint32_t Length) {
   __IO uint32_t counter = 0U;
-  ADC_Common_TypeDef* tmpADC_Common;
+  ADC_Common_TypeDef *tmpADC_Common;
 
   /* Check the parameters */
   assert_param(IS_FUNCTIONAL_STATE(hadc->Init.ContinuousConvMode));
@@ -680,9 +680,9 @@ HAL_StatusTypeDef HAL_ADCEx_MultiModeStart_DMA(ADC_HandleTypeDef* hadc,
  *         the configuration information for the specified ADC.
  * @retval HAL status
  */
-HAL_StatusTypeDef HAL_ADCEx_MultiModeStop_DMA(ADC_HandleTypeDef* hadc) {
+HAL_StatusTypeDef HAL_ADCEx_MultiModeStop_DMA(ADC_HandleTypeDef *hadc) {
   HAL_StatusTypeDef tmp_hal_status = HAL_OK;
-  ADC_Common_TypeDef* tmpADC_Common;
+  ADC_Common_TypeDef *tmpADC_Common;
 
   /* Check the parameters */
   assert_param(IS_ADC_ALL_INSTANCE(hadc->Instance));
@@ -731,8 +731,11 @@ HAL_StatusTypeDef HAL_ADCEx_MultiModeStop_DMA(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval The converted data value.
  */
-uint32_t HAL_ADCEx_MultiModeGetValue(ADC_HandleTypeDef* hadc) {
-  ADC_Common_TypeDef* tmpADC_Common;
+uint32_t HAL_ADCEx_MultiModeGetValue(ADC_HandleTypeDef *hadc) {
+  ADC_Common_TypeDef *tmpADC_Common;
+
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hadc);
 
   /* Pointer to the common control register to which is belonging hadc    */
   /* (Depending on STM32F4 product, there may be up to 3 ADC and 1 common */
@@ -749,7 +752,7 @@ uint32_t HAL_ADCEx_MultiModeGetValue(ADC_HandleTypeDef* hadc) {
  *         the configuration information for the specified ADC.
  * @retval None
  */
-__weak void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef* hadc) {
+__weak void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc) {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hadc);
   /* NOTE : This function Should not be modified, when the callback is needed,
@@ -767,13 +770,13 @@ __weak void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef* hadc) {
  * @retval None
  */
 HAL_StatusTypeDef HAL_ADCEx_InjectedConfigChannel(
-    ADC_HandleTypeDef* hadc, ADC_InjectionConfTypeDef* sConfigInjected) {
+    ADC_HandleTypeDef *hadc, ADC_InjectionConfTypeDef *sConfigInjected) {
 #ifdef USE_FULL_ASSERT
   uint32_t tmp = 0U;
 
 #endif /* USE_FULL_ASSERT  */
 
-  ADC_Common_TypeDef* tmpADC_Common;
+  ADC_Common_TypeDef *tmpADC_Common;
 
   /* Check the parameters */
   assert_param(IS_ADC_CHANNEL(sConfigInjected->InjectedChannel));
@@ -930,8 +933,8 @@ HAL_StatusTypeDef HAL_ADCEx_InjectedConfigChannel(
  * @retval HAL status
  */
 HAL_StatusTypeDef HAL_ADCEx_MultiModeConfigChannel(
-    ADC_HandleTypeDef* hadc, ADC_MultiModeTypeDef* multimode) {
-  ADC_Common_TypeDef* tmpADC_Common;
+    ADC_HandleTypeDef *hadc, ADC_MultiModeTypeDef *multimode) {
+  ADC_Common_TypeDef *tmpADC_Common;
 
   /* Check the parameters */
   assert_param(IS_ADC_MODE(multimode->Mode));
@@ -975,10 +978,10 @@ HAL_StatusTypeDef HAL_ADCEx_MultiModeConfigChannel(
  *                the configuration information for the specified DMA module.
  * @retval None
  */
-static void ADC_MultiModeDMAConvCplt(DMA_HandleTypeDef* hdma) {
+static void ADC_MultiModeDMAConvCplt(DMA_HandleTypeDef *hdma) {
   /* Retrieve ADC handle corresponding to current DMA handle */
-  ADC_HandleTypeDef* hadc =
-      (ADC_HandleTypeDef*)((DMA_HandleTypeDef*)hdma)->Parent;
+  ADC_HandleTypeDef *hadc =
+      (ADC_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
 
   /* Update state machine on conversion status if not in error state */
   if (HAL_IS_BIT_CLR(hadc->State,
@@ -1024,9 +1027,9 @@ static void ADC_MultiModeDMAConvCplt(DMA_HandleTypeDef* hdma) {
  *                the configuration information for the specified DMA module.
  * @retval None
  */
-static void ADC_MultiModeDMAHalfConvCplt(DMA_HandleTypeDef* hdma) {
-  ADC_HandleTypeDef* hadc =
-      (ADC_HandleTypeDef*)((DMA_HandleTypeDef*)hdma)->Parent;
+static void ADC_MultiModeDMAHalfConvCplt(DMA_HandleTypeDef *hdma) {
+  ADC_HandleTypeDef *hadc =
+      (ADC_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
   /* Conversion complete callback */
   HAL_ADC_ConvHalfCpltCallback(hadc);
 }
@@ -1037,9 +1040,9 @@ static void ADC_MultiModeDMAHalfConvCplt(DMA_HandleTypeDef* hdma) {
  *                the configuration information for the specified DMA module.
  * @retval None
  */
-static void ADC_MultiModeDMAError(DMA_HandleTypeDef* hdma) {
-  ADC_HandleTypeDef* hadc =
-      (ADC_HandleTypeDef*)((DMA_HandleTypeDef*)hdma)->Parent;
+static void ADC_MultiModeDMAError(DMA_HandleTypeDef *hdma) {
+  ADC_HandleTypeDef *hadc =
+      (ADC_HandleTypeDef *)((DMA_HandleTypeDef *)hdma)->Parent;
   hadc->State = HAL_ADC_STATE_ERROR_DMA;
   /* Set ADC error code to DMA error */
   hadc->ErrorCode |= HAL_ADC_ERROR_DMA;

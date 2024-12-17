@@ -129,8 +129,8 @@ HAL_StatusTypeDef FLASH_WaitForLastOperation(uint32_t Timeout);
  */
 
 /** @defgroup FLASH_Exported_Functions_Group1 Programming operation functions
- *  @brief   Programming operation functions
- *
+  *  @brief   Programming operation functions
+  *
 @verbatim
  ===============================================================================
                   ##### Programming operation functions #####
@@ -208,9 +208,6 @@ HAL_StatusTypeDef HAL_FLASH_Program(uint32_t TypeProgram, uint32_t Address,
 HAL_StatusTypeDef HAL_FLASH_Program_IT(uint32_t TypeProgram, uint32_t Address,
                                        uint64_t Data) {
   HAL_StatusTypeDef status = HAL_OK;
-
-  /* Process Locked */
-  __HAL_LOCK(&pFlash);
 
   /* Check the parameters */
   assert_param(IS_FLASH_TYPEPROGRAM(TypeProgram));
@@ -339,9 +336,6 @@ void HAL_FLASH_IRQHandler(void) {
 
     /* Disable Error source interrupt */
     __HAL_FLASH_DISABLE_IT(FLASH_IT_ERR);
-
-    /* Process Unlocked */
-    __HAL_UNLOCK(&pFlash);
   }
 }
 
@@ -385,8 +379,8 @@ __weak void HAL_FLASH_OperationErrorCallback(uint32_t ReturnValue) {
  */
 
 /** @defgroup FLASH_Exported_Functions_Group2 Peripheral Control functions
- *  @brief   management functions
- *
+  *  @brief   management functions
+  *
 @verbatim
  ===============================================================================
                       ##### Peripheral Control functions #####
@@ -476,8 +470,8 @@ HAL_StatusTypeDef HAL_FLASH_OB_Launch(void) {
 
 /** @defgroup FLASH_Exported_Functions_Group3 Peripheral State and Errors
 functions
- *  @brief   Peripheral Errors functions
- *
+  *  @brief   Peripheral Errors functions
+  *
 @verbatim
  ===============================================================================
                 ##### Peripheral Errors functions #####

@@ -161,19 +161,15 @@ typedef struct {
                                     @ref ADC_External_trigger_edge_Regular */
   FunctionalState
       DMAContinuousRequests; /*!< Specifies whether the DMA requests are
-                                performed in one shot mode (DMA transfer stop
-                                when number of conversions is reached) or in
-                                Continuous mode (DMA transfer unlimited,
-                                whatever number of conversions). Note: In
-                                continuous mode, DMA must be configured in
-                                circular mode. Otherwise an overrun will be
-                                triggered when DMA buffer maximum pointer is
-                                reached. Note: This parameter must be modified
-                                when no conversion is on going on both regular
-                                and injected groups (ADC disabled, or ADC
-                                enabled without continuous mode or external
-                                trigger that could launch a conversion). This
-                                parameter can be set to ENABLE or DISABLE. */
+            performed in one shot mode (DMA transfer stop when number of
+            conversions is reached) or in Continuous mode (DMA transfer
+            unlimited, whatever number of conversions). Note: In continuous
+            mode, DMA must be configured in circular mode. Otherwise an overrun
+            will be triggered when DMA buffer maximum pointer is reached. Note:
+            This parameter must be modified when no conversion is on going on
+            both regular and injected groups (ADC disabled, or ADC enabled
+            without continuous mode or external trigger that could launch a
+            conversion). This parameter can be set to ENABLE or DISABLE. */
 } ADC_InitTypeDef;
 
 /**
@@ -293,14 +289,14 @@ typedef struct __ADC_HandleTypeDef
 typedef struct
 #endif
 {
-  ADC_TypeDef* Instance; /*!< Register base address */
+  ADC_TypeDef *Instance; /*!< Register base address */
 
   ADC_InitTypeDef Init; /*!< ADC required parameters */
 
   __IO uint32_t
       NbrOfCurrentConversionRank; /*!< ADC number of current conversion rank */
 
-  DMA_HandleTypeDef* DMA_Handle; /*!< Pointer DMA Handler */
+  DMA_HandleTypeDef *DMA_Handle; /*!< Pointer DMA Handler */
 
   HAL_LockTypeDef Lock; /*!< ADC locking object */
 
@@ -308,22 +304,22 @@ typedef struct
 
   __IO uint32_t ErrorCode; /*!< ADC Error code */
 #if (USE_HAL_ADC_REGISTER_CALLBACKS == 1)
-  void (*ConvCpltCallback)(struct __ADC_HandleTypeDef*
-                               hadc); /*!< ADC conversion complete callback */
+  void (*ConvCpltCallback)(struct __ADC_HandleTypeDef
+                               *hadc); /*!< ADC conversion complete callback */
   void (*ConvHalfCpltCallback)(
-      struct __ADC_HandleTypeDef*
-          hadc); /*!< ADC conversion DMA half-transfer callback */
+      struct __ADC_HandleTypeDef
+          *hadc); /*!< ADC conversion DMA half-transfer callback */
   void (*LevelOutOfWindowCallback)(
-      struct __ADC_HandleTypeDef* hadc); /*!< ADC analog watchdog 1 callback */
+      struct __ADC_HandleTypeDef *hadc); /*!< ADC analog watchdog 1 callback */
   void (*ErrorCallback)(
-      struct __ADC_HandleTypeDef* hadc); /*!< ADC error callback */
+      struct __ADC_HandleTypeDef *hadc); /*!< ADC error callback */
   void (*InjectedConvCpltCallback)(
-      struct __ADC_HandleTypeDef*
-          hadc); /*!< ADC group injected conversion complete callback */
+      struct __ADC_HandleTypeDef
+          *hadc); /*!< ADC group injected conversion complete callback */
   void (*MspInitCallback)(
-      struct __ADC_HandleTypeDef* hadc); /*!< ADC Msp Init callback */
+      struct __ADC_HandleTypeDef *hadc); /*!< ADC Msp Init callback */
   void (*MspDeInitCallback)(
-      struct __ADC_HandleTypeDef* hadc); /*!< ADC Msp DeInit callback */
+      struct __ADC_HandleTypeDef *hadc); /*!< ADC Msp DeInit callback */
 #endif                                   /* USE_HAL_ADC_REGISTER_CALLBACKS */
 } ADC_HandleTypeDef;
 
@@ -349,7 +345,7 @@ typedef enum {
  * @brief  HAL ADC Callback pointer definition
  */
 typedef void (*pADC_CallbackTypeDef)(
-    ADC_HandleTypeDef* hadc); /*!< pointer to a ADC callback function */
+    ADC_HandleTypeDef *hadc); /*!< pointer to a ADC callback function */
 
 #endif /* USE_HAL_ADC_REGISTER_CALLBACKS */
 
@@ -721,18 +717,18 @@ typedef void (*pADC_CallbackTypeDef)(
  */
 /* Initialization/de-initialization functions
  * ***********************************/
-HAL_StatusTypeDef HAL_ADC_Init(ADC_HandleTypeDef* hadc);
-HAL_StatusTypeDef HAL_ADC_DeInit(ADC_HandleTypeDef* hadc);
-void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc);
-void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc);
+HAL_StatusTypeDef HAL_ADC_Init(ADC_HandleTypeDef *hadc);
+HAL_StatusTypeDef HAL_ADC_DeInit(ADC_HandleTypeDef *hadc);
+void HAL_ADC_MspInit(ADC_HandleTypeDef *hadc);
+void HAL_ADC_MspDeInit(ADC_HandleTypeDef *hadc);
 
 #if (USE_HAL_ADC_REGISTER_CALLBACKS == 1)
 /* Callbacks Register/UnRegister functions  ***********************************/
-HAL_StatusTypeDef HAL_ADC_RegisterCallback(ADC_HandleTypeDef* hadc,
+HAL_StatusTypeDef HAL_ADC_RegisterCallback(ADC_HandleTypeDef *hadc,
                                            HAL_ADC_CallbackIDTypeDef CallbackID,
                                            pADC_CallbackTypeDef pCallback);
 HAL_StatusTypeDef HAL_ADC_UnRegisterCallback(
-    ADC_HandleTypeDef* hadc, HAL_ADC_CallbackIDTypeDef CallbackID);
+    ADC_HandleTypeDef *hadc, HAL_ADC_CallbackIDTypeDef CallbackID);
 #endif /* USE_HAL_ADC_REGISTER_CALLBACKS */
 /**
  * @}
@@ -743,29 +739,29 @@ HAL_StatusTypeDef HAL_ADC_UnRegisterCallback(
  */
 /* I/O operation functions
  * ******************************************************/
-HAL_StatusTypeDef HAL_ADC_Start(ADC_HandleTypeDef* hadc);
-HAL_StatusTypeDef HAL_ADC_Stop(ADC_HandleTypeDef* hadc);
-HAL_StatusTypeDef HAL_ADC_PollForConversion(ADC_HandleTypeDef* hadc,
+HAL_StatusTypeDef HAL_ADC_Start(ADC_HandleTypeDef *hadc);
+HAL_StatusTypeDef HAL_ADC_Stop(ADC_HandleTypeDef *hadc);
+HAL_StatusTypeDef HAL_ADC_PollForConversion(ADC_HandleTypeDef *hadc,
                                             uint32_t Timeout);
 
-HAL_StatusTypeDef HAL_ADC_PollForEvent(ADC_HandleTypeDef* hadc,
+HAL_StatusTypeDef HAL_ADC_PollForEvent(ADC_HandleTypeDef *hadc,
                                        uint32_t EventType, uint32_t Timeout);
 
-HAL_StatusTypeDef HAL_ADC_Start_IT(ADC_HandleTypeDef* hadc);
-HAL_StatusTypeDef HAL_ADC_Stop_IT(ADC_HandleTypeDef* hadc);
+HAL_StatusTypeDef HAL_ADC_Start_IT(ADC_HandleTypeDef *hadc);
+HAL_StatusTypeDef HAL_ADC_Stop_IT(ADC_HandleTypeDef *hadc);
 
-void HAL_ADC_IRQHandler(ADC_HandleTypeDef* hadc);
+void HAL_ADC_IRQHandler(ADC_HandleTypeDef *hadc);
 
-HAL_StatusTypeDef HAL_ADC_Start_DMA(ADC_HandleTypeDef* hadc, uint32_t* pData,
+HAL_StatusTypeDef HAL_ADC_Start_DMA(ADC_HandleTypeDef *hadc, uint32_t *pData,
                                     uint32_t Length);
-HAL_StatusTypeDef HAL_ADC_Stop_DMA(ADC_HandleTypeDef* hadc);
+HAL_StatusTypeDef HAL_ADC_Stop_DMA(ADC_HandleTypeDef *hadc);
 
-uint32_t HAL_ADC_GetValue(ADC_HandleTypeDef* hadc);
+uint32_t HAL_ADC_GetValue(ADC_HandleTypeDef *hadc);
 
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc);
-void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc);
-void HAL_ADC_LevelOutOfWindowCallback(ADC_HandleTypeDef* hadc);
-void HAL_ADC_ErrorCallback(ADC_HandleTypeDef* hadc);
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc);
+void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc);
+void HAL_ADC_LevelOutOfWindowCallback(ADC_HandleTypeDef *hadc);
+void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc);
 /**
  * @}
  */
@@ -775,10 +771,10 @@ void HAL_ADC_ErrorCallback(ADC_HandleTypeDef* hadc);
  */
 /* Peripheral Control functions
  * *************************************************/
-HAL_StatusTypeDef HAL_ADC_ConfigChannel(ADC_HandleTypeDef* hadc,
-                                        ADC_ChannelConfTypeDef* sConfig);
+HAL_StatusTypeDef HAL_ADC_ConfigChannel(ADC_HandleTypeDef *hadc,
+                                        ADC_ChannelConfTypeDef *sConfig);
 HAL_StatusTypeDef HAL_ADC_AnalogWDGConfig(
-    ADC_HandleTypeDef* hadc, ADC_AnalogWDGConfTypeDef* AnalogWDGConfig);
+    ADC_HandleTypeDef *hadc, ADC_AnalogWDGConfTypeDef *AnalogWDGConfig);
 /**
  * @}
  */
@@ -788,8 +784,8 @@ HAL_StatusTypeDef HAL_ADC_AnalogWDGConfig(
  */
 /* Peripheral State functions
  * ***************************************************/
-uint32_t HAL_ADC_GetState(ADC_HandleTypeDef* hadc);
-uint32_t HAL_ADC_GetError(ADC_HandleTypeDef* hadc);
+uint32_t HAL_ADC_GetState(ADC_HandleTypeDef *hadc);
+uint32_t HAL_ADC_GetError(ADC_HandleTypeDef *hadc);
 /**
  * @}
  */

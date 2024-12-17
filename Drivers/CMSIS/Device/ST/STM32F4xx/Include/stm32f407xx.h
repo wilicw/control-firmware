@@ -7,7 +7,7 @@
  *          This file contains:
  *           - Data structures and the address mapping for all peripherals
  *           - peripherals registers declarations and bits definition
- *           - Macros to access peripheral’s registers hardware
+ *           - Macros to access peripheral's registers hardware
  *
  ******************************************************************************
  * @attention
@@ -1376,7 +1376,7 @@ typedef struct {
 /******************************************************************************/
 /*
  * @brief Specific device feature definitions (not present on all devices in the
- * STM32F4 serie)
+ * STM32F4 series)
  */
 #define ADC_MULTIMODE_SUPPORT /*!<ADC Multimode feature available on specific \
                                  devices */
@@ -5859,7 +5859,7 @@ typedef struct {
 /******************************************************************************/
 /*
  * @brief Specific device feature definitions (not present on all devices in the
- * STM32F4 serie)
+ * STM32F4 series)
  */
 #define DAC_CHANNEL2_SUPPORT /*!< DAC feature available only on specific \
                                 devices: availability of DAC channel 2 */
@@ -11251,7 +11251,7 @@ typedef struct {
 #define RCC_CR_PLLRDY RCC_CR_PLLRDY_Msk
 /*
  * @brief Specific device feature definitions (not present on all devices in the
- * STM32F4 serie)
+ * STM32F4 series)
  */
 #define RCC_PLLI2S_SUPPORT /*!< Support PLLI2S oscillator */
 
@@ -11840,7 +11840,7 @@ typedef struct {
 /********************  Bit definition for RCC_AHB2ENR register  ***************/
 /*
  * @brief Specific device feature definitions (not present on all devices in the
- * STM32F4 serie)
+ * STM32F4 series)
  */
 #define RCC_AHB2_SUPPORT /*!< AHB2 Bus is supported */
 
@@ -11860,7 +11860,7 @@ typedef struct {
 /********************  Bit definition for RCC_AHB3ENR register  ***************/
 /*
  * @brief Specific device feature definitions (not present on all devices in the
- * STM32F4 serie)
+ * STM32F4 series)
  */
 #define RCC_AHB3_SUPPORT /*!< AHB3 Bus is supported */
 
@@ -12432,7 +12432,7 @@ typedef struct {
 /******************************************************************************/
 /*
  * @brief Specific device feature definitions  (not present on all devices in
- * the STM32F4 serie)
+ * the STM32F4 series)
  */
 #define RTC_TAMPER2_SUPPORT /*!< TAMPER 2 feature support */
 #define RTC_AF2_SUPPORT     /*!< RTC Alternate Function 2 mapping support */
@@ -15368,6 +15368,9 @@ typedef struct {
 /*                                                                            */
 /******************************************************************************/
 /* Bit definition for Ethernet MAC Control Register register */
+#define ETH_MACCR_CSTF_Pos (25U)
+#define ETH_MACCR_CSTF_Msk (0x1UL << ETH_MACCR_CSTF_Pos) /*!< 0x02000000 */
+#define ETH_MACCR_CSTF ETH_MACCR_CSTF_Msk /* CRC stripping for Type frames */
 #define ETH_MACCR_WD_Pos (23U)
 #define ETH_MACCR_WD_Msk (0x1UL << ETH_MACCR_WD_Pos) /*!< 0x00800000 */
 #define ETH_MACCR_WD ETH_MACCR_WD_Msk                /* Watchdog disable */
@@ -19238,7 +19241,7 @@ collision: 0 =< r <2^k */
 #define FLASH_SCALE2_LATENCY3_FREQ \
   90000000U /*!< HCLK frequency to set FLASH latency 3 in power scale 2  */
 #define FLASH_SCALE2_LATENCY4_FREQ \
-  12000000U /*!< HCLK frequency to set FLASH latency 4 in power scale 2  */
+  120000000U /*!< HCLK frequency to set FLASH latency 4 in power scale 2  */
 
 #define USB_OTG_HS_HOST_MAX_CHANNEL_NBR 12U
 #define USB_OTG_HS_MAX_IN_ENDPOINTS 6U   /* Including EP0 */

@@ -195,7 +195,7 @@ void HAL_PCDEx_BCD_VBUSDetect(PCD_HandleTypeDef *hpcd) {
   } else {
     /* start secondary detection to check connection to Charging Downstream
     Port or Dedicated Charging Port */
-    USBx->GCCFG &= ~USB_OTG_GCCFG_PDEN;
+    USBx->GCCFG &= ~(USB_OTG_GCCFG_PDEN);
     HAL_Delay(50U);
     USBx->GCCFG |= USB_OTG_GCCFG_SDEN;
     HAL_Delay(50U);

@@ -389,27 +389,27 @@ typedef struct {
 
 /* I/O operation functions
  * ******************************************************/
-HAL_StatusTypeDef HAL_ADCEx_InjectedStart(ADC_HandleTypeDef* hadc);
-HAL_StatusTypeDef HAL_ADCEx_InjectedStop(ADC_HandleTypeDef* hadc);
-HAL_StatusTypeDef HAL_ADCEx_InjectedPollForConversion(ADC_HandleTypeDef* hadc,
+HAL_StatusTypeDef HAL_ADCEx_InjectedStart(ADC_HandleTypeDef *hadc);
+HAL_StatusTypeDef HAL_ADCEx_InjectedStop(ADC_HandleTypeDef *hadc);
+HAL_StatusTypeDef HAL_ADCEx_InjectedPollForConversion(ADC_HandleTypeDef *hadc,
                                                       uint32_t Timeout);
-HAL_StatusTypeDef HAL_ADCEx_InjectedStart_IT(ADC_HandleTypeDef* hadc);
-HAL_StatusTypeDef HAL_ADCEx_InjectedStop_IT(ADC_HandleTypeDef* hadc);
-uint32_t HAL_ADCEx_InjectedGetValue(ADC_HandleTypeDef* hadc,
+HAL_StatusTypeDef HAL_ADCEx_InjectedStart_IT(ADC_HandleTypeDef *hadc);
+HAL_StatusTypeDef HAL_ADCEx_InjectedStop_IT(ADC_HandleTypeDef *hadc);
+uint32_t HAL_ADCEx_InjectedGetValue(ADC_HandleTypeDef *hadc,
                                     uint32_t InjectedRank);
-HAL_StatusTypeDef HAL_ADCEx_MultiModeStart_DMA(ADC_HandleTypeDef* hadc,
-                                               uint32_t* pData,
+HAL_StatusTypeDef HAL_ADCEx_MultiModeStart_DMA(ADC_HandleTypeDef *hadc,
+                                               uint32_t *pData,
                                                uint32_t Length);
-HAL_StatusTypeDef HAL_ADCEx_MultiModeStop_DMA(ADC_HandleTypeDef* hadc);
-uint32_t HAL_ADCEx_MultiModeGetValue(ADC_HandleTypeDef* hadc);
-void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef* hadc);
+HAL_StatusTypeDef HAL_ADCEx_MultiModeStop_DMA(ADC_HandleTypeDef *hadc);
+uint32_t HAL_ADCEx_MultiModeGetValue(ADC_HandleTypeDef *hadc);
+void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc);
 
 /* Peripheral Control functions
  * *************************************************/
 HAL_StatusTypeDef HAL_ADCEx_InjectedConfigChannel(
-    ADC_HandleTypeDef* hadc, ADC_InjectionConfTypeDef* sConfigInjected);
+    ADC_HandleTypeDef *hadc, ADC_InjectionConfTypeDef *sConfigInjected);
 HAL_StatusTypeDef HAL_ADCEx_MultiModeConfigChannel(
-    ADC_HandleTypeDef* hadc, ADC_MultiModeTypeDef* multimode);
+    ADC_HandleTypeDef *hadc, ADC_MultiModeTypeDef *multimode);
 
 /**
  * @}

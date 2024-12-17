@@ -8,6 +8,7 @@ Revision: $Rev: 2024.11$
 
 #include "control.h"
 
+#include "SEGGER_RTT.h"
 #include "adc.h"
 #include "config.h"
 #include "events.h"
@@ -21,7 +22,7 @@ Revision: $Rev: 2024.11$
 
 static const float TORQUE_FACTOR = 10.0f;
 static const float MAX_TORQUE = 150 * TORQUE_FACTOR;
-static const float REGEN_TORQUE = (REGEN_ENABLE ? -30 : 0) * TORQUE_FACTOR;
+static const float REGEN_TORQUE = (REGEN_ENABLE ? -10 : 0) * TORQUE_FACTOR;
 static const float BSE_MAX = 75.0f;
 const static float MAX_PEDAL_POSITION = MAX_TORQUE - REGEN_TORQUE;
 
@@ -40,7 +41,7 @@ static inline void control_stopped() {
   inverter_R->torque = 0;
   inverter_L->torque = 0;
 
-  static const float CALIBRATION_APPS = 0.1 * MAX_TORQUE;
+  static const float CALIBRATION_APPS = 0.05 * MAX_TORQUE;
   static const float RTD_BPPS = 50.0f;
   const uint8_t apps_triggered =
       apps_l->value < -CALIBRATION_APPS && apps_r->value > CALIBRATION_APPS;
@@ -78,6 +79,7 @@ static inline void control_rtd() {
     HAL_GPIO_TogglePin(BUZZER_OUTPUT_GPIO_Port, BUZZER_OUTPUT_Pin);
     tx_thread_sleep(TX_TIMER_TICKS_PER_SECOND / 1000);
   }
+  tx_thread_sleep(TX_TIMER_TICKS_PER_SECOND * 3);
   control_state = CONTROL_RUNNING;
 }
 
@@ -91,6 +93,16 @@ static inline void control_running() {
                                               : __COMMAND_TORQUE)) /
       TORQUE_FACTOR;
   const float COMMAND_BREAK = (bpps_l->value + bpps_r->value) / 2;
+
+  recv_events_flags = 0;
+  tx_event_flags_get(&event_flags,
+                     EVENT_BIT(EVENT_PRECHARGE) | EVENT_BIT(EVENT_LOGGING),
+                     TX_OR, &recv_events_flags, TX_NO_WAIT);
+
+  if (!IS_PRECHARGED) {
+    control_state = CONTROL_STOPPED;
+    return;
+  }
 
   /* WARN: BYPASS the rule while recoding */
   if (!IS_RECORDED) {
@@ -106,8 +118,7 @@ static inline void control_running() {
      * operating range, for example <0.5 V or >4.5 V.
      */
 
-    if (bpps_l->value < -5 || bpps_r->value < -5 ||
-        bpps_l->value > BSE_MAX * 1.1f || bpps_r->value > BSE_MAX * 1.1f) {
+    if (bpps_l->value > BSE_MAX * 2 || bpps_r->value > BSE_MAX * 2) {
       SEGGER_RTT_printf(0, "Fault T4.3.3 or T4.3.4\n");
       inverter_R->torque = inverter_L->torque = 0;
       return;
@@ -122,8 +133,7 @@ static inline void control_running() {
      *   b. The Motor shut down must stay active until the APPS signals less
      * than 5% Pedal Travel, with or without brake operation */
     static uint8_t ev471_triggered = 0;
-    if (!ev471_triggered && COMMAND_BREAK > 25 &&
-        COMMAND_TORQUE >= MAX_TORQUE * 0.15f) {
+    if (!ev471_triggered && COMMAND_BREAK > 10) {
       SEGGER_RTT_printf(0, "Fault EV4.7.2\n");
       inverter_R->torque = inverter_L->torque = 0;
       ev471_triggered = 1;
@@ -131,6 +141,9 @@ static inline void control_running() {
     }
     if (ev471_triggered && COMMAND_TORQUE <= MAX_TORQUE * 0.05f) {
       ev471_triggered = 0;
+    } else if (ev471_triggered) {
+      inverter_R->torque = inverter_L->torque = 0;
+      return;
     }
   }
 
@@ -139,6 +152,11 @@ static inline void control_running() {
   */
   if (apps_l->value >= -MAX_TORQUE * 0.05f &&
       apps_r->value <= MAX_TORQUE * 0.05f) {
+    inverter_R->torque = inverter_L->torque = 0;
+    return;
+  }
+
+  if (COMMAND_TORQUE <= -5) {
     inverter_R->torque = inverter_L->torque = 0;
     return;
   }
@@ -176,11 +194,6 @@ void control_thread_entry(ULONG thread_input) {
     adc_convert(apps_r);
     adc_convert(bpps_l);
     adc_convert(bpps_r);
-
-    recv_events_flags = 0;
-    tx_event_flags_get(&event_flags,
-                       EVENT_BIT(EVENT_PRECHARGE) | EVENT_BIT(EVENT_LOGGING),
-                       TX_OR, &recv_events_flags, TX_NO_WAIT);
 
     switch (control_state) {
       case CONTROL_STOPPED:

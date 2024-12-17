@@ -123,15 +123,15 @@ typedef struct {
       FilterMaskIdHigh; /*!< Specifies the filter mask number or identification
                            number, according to the mode (MSBs for a 32-bit
                            configuration, first one for a 16-bit configuration).
-                             This parameter must be a number between Min_Data =
-                           0x0000 and Max_Data = 0xFFFF. */
+                             This parameter must be a number between
+                             Min_Data = 0x0000 and Max_Data = 0xFFFF. */
 
   uint32_t
       FilterMaskIdLow; /*!< Specifies the filter mask number or identification
                           number, according to the mode (LSBs for a 32-bit
                           configuration, second one for a 16-bit configuration).
-                            This parameter must be a number between Min_Data =
-                          0x0000 and Max_Data = 0xFFFF. */
+                            This parameter must be a number between
+                            Min_Data = 0x0000 and Max_Data = 0xFFFF. */
 
   uint32_t FilterFIFOAssignment; /*!< Specifies the FIFO (0 or 1U) which will be
                                     assigned to the filter. This parameter can
@@ -241,7 +241,12 @@ typedef struct {
 /**
  * @brief  CAN handle Structure definition
  */
-typedef struct __CAN_HandleTypeDef {
+#if USE_HAL_CAN_REGISTER_CALLBACKS == 1
+typedef struct __CAN_HandleTypeDef
+#else
+typedef struct
+#endif /* USE_HAL_CAN_REGISTER_CALLBACKS */
+{
   CAN_TypeDef *Instance; /*!< Register base address */
 
   CAN_InitTypeDef Init; /*!< CAN required parameters */
@@ -374,15 +379,15 @@ typedef void (*pCAN_CallbackTypeDef)(
 #define HAL_CAN_ERROR_TX_ALST0 \
   (0x00000800U) /*!< TxMailbox 0 transmit failure due to arbitration lost */
 #define HAL_CAN_ERROR_TX_TERR0 \
-  (0x00001000U) /*!< TxMailbox 0 transmit failure due to transmit error    */
+  (0x00001000U) /*!< TxMailbox 0 transmit failure due to transmit error   */
 #define HAL_CAN_ERROR_TX_ALST1 \
   (0x00002000U) /*!< TxMailbox 1 transmit failure due to arbitration lost */
 #define HAL_CAN_ERROR_TX_TERR1 \
-  (0x00004000U) /*!< TxMailbox 1 transmit failure due to transmit error    */
+  (0x00004000U) /*!< TxMailbox 1 transmit failure due to transmit error   */
 #define HAL_CAN_ERROR_TX_ALST2 \
   (0x00008000U) /*!< TxMailbox 2 transmit failure due to arbitration lost */
 #define HAL_CAN_ERROR_TX_TERR2 \
-  (0x00010000U) /*!< TxMailbox 2 transmit failure due to transmit error    */
+  (0x00010000U) /*!< TxMailbox 2 transmit failure due to transmit error   */
 #define HAL_CAN_ERROR_TIMEOUT \
   (0x00020000U) /*!< Timeout error                                        */
 #define HAL_CAN_ERROR_NOT_INITIALIZED \
@@ -420,9 +425,9 @@ typedef void (*pCAN_CallbackTypeDef)(
 #define CAN_MODE_NORMAL (0x00000000U)              /*!< Normal mode   */
 #define CAN_MODE_LOOPBACK ((uint32_t)CAN_BTR_LBKM) /*!< Loopback mode */
 #define CAN_MODE_SILENT ((uint32_t)CAN_BTR_SILM)   /*!< Silent mode   */
-#define CAN_MODE_SILENT_LOOPBACK \
-  ((uint32_t)(CAN_BTR_LBKM |     \
-              CAN_BTR_SILM)) /*!< Loopback combined with silent mode */
+#define CAN_MODE_SILENT_LOOPBACK                                        \
+  ((uint32_t)(CAN_BTR_LBKM | CAN_BTR_SILM)) /*!< Loopback combined with \
+                                                 silent mode   */
 /**
  * @}
  */
@@ -810,7 +815,7 @@ HAL_StatusTypeDef HAL_CAN_UnRegisterCallback(
 
 /* Configuration functions ****************************************************/
 HAL_StatusTypeDef HAL_CAN_ConfigFilter(CAN_HandleTypeDef *hcan,
-                                       CAN_FilterTypeDef *sFilterConfig);
+                                       const CAN_FilterTypeDef *sFilterConfig);
 
 /**
  * @}
@@ -826,20 +831,23 @@ HAL_StatusTypeDef HAL_CAN_Start(CAN_HandleTypeDef *hcan);
 HAL_StatusTypeDef HAL_CAN_Stop(CAN_HandleTypeDef *hcan);
 HAL_StatusTypeDef HAL_CAN_RequestSleep(CAN_HandleTypeDef *hcan);
 HAL_StatusTypeDef HAL_CAN_WakeUp(CAN_HandleTypeDef *hcan);
-uint32_t HAL_CAN_IsSleepActive(CAN_HandleTypeDef *hcan);
+uint32_t HAL_CAN_IsSleepActive(const CAN_HandleTypeDef *hcan);
 HAL_StatusTypeDef HAL_CAN_AddTxMessage(CAN_HandleTypeDef *hcan,
-                                       CAN_TxHeaderTypeDef *pHeader,
-                                       uint8_t aData[], uint32_t *pTxMailbox);
+                                       const CAN_TxHeaderTypeDef *pHeader,
+                                       const uint8_t aData[],
+                                       uint32_t *pTxMailbox);
 HAL_StatusTypeDef HAL_CAN_AbortTxRequest(CAN_HandleTypeDef *hcan,
                                          uint32_t TxMailboxes);
-uint32_t HAL_CAN_GetTxMailboxesFreeLevel(CAN_HandleTypeDef *hcan);
-uint32_t HAL_CAN_IsTxMessagePending(CAN_HandleTypeDef *hcan,
+uint32_t HAL_CAN_GetTxMailboxesFreeLevel(const CAN_HandleTypeDef *hcan);
+uint32_t HAL_CAN_IsTxMessagePending(const CAN_HandleTypeDef *hcan,
                                     uint32_t TxMailboxes);
-uint32_t HAL_CAN_GetTxTimestamp(CAN_HandleTypeDef *hcan, uint32_t TxMailbox);
+uint32_t HAL_CAN_GetTxTimestamp(const CAN_HandleTypeDef *hcan,
+                                uint32_t TxMailbox);
 HAL_StatusTypeDef HAL_CAN_GetRxMessage(CAN_HandleTypeDef *hcan, uint32_t RxFifo,
                                        CAN_RxHeaderTypeDef *pHeader,
                                        uint8_t aData[]);
-uint32_t HAL_CAN_GetRxFifoFillLevel(CAN_HandleTypeDef *hcan, uint32_t RxFifo);
+uint32_t HAL_CAN_GetRxFifoFillLevel(const CAN_HandleTypeDef *hcan,
+                                    uint32_t RxFifo);
 
 /**
  * @}
@@ -890,8 +898,8 @@ void HAL_CAN_ErrorCallback(CAN_HandleTypeDef *hcan);
  * @{
  */
 /* Peripheral State and Error functions ***************************************/
-HAL_CAN_StateTypeDef HAL_CAN_GetState(CAN_HandleTypeDef *hcan);
-uint32_t HAL_CAN_GetError(CAN_HandleTypeDef *hcan);
+HAL_CAN_StateTypeDef HAL_CAN_GetState(const CAN_HandleTypeDef *hcan);
+uint32_t HAL_CAN_GetError(const CAN_HandleTypeDef *hcan);
 HAL_StatusTypeDef HAL_CAN_ResetError(CAN_HandleTypeDef *hcan);
 
 /**

@@ -1,11 +1,11 @@
 /**************************************************************************/ /**
                                                                               * @file     core_sc300.h
                                                                               * @brief    CMSIS SC300 Core Peripheral Access Layer Header File
-                                                                              * @version  V5.0.6
-                                                                              * @date     04. June 2018
+                                                                              * @version  V5.0.10
+                                                                              * @date     04. June 2021
                                                                               ******************************************************************************/
 /*
- * Copyright (c) 2009-2018 Arm Limited. All rights reserved.
+ * Copyright (c) 2009-2021 Arm Limited. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -61,7 +61,7 @@ extern "C" {
 
 #include "cmsis_version.h"
 
-/*  CMSIS SC300 definitions */
+/* CMSIS SC300 definitions */
 #define __SC300_CMSIS_VERSION_MAIN \
   (__CM_CMSIS_VERSION_MAIN) /*!< \deprecated [31:16] CMSIS HAL main version */
 #define __SC300_CMSIS_VERSION_SUB \
@@ -84,7 +84,7 @@ extern "C" {
 #endif
 
 #elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
-#if defined __ARM_PCS_VFP
+#if defined __ARM_FP
 #error \
     "Compiler generates FPU instructions for a device without an FPU (check __FPU_PRESENT)"
 #endif
@@ -148,6 +148,11 @@ extern "C" {
 #ifndef __MPU_PRESENT
 #define __MPU_PRESENT 0U
 #warning "__MPU_PRESENT not defined in device header file; using default!"
+#endif
+
+#ifndef __VTOR_PRESENT
+#define __VTOR_PRESENT 1U
+#warning "__VTOR_PRESENT not defined in device header file; using default!"
 #endif
 
 #ifndef __NVIC_PRIO_BITS
@@ -347,7 +352,7 @@ typedef struct {
   uint32_t RESERVED0[24U];
   __IOM uint32_t
       ICER[8U]; /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register */
-  uint32_t RSERVED1[24U];
+  uint32_t RESERVED1[24U];
   __IOM uint32_t
       ISPR[8U]; /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register */
   uint32_t RESERVED2[24U];
@@ -644,30 +649,28 @@ typedef struct {
 
 /* MemManage Fault Status Register (part of SCB Configurable Fault Status
  * Register) */
-#define SCB_CFSR_MMARVALID_Pos                                               \
-  (SCB_SHCSR_MEMFAULTACT_Pos + 7U) /*!< SCB CFSR (MMFSR): MMARVALID Position \
-                                    */
+#define SCB_CFSR_MMARVALID_Pos \
+  (SCB_CFSR_MEMFAULTSR_Pos + 7U) /*!< SCB CFSR (MMFSR): MMARVALID Position */
 #define SCB_CFSR_MMARVALID_Msk \
   (1UL << SCB_CFSR_MMARVALID_Pos) /*!< SCB CFSR (MMFSR): MMARVALID Mask */
 
 #define SCB_CFSR_MSTKERR_Pos \
-  (SCB_SHCSR_MEMFAULTACT_Pos + 4U) /*!< SCB CFSR (MMFSR): MSTKERR Position */
+  (SCB_CFSR_MEMFAULTSR_Pos + 4U) /*!< SCB CFSR (MMFSR): MSTKERR Position */
 #define SCB_CFSR_MSTKERR_Msk \
   (1UL << SCB_CFSR_MSTKERR_Pos) /*!< SCB CFSR (MMFSR): MSTKERR Mask */
 
-#define SCB_CFSR_MUNSTKERR_Pos                                               \
-  (SCB_SHCSR_MEMFAULTACT_Pos + 3U) /*!< SCB CFSR (MMFSR): MUNSTKERR Position \
-                                    */
+#define SCB_CFSR_MUNSTKERR_Pos \
+  (SCB_CFSR_MEMFAULTSR_Pos + 3U) /*!< SCB CFSR (MMFSR): MUNSTKERR Position */
 #define SCB_CFSR_MUNSTKERR_Msk \
   (1UL << SCB_CFSR_MUNSTKERR_Pos) /*!< SCB CFSR (MMFSR): MUNSTKERR Mask */
 
 #define SCB_CFSR_DACCVIOL_Pos \
-  (SCB_SHCSR_MEMFAULTACT_Pos + 1U) /*!< SCB CFSR (MMFSR): DACCVIOL Position */
+  (SCB_CFSR_MEMFAULTSR_Pos + 1U) /*!< SCB CFSR (MMFSR): DACCVIOL Position */
 #define SCB_CFSR_DACCVIOL_Msk \
   (1UL << SCB_CFSR_DACCVIOL_Pos) /*!< SCB CFSR (MMFSR): DACCVIOL Mask */
 
 #define SCB_CFSR_IACCVIOL_Pos \
-  (SCB_SHCSR_MEMFAULTACT_Pos + 0U) /*!< SCB CFSR (MMFSR): IACCVIOL Position */
+  (SCB_CFSR_MEMFAULTSR_Pos + 0U) /*!< SCB CFSR (MMFSR): IACCVIOL Position */
 #define SCB_CFSR_IACCVIOL_Msk \
   (1UL /*<< SCB_CFSR_IACCVIOL_Pos*/) /*!< SCB CFSR (MMFSR): IACCVIOL Mask */
 
@@ -787,13 +790,26 @@ typedef struct {
   uint32_t RESERVED0[1U];
   __IM uint32_t
       ICTR; /*!< Offset: 0x004 (R/ )  Interrupt Controller Type Register */
-  uint32_t RESERVED1[1U];
+  __IOM uint32_t ACTLR; /*!< Offset: 0x008 (R/W)  Auxiliary Control Register */
 } SCnSCB_Type;
 
 /* Interrupt Controller Type Register Definitions */
 #define SCnSCB_ICTR_INTLINESNUM_Pos 0U /*!< ICTR: INTLINESNUM Position */
 #define SCnSCB_ICTR_INTLINESNUM_Msk \
   (0xFUL /*<< SCnSCB_ICTR_INTLINESNUM_Pos*/) /*!< ICTR: INTLINESNUM Mask */
+
+/* Auxiliary Control Register Definitions */
+#define SCnSCB_ACTLR_DISFOLD_Pos 2U /*!< ACTLR: DISFOLD Position */
+#define SCnSCB_ACTLR_DISFOLD_Msk \
+  (1UL << SCnSCB_ACTLR_DISFOLD_Pos) /*!< ACTLR: DISFOLD Mask */
+
+#define SCnSCB_ACTLR_DISDEFWBUF_Pos 1U /*!< ACTLR: DISDEFWBUF Position */
+#define SCnSCB_ACTLR_DISDEFWBUF_Msk \
+  (1UL << SCnSCB_ACTLR_DISDEFWBUF_Pos) /*!< ACTLR: DISDEFWBUF Mask */
+
+#define SCnSCB_ACTLR_DISMCYCINT_Pos 0U /*!< ACTLR: DISMCYCINT Position */
+#define SCnSCB_ACTLR_DISMCYCINT_Msk \
+  (1UL /*<< SCnSCB_ACTLR_DISMCYCINT_Pos*/) /*!< ACTLR: DISMCYCINT Mask */
 
 /*@} end of group CMSIS_SCnotSCB */
 
@@ -887,11 +903,7 @@ typedef struct {
   __IOM uint32_t TPR; /*!< Offset: 0xE40 (R/W)  ITM Trace Privilege Register */
   uint32_t RESERVED2[15U];
   __IOM uint32_t TCR; /*!< Offset: 0xE80 (R/W)  ITM Trace Control Register */
-  uint32_t RESERVED3[29U];
-  __OM uint32_t IWR; /*!< Offset: 0xEF8 ( /W)  ITM Integration Write Register */
-  __IM uint32_t IRR; /*!< Offset: 0xEFC (R/ )  ITM Integration Read Register */
-  __IOM uint32_t
-      IMCR; /*!< Offset: 0xF00 (R/W)  ITM Integration Mode Control Register */
+  uint32_t RESERVED3[32U];
   uint32_t RESERVED4[43U];
   __OM uint32_t LAR; /*!< Offset: 0xFB0 ( /W)  ITM Lock Access Register */
   __IM uint32_t LSR; /*!< Offset: 0xFB4 (R/ )  ITM Lock Status Register */
@@ -965,21 +977,6 @@ typedef struct {
 #define ITM_TCR_ITMENA_Pos 0U /*!< ITM TCR: ITM Enable bit Position */
 #define ITM_TCR_ITMENA_Msk \
   (1UL /*<< ITM_TCR_ITMENA_Pos*/) /*!< ITM TCR: ITM Enable bit Mask */
-
-/* ITM Integration Write Register Definitions */
-#define ITM_IWR_ATVALIDM_Pos 0U /*!< ITM IWR: ATVALIDM Position */
-#define ITM_IWR_ATVALIDM_Msk \
-  (1UL /*<< ITM_IWR_ATVALIDM_Pos*/) /*!< ITM IWR: ATVALIDM Mask */
-
-/* ITM Integration Read Register Definitions */
-#define ITM_IRR_ATREADYM_Pos 0U /*!< ITM IRR: ATREADYM Position */
-#define ITM_IRR_ATREADYM_Msk \
-  (1UL /*<< ITM_IRR_ATREADYM_Pos*/) /*!< ITM IRR: ATREADYM Mask */
-
-/* ITM Integration Mode Control Register Definitions */
-#define ITM_IMCR_INTEGRATION_Pos 0U /*!< ITM IMCR: INTEGRATION Position */
-#define ITM_IMCR_INTEGRATION_Msk \
-  (1UL /*<< ITM_IMCR_INTEGRATION_Pos*/) /*!< ITM IMCR: INTEGRATION Mask */
 
 /* ITM Lock Status Register Definitions */
 #define ITM_LSR_ByteAcc_Pos 2U /*!< ITM LSR: ByteAcc Position */
@@ -1272,7 +1269,7 @@ typedef struct {
 /* TPI Integration ETM Data Register Definitions (FIFO0) */
 #define TPI_FIFO0_ITM_ATVALID_Pos 29U /*!< TPI FIFO0: ITM_ATVALID Position */
 #define TPI_FIFO0_ITM_ATVALID_Msk \
-  (0x3UL << TPI_FIFO0_ITM_ATVALID_Pos) /*!< TPI FIFO0: ITM_ATVALID Mask */
+  (0x1UL << TPI_FIFO0_ITM_ATVALID_Pos) /*!< TPI FIFO0: ITM_ATVALID Mask */
 
 #define TPI_FIFO0_ITM_bytecount_Pos \
   27U /*!< TPI FIFO0: ITM_bytecount Position */
@@ -1281,7 +1278,7 @@ typedef struct {
 
 #define TPI_FIFO0_ETM_ATVALID_Pos 26U /*!< TPI FIFO0: ETM_ATVALID Position */
 #define TPI_FIFO0_ETM_ATVALID_Msk \
-  (0x3UL << TPI_FIFO0_ETM_ATVALID_Pos) /*!< TPI FIFO0: ETM_ATVALID Mask */
+  (0x1UL << TPI_FIFO0_ETM_ATVALID_Pos) /*!< TPI FIFO0: ETM_ATVALID Mask */
 
 #define TPI_FIFO0_ETM_bytecount_Pos \
   24U /*!< TPI FIFO0: ETM_bytecount Position */
@@ -1314,7 +1311,7 @@ typedef struct {
 /* TPI Integration ITM Data Register Definitions (FIFO1) */
 #define TPI_FIFO1_ITM_ATVALID_Pos 29U /*!< TPI FIFO1: ITM_ATVALID Position */
 #define TPI_FIFO1_ITM_ATVALID_Msk \
-  (0x3UL << TPI_FIFO1_ITM_ATVALID_Pos) /*!< TPI FIFO1: ITM_ATVALID Mask */
+  (0x1UL << TPI_FIFO1_ITM_ATVALID_Pos) /*!< TPI FIFO1: ITM_ATVALID Mask */
 
 #define TPI_FIFO1_ITM_bytecount_Pos \
   27U /*!< TPI FIFO1: ITM_bytecount Position */
@@ -1323,7 +1320,7 @@ typedef struct {
 
 #define TPI_FIFO1_ETM_ATVALID_Pos 26U /*!< TPI FIFO1: ETM_ATVALID Position */
 #define TPI_FIFO1_ETM_ATVALID_Msk \
-  (0x3UL << TPI_FIFO1_ETM_ATVALID_Pos) /*!< TPI FIFO1: ETM_ATVALID Mask */
+  (0x1UL << TPI_FIFO1_ETM_ATVALID_Pos) /*!< TPI FIFO1: ETM_ATVALID Mask */
 
 #define TPI_FIFO1_ETM_bytecount_Pos \
   24U /*!< TPI FIFO1: ETM_bytecount Position */
@@ -1839,7 +1836,8 @@ __STATIC_INLINE void __NVIC_SetPriorityGrouping(uint32_t PriorityGroup) {
                             SCB_AIRCR_PRIGROUP_Msk)); /* clear bits to change */
   reg_value =
       (reg_value | ((uint32_t)0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
-       (PriorityGroupTmp << 8U)); /* Insert write key and priorty group */
+       (PriorityGroupTmp
+        << SCB_AIRCR_PRIGROUP_Pos)); /* Insert write key and priority group */
   SCB->AIRCR = reg_value;
 }
 
@@ -1862,8 +1860,10 @@ __STATIC_INLINE uint32_t __NVIC_GetPriorityGrouping(void) {
  */
 __STATIC_INLINE void __NVIC_EnableIRQ(IRQn_Type IRQn) {
   if ((int32_t)(IRQn) >= 0) {
+    __COMPILER_BARRIER();
     NVIC->ISER[(((uint32_t)IRQn) >> 5UL)] =
         (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+    __COMPILER_BARRIER();
   }
 }
 
@@ -2079,6 +2079,8 @@ __STATIC_INLINE void NVIC_DecodePriority(uint32_t Priority,
 __STATIC_INLINE void __NVIC_SetVector(IRQn_Type IRQn, uint32_t vector) {
   uint32_t *vectors = (uint32_t *)SCB->VTOR;
   vectors[(int32_t)IRQn + NVIC_USER_IRQ_OFFSET] = vector;
+  /* ARM Application Note 321 states that the M3 does not require the
+   * architectural barrier */
 }
 
 /**
