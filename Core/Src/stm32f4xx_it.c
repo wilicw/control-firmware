@@ -24,16 +24,11 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "SEGGER_RTT.h"
-#include "config.h"
 #include "events.h"
-#include "gnss.h"
-#include "imu.h"
-#include "inverter.h"
-#include "steering.h"
+#include "fsae.h"
 #include "stm32f407xx.h"
 #include "stm32f4xx_hal_uart.h"
 #include "tx_api.h"
-#include "wheel.h"
 
 /* USER CODE END Includes */
 
@@ -361,13 +356,13 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
   static uint8_t rx_data[128];
   HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &rx_header, rx_data);
 
-#if IMU_ENABLE
+#ifdef FSAE_IMU
   static imu_t *imu = NULL;
   if (!imu) imu = open_imu_instance(0);
   imu_bsp_interrupt(imu, &rx_header, rx_data);
 #endif
 
-#if INVERTER_ENABLE
+#ifdef FSAE_INVERTER
   static inverter_t *inverter_R = NULL, *inverter_L = NULL;
   if (!inverter_R) inverter_R = open_inverter_instance(0);
   if (!inverter_L) inverter_L = open_inverter_instance(1);
@@ -375,7 +370,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
   inverter_bsp_interrupt(inverter_L, &rx_header, rx_data);
 #endif
 
-#if STEERING_ENABLE
+#ifdef FSAE_STEERING
   static steering_t *steering = NULL;
   if (!steering) steering = open_steering_instance(0);
   steering_bsp_interrupt(steering, &rx_header, rx_data);
@@ -383,7 +378,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan) {
 }
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
-#if WHEEL_ENABLE
+#ifdef FSAE_WHEELSPEED
   static wheel_t *fl_wheel = NULL, *fr_wheel = NULL, *rl_wheel = NULL,
                  *rr_wheel = NULL;
   if (!fl_wheel) fl_wheel = open_wheel_instance(0);
@@ -424,7 +419,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 }
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t size) {
-#if GNSS_ENABLE
+#ifdef FSAE_GNSS
   static gnss_t *gnss = NULL;
   if (!gnss) gnss = open_gnss_instance(0);
   gnss_bsp_interrupt(gnss, huart->pRxBuffPtr, size);

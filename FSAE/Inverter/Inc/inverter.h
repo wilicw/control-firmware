@@ -3,8 +3,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "config.h"
-
 typedef enum {
   INVERTER_PM100,
 } inverter_type_t;

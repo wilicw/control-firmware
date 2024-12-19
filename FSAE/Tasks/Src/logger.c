@@ -48,19 +48,13 @@ Revision: $Rev: 2023.49$
 #include "logger.h"
 
 #include "SEGGER_RTT.h"
-#include "adc.h"
-#include "config.h"
 #include "events.h"
+#include "fsae.h"
 #include "fx_api.h"
-#include "gnss.h"
-#include "imu.h"
-#include "inverter.h"
 #include "main.h"
 #include "stddef.h"
-#include "steering.h"
 #include "string.h"
 #include "usbd_cdc_if.h"
-#include "wheel.h"
 
 TX_THREAD logger_thread;
 
@@ -84,18 +78,16 @@ void logger_thread_entry(ULONG thread_input) {
 
   // Wait for the filesystem and config to be loaded
   ULONG recv_events_flags = 0;
-  status = tx_event_flags_get(&event_flags,
-                              EVENT_BIT(EVENT_FS_INIT) |
-                                  EVENT_BIT(EVENT_CONFIG_LOADED) |
-                                  EVENT_BIT(EVENT_LOGGING),
-                              TX_AND, &recv_events_flags, TX_WAIT_FOREVER);
+  status = tx_event_flags_get(
+      &event_flags, EVENT_BIT(EVENT_FS_INIT) | EVENT_BIT(EVENT_LOGGING), TX_AND,
+      &recv_events_flags, TX_WAIT_FOREVER);
 
   while (1) {
     recv_events_flags = 0;
     tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_LOGGING), TX_OR,
                        &recv_events_flags, TX_NO_WAIT);
     if (recv_events_flags & EVENT_BIT(EVENT_LOGGING)) {
-      if (unlikely(!logger_file.fx_file_name)) {
+      if (!logger_file.fx_file_name) {
         int fid = 0;
         char fn[32];
         do {
@@ -123,7 +115,7 @@ void logger_thread_entry(ULONG thread_input) {
     uint32_t timestamp = tx_time_get();
     memcpy(buf, &timestamp, sizeof(timestamp));
 
-#if ADC_ENABLE
+#ifdef FSAE_ADC
     static uint32_t last_adc_timestamp = 0;
     adc_t *adc[] = {open_adc_instance(0), open_adc_instance(1),
                     open_adc_instance(2), open_adc_instance(3)};
@@ -143,7 +135,7 @@ void logger_thread_entry(ULONG thread_input) {
     }
 #endif
 
-#if IMU_ENABLE
+#ifdef FSAE_IMU
     static imu_t *imu = NULL;
     if (!imu) imu = open_imu_instance(0);
 
@@ -174,7 +166,7 @@ void logger_thread_entry(ULONG thread_input) {
     }
 #endif
 
-#if INVERTER_ENABLE
+#ifdef FSAE_INVERTER
     inverter_t *inverter[] = {open_inverter_instance(0),
                               open_inverter_instance(1)};
     const size_t INVERTER_N = sizeof(inverter) / sizeof(inverter[0]);
@@ -199,7 +191,7 @@ void logger_thread_entry(ULONG thread_input) {
     }
 #endif
 
-#if STEERING_ENABLE
+#ifdef FSAE_STEERING
     steering_t *steering = open_steering_instance(0);
     static uint32_t last_steering_timestamp = 0;
     if (steering->timestamp != last_steering_timestamp) {
@@ -214,7 +206,7 @@ void logger_thread_entry(ULONG thread_input) {
     }
 #endif
 
-#if WHEEL_ENABLE
+#ifdef FSAE_WHEELSPEED
     wheel_t *wheel_fl = open_wheel_instance(0);
     wheel_t *wheel_fr = open_wheel_instance(1);
     wheel_t *wheel_rl = open_wheel_instance(2);
@@ -235,7 +227,7 @@ void logger_thread_entry(ULONG thread_input) {
     }
 #endif
 
-#if GNSS_ENABLE
+#ifdef FSAE_GNSS
     gnss_t *gnss = open_gnss_instance(0);
     static uint32_t last_gnss_timestamp = 0;
     if (gnss->timestamp != last_gnss_timestamp && gnss->valid) {

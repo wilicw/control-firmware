@@ -20,6 +20,9 @@ Revision: $Rev: 2023.49$
 #define LOGGER_DEBUG(...)
 #endif
 
+#define LOGGER_FN_PATTERN "ncku-fsae-log-%04d.log"
+#define LOGGER_SD
+
 void logger_thread_entry(ULONG thread_input);
 
 #endif

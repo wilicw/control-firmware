@@ -10,7 +10,6 @@ Revision: $Rev: 2024.11$
 
 #include "SEGGER_RTT.h"
 #include "adc.h"
-#include "config.h"
 #include "events.h"
 #include "inverter.h"
 #include "main.h"

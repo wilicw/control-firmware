@@ -23,11 +23,12 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "config.h"
 #include "control.h"
+#include "fsae.h"
 #include "init.h"
 #include "logger.h"
 #include "tx_api.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -99,14 +100,12 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
    *   initialization. Only enabled if LOGGER_ENABLE is defined.
    */
 
-#if LOGGER_ENABLE
   VOID *logger_pointer;
   int logger_priority = 5;
   tx_byte_allocate(byte_pool, &logger_pointer, 2048, TX_NO_WAIT);
   ret = tx_thread_create(&logger_thread, "logger_thread", logger_thread_entry,
                          0, logger_pointer, 2048, logger_priority,
                          logger_priority, TX_NO_TIME_SLICE, TX_AUTO_START);
-#endif
 
   /* Control Thread
    * - Priority: 4

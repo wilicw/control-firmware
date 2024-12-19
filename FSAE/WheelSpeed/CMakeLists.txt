@@ -7,6 +7,10 @@ project(
 )
 add_library(${PROJECT_NAME} INTERFACE)
 
+add_compile_definitions()
+
+target_compile_definitions(${PROJECT_NAME} INTERFACE FSAE_WHEELSPEED)
+
 target_include_directories(${PROJECT_NAME} INTERFACE
     ./Inc
 )

@@ -24,7 +24,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "SEGGER_RTT.h"
-#include "config.h"
 #include "usb_device.h"
 #include "wheel.h"
 

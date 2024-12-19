@@ -7,6 +7,8 @@ project(
 )
 add_library(${PROJECT_NAME} INTERFACE)
 
+target_compile_definitions(${PROJECT_NAME} INTERFACE FSAE_ADC)
+
 target_include_directories(${PROJECT_NAME} INTERFACE
     ./Inc
 )

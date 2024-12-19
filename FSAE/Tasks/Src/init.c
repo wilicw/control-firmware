@@ -8,16 +8,11 @@ Revision: $Rev: 2023.49$
 
 #include "init.h"
 
-#include "adc.h"
-#include "config.h"
 #include "events.h"
+#include "fsae.h"
 #include "fx_api.h"
-#include "gnss.h"
-#include "imu.h"
-#include "inverter.h"
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_uart.h"
-#include "wheel.h"
 
 TX_THREAD init_thread;
 
@@ -39,29 +34,7 @@ void init_thread_entry(ULONG thread_input) {
 
   INIT_DEBUG("Init started\n");
 
-  char buf[512];
-  ULONG len;
-
-  status =
-      fx_file_open(&sdio_disk, &config_file, CONFIG_FILENAME, FX_OPEN_FOR_READ);
-  if (status != FX_SUCCESS) {
-    INIT_DEBUG("Failed to open config file\n");
-    tx_thread_terminate(tx_thread_identify());
-  }
-
-  status = fx_file_read(&config_file, buf, sizeof(buf), &len);
-  if (status != FX_SUCCESS) {
-    INIT_DEBUG("Failed to read config file\n");
-    tx_thread_terminate(tx_thread_identify());
-  }
-
-  status = fx_file_close(&config_file);
-  if (status != FX_SUCCESS) {
-    INIT_DEBUG("Failed to close config file\n");
-    tx_thread_terminate(tx_thread_identify());
-  }
-
-#if ADC_ENABLE
+#ifdef FSAE_ADC
   adc_t *apps_l = open_adc_instance(0);
   adc_t *apps_r = open_adc_instance(1);
   adc_t *bpps_l = open_adc_instance(2);
@@ -94,12 +67,12 @@ void init_thread_entry(ULONG thread_input) {
               "adc");
 #endif
 
-#if IMU_ENABLE
+#ifdef FSAE_IMU
   imu_t *imu = open_imu_instance(0);
   imu_set_type(imu, IMU_MTI600);
 #endif
 
-#if WHEEL_ENABLE
+#ifdef FSAE_WHEELSPEED
   extern TIM_HandleTypeDef htim3;
   extern TIM_HandleTypeDef htim4;
 
@@ -130,7 +103,7 @@ void init_thread_entry(ULONG thread_input) {
   wheel_init(wheel_rr);
 #endif
 
-#if INVERTER_ENABLE
+#ifdef FSAE_INVERTER
   inverter_t *inverter_R = open_inverter_instance(0);
   inverter_t *inverter_L = open_inverter_instance(1);
   inverter_R->type = INVERTER_PM100;
@@ -143,14 +116,14 @@ void init_thread_entry(ULONG thread_input) {
   inverter_init(inverter_L);
 #endif
 
-#if GNSS_ENABLE
+#ifdef FSAE_GNSS
   extern UART_HandleTypeDef huart1;
   gnss_t *gnss = open_gnss_instance(0);
   gnss->hw.handler = &huart1;
   gnss_init(gnss);
 #endif
 
-  tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_CONFIG_LOADED), TX_OR);
+  tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_FS_INIT), TX_OR);
 
   INIT_DEBUG("Init finished\n");
 
