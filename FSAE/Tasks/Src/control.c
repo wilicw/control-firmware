@@ -19,11 +19,13 @@ Revision: $Rev: 2024.11$
 #define IS_PRECHARGED (recv_events_flags & EVENT_BIT(EVENT_PRECHARGE))
 #define IS_RECORDED (recv_events_flags & EVENT_BIT(EVENT_LOGGING))
 
+#define REGEN_ENABLE 1
+
 static const float TORQUE_FACTOR = 10.0f;
 static const float MAX_TORQUE = 150 * TORQUE_FACTOR;
 static const float REGEN_TORQUE = (REGEN_ENABLE ? -10 : 0) * TORQUE_FACTOR;
-static const float BSE_MAX = 75.0f;
-const static float MAX_PEDAL_POSITION = MAX_TORQUE - REGEN_TORQUE;
+static const float MAX_PEDAL_POSITION = MAX_TORQUE - REGEN_TORQUE;
+static const float RTD_BPPS = 10 * 1000;
 
 TX_THREAD control_thread;
 extern TX_EVENT_FLAGS_GROUP event_flags;
@@ -36,44 +38,27 @@ static inverter_t *inverter_R = NULL;
 static inverter_t *inverter_L = NULL;
 static ULONG recv_events_flags = 0;
 
+static inline void rtd_blink() {
+  static uint16_t t = 0;
+  if (!t) HAL_GPIO_TogglePin(RTD_OUTPUT_GPIO_Port, RTD_OUTPUT_Pin);
+}
+
 static inline void control_stopped() {
   inverter_R->torque = 0;
   inverter_L->torque = 0;
 
-  static const float CALIBRATION_APPS = 0.05 * MAX_TORQUE;
-  static const float RTD_BPPS = 50.0f;
-  const uint8_t apps_triggered =
-      apps_l->value < -CALIBRATION_APPS && apps_r->value > CALIBRATION_APPS;
   const uint8_t bpps_triggered =
       bpps_l->value > RTD_BPPS && bpps_r->value > RTD_BPPS;
 
   HAL_GPIO_WritePin(RTD_OUTPUT_GPIO_Port, RTD_OUTPUT_Pin, GPIO_PIN_RESET);
 
-  if (HAL_GPIO_ReadPin(RTD_INPUT_GPIO_Port, RTD_INPUT_Pin) == GPIO_PIN_RESET) {
-    if (apps_triggered && !bpps_triggered) {
-      control_state = CONTROL_CALIBRATE;
-    } else if (!apps_triggered && bpps_triggered) {
-      control_state = CONTROL_RTD;
-    }
-  }
-}
-
-static inline void control_calibrate() {
-  // Calibrate the APPS and Steering wheel sensors
-  apps_l->cal.scale *= -MAX_PEDAL_POSITION / apps_l->value;
-  apps_r->cal.scale *= MAX_PEDAL_POSITION / apps_r->value;
-
-  if (HAL_GPIO_ReadPin(RTD_INPUT_GPIO_Port, RTD_INPUT_Pin) == GPIO_PIN_SET)
-    control_state = CONTROL_STOPPED;
+  if (HAL_GPIO_ReadPin(RTD_INPUT_GPIO_Port, RTD_INPUT_Pin) == GPIO_PIN_RESET &&
+      bpps_triggered)
+    control_state = CONTROL_RTD;
 }
 
 static inline void control_rtd() {
   // Ready to drive
-
-  bpps_l->cal.scale *= BSE_MAX / bpps_l->value;
-  bpps_r->cal.scale *= BSE_MAX / bpps_r->value;
-
-  HAL_GPIO_WritePin(RTD_OUTPUT_GPIO_Port, RTD_OUTPUT_Pin, GPIO_PIN_SET);
   for (int i = 0; i < 1500; i++) {
     HAL_GPIO_TogglePin(BUZZER_OUTPUT_GPIO_Port, BUZZER_OUTPUT_Pin);
     tx_thread_sleep(TX_TIMER_TICKS_PER_SECOND / 1000);
@@ -117,7 +102,8 @@ static inline void control_running() {
      * operating range, for example <0.5 V or >4.5 V.
      */
 
-    if (bpps_l->value > BSE_MAX * 2 || bpps_r->value > BSE_MAX * 2) {
+    if (bpps_l->value > 4000 * bpps_l->cal.scale + bpps_l->cal.offset ||
+        bpps_r->value > 4000 * bpps_r->cal.scale + bpps_r->cal.offset) {
       SEGGER_RTT_printf(0, "Fault T4.3.3 or T4.3.4\n");
       inverter_R->torque = inverter_L->torque = 0;
       return;
@@ -132,7 +118,7 @@ static inline void control_running() {
      *   b. The Motor shut down must stay active until the APPS signals less
      * than 5% Pedal Travel, with or without brake operation */
     static uint8_t ev471_triggered = 0;
-    if (!ev471_triggered && COMMAND_BREAK > 10) {
+    if (!ev471_triggered && COMMAND_BREAK > RTD_BPPS * 2) {
       SEGGER_RTT_printf(0, "Fault EV4.7.2\n");
       inverter_R->torque = inverter_L->torque = 0;
       ev471_triggered = 1;
@@ -168,9 +154,8 @@ void control_thread_entry(ULONG thread_input) {
 
   // Wait for the filesystem and config to be loaded
   ULONG recv_events_flags = 0;
-  status = tx_event_flags_get(
-      &event_flags, EVENT_BIT(EVENT_FS_INIT) | EVENT_BIT(EVENT_CONFIG_LOADED),
-      TX_AND, &recv_events_flags, TX_WAIT_FOREVER);
+  status = tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_FS_INIT), TX_AND,
+                              &recv_events_flags, TX_WAIT_FOREVER);
 
   CONTROL_DEBUG("control main loop started\n");
 
@@ -178,6 +163,9 @@ void control_thread_entry(ULONG thread_input) {
   apps_r = open_adc_instance(1);
   bpps_l = open_adc_instance(2);
   bpps_r = open_adc_instance(3);
+
+  adc_return_to_zero(apps_l);
+  adc_return_to_zero(apps_r);
 
   inverter_R = open_inverter_instance(0);
   inverter_L = open_inverter_instance(1);
@@ -198,9 +186,6 @@ void control_thread_entry(ULONG thread_input) {
       case CONTROL_STOPPED:
         control_stopped();
         break;
-      case CONTROL_CALIBRATE:
-        control_calibrate();
-        break;
       case CONTROL_RTD:
         control_rtd();
         break;
@@ -211,10 +196,10 @@ void control_thread_entry(ULONG thread_input) {
         break;
     }
 
-    if (control_state != CONTROL_RUNNING) {
-      inverter_R->torque = 0;
-      inverter_L->torque = 0;
-    }
+    if (control_state <= CONTROL_RTD)
+      inverter_R->torque = inverter_L->torque = 0;
+    else
+      rtd_blink();
 
     inverter_send_torque(inverter_R);
     inverter_send_torque(inverter_L);

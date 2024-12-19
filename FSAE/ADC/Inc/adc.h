@@ -16,7 +16,7 @@ Revision: $Rev: 2024.12$
 
 typedef struct {
   float scale;
-  uint16_t offset;
+  int32_t offset;
 } adc_cal_t;
 
 typedef struct {

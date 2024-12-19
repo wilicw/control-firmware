@@ -20,7 +20,6 @@ Revision: $Rev: 2024.11$
 
 typedef enum {
   CONTROL_STOPPED,
-  CONTROL_CALIBRATE,
   CONTROL_RTD,
   CONTROL_RUNNING,
 } control_state_t;

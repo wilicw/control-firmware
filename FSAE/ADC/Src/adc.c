@@ -28,9 +28,11 @@ void adc_set_buffer_pos(adc_t *adc, size_t pos) {
 
 void adc_convert(adc_t *adc) {
   float last_value = adc->value;
-  adc->value = ((float)((int32_t)*adc->buffer_ptr - (int32_t)adc->cal.offset)) *
-               adc->cal.scale;
+  adc->value =
+      ((float)((int32_t)*adc->buffer_ptr)) * adc->cal.scale + adc->cal.offset;
   adc->value = IIR_filter(adc->value, last_value, adc->alpha);
 }
 
-void adc_return_to_zero(adc_t *adc) { adc->cal.offset = *adc->buffer_ptr; }
+void adc_return_to_zero(adc_t *adc) {
+  adc->cal.offset = -((float)((int32_t)*adc->buffer_ptr)) * adc->cal.scale;
+}

@@ -51,20 +51,16 @@ void init_thread_entry(ULONG thread_input) {
   adc_set_buffer_pos(apps_r, 1);
   adc_set_buffer_pos(bpps_l, 2);
   adc_set_buffer_pos(bpps_r, 3);
-  adc_return_to_zero(apps_l);
-  adc_return_to_zero(apps_r);
-  adc_return_to_zero(bpps_l);
-  adc_return_to_zero(bpps_r);
 
-  uint8_t adc_id[4] = {0, 1, 2, 3};
-  config_load(buf, len, apps_l, &adc_id[0], (config_hook_t)adc_config_hook,
-              "adc");
-  config_load(buf, len, apps_r, &adc_id[1], (config_hook_t)adc_config_hook,
-              "adc");
-  config_load(buf, len, bpps_l, &adc_id[2], (config_hook_t)adc_config_hook,
-              "adc");
-  config_load(buf, len, bpps_r, &adc_id[3], (config_hook_t)adc_config_hook,
-              "adc");
+  apps_l->cal.scale = 12.6;
+  apps_r->cal.scale = 12.6;
+  apps_l->cal.offset = 0;
+  apps_r->cal.offset = 0;
+
+  bpps_l->cal.scale = 23.49853515;
+  bpps_l->cal.offset = -17500;
+  bpps_r->cal.scale = 23.49853515;
+  bpps_r->cal.offset = -17500;
 #endif
 
 #ifdef FSAE_IMU
