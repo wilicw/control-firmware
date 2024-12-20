@@ -40,7 +40,7 @@ static ULONG recv_events_flags = 0;
 
 static inline void rtd_blink() {
   static uint16_t t = 0;
-  if (!t) HAL_GPIO_TogglePin(RTD_OUTPUT_GPIO_Port, RTD_OUTPUT_Pin);
+  if (!t++) HAL_GPIO_TogglePin(RTD_OUTPUT_GPIO_Port, RTD_OUTPUT_Pin);
 }
 
 static inline void control_stopped() {
