@@ -9,7 +9,9 @@ typedef enum {
 
 typedef struct {
   int16_t torque;
-  uint16_t speed;
+  int16_t torque_feedback;
+  int16_t speed;
+  uint32_t timestamp;
   uint16_t voltage;
   uint16_t current;
   uint8_t direction;
@@ -25,3 +27,6 @@ void inverter_send_torque(inverter_t *instance);
 void inverter_bsp_init(inverter_t *instance);
 void inverter_bsp_send_torque(inverter_t *instance);
 void inverter_bsp_interrupt(inverter_t *instance, void *arg1, void *arg2);
+void inverter_bsp_write_parameter(inverter_t *instance, uint16_t address,
+                                  uint16_t value);
+void inverter_bsp_read_parameter(inverter_t *instance, uint16_t address);

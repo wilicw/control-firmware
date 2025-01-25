@@ -15,13 +15,10 @@ typedef struct {
   uint8_t fault;
 } pm100_t;
 
-uint8_t pm100_clear_fault_buffer[8] = {20, 0, 1, 0, 0, 0, 0, 0};
-
-static inline void inverter_bsp_set_hw_id(inverter_t *instance) {
+static inline void inverter_bsp_set_direction(inverter_t *instance) {
   switch (instance->type) {
     case INVERTER_PM100: {
-      ((pm100_t *)(&instance->priv_pool))->tx_handler.StdId =
-          instance->hw_id + 0x20;
+      ((pm100_t *)(&instance->priv_pool))->buffer[4] = instance->direction;
       break;
     }
     default:
@@ -29,10 +26,41 @@ static inline void inverter_bsp_set_hw_id(inverter_t *instance) {
   }
 }
 
-static inline void inverter_bsp_set_direction(inverter_t *instance) {
+void inverter_bsp_write_parameter(inverter_t *instance, uint16_t address,
+                                  uint16_t value) {
   switch (instance->type) {
     case INVERTER_PM100: {
-      ((pm100_t *)(&instance->priv_pool))->buffer[4] = instance->direction;
+      uint8_t buffer[8] = {address & 0xFF, address >> 8, 1, 0,
+                           value & 0xFF,   value >> 8,   0, 0};
+      ((pm100_t *)(&instance->priv_pool))->tx_handler.StdId ^= 0x01;
+      if (HAL_CAN_AddTxMessage(&hcan1,
+                               &((pm100_t *)(&instance->priv_pool))->tx_handler,
+                               buffer, &txmailbox) != HAL_OK) {
+        SEGGER_RTT_printf(0, "Failed to write parameter\n");
+      }
+      while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) != 3)
+        ;
+      ((pm100_t *)(&instance->priv_pool))->tx_handler.StdId ^= 0x01;
+      break;
+    }
+    default:
+      break;
+  }
+}
+
+void inverter_bsp_read_parameter(inverter_t *instance, uint16_t address) {
+  switch (instance->type) {
+    case INVERTER_PM100: {
+      uint8_t buffer[8] = {address & 0xFF, address >> 8, 0, 0, 0, 0, 0, 0};
+      ((pm100_t *)(&instance->priv_pool))->tx_handler.StdId ^= 0x01;
+      if (HAL_CAN_AddTxMessage(&hcan1,
+                               &((pm100_t *)(&instance->priv_pool))->tx_handler,
+                               buffer, &txmailbox) != HAL_OK) {
+        SEGGER_RTT_printf(0, "Failed to read parameter\n");
+      }
+      while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) != 3)
+        ;
+      ((pm100_t *)(&instance->priv_pool))->tx_handler.StdId ^= 0x01;
       break;
     }
     default:
@@ -57,13 +85,16 @@ void inverter_bsp_init(inverter_t *instance) {
           .fault = 1,
       };
       *((pm100_t *)(&instance->priv_pool)) = priv;
+      ((pm100_t *)(&instance->priv_pool))->tx_handler.StdId =
+          instance->hw_id + 0x20;
       break;
     }
     default:
       break;
   }
-  inverter_bsp_set_hw_id(instance);
   inverter_bsp_set_direction(instance);
+  // IQ Limit
+  inverter_bsp_read_parameter(instance, 100);
 }
 
 void inverter_bsp_send_torque(inverter_t *instance) {
@@ -71,17 +102,8 @@ void inverter_bsp_send_torque(inverter_t *instance) {
     case INVERTER_PM100: {
       if (((pm100_t *)(&instance->priv_pool))->fault) {
         SEGGER_RTT_printf(0, "Fault detected, clearing fault\n");
-        ((pm100_t *)(&instance->priv_pool))->tx_handler.StdId ^= 0x01;
-        if (HAL_CAN_AddTxMessage(
-                &hcan1, &((pm100_t *)(&instance->priv_pool))->tx_handler,
-                pm100_clear_fault_buffer, &txmailbox) != HAL_OK) {
-          SEGGER_RTT_printf(0, "Failed to send torque\n");
-        }
-        while (HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) != 3)
-          ;
-        ((pm100_t *)(&instance->priv_pool))->tx_handler.StdId ^= 0x01;
+        inverter_bsp_write_parameter(instance, 20, 0);
         ((pm100_t *)(&instance->priv_pool))->fault = 0;
-        break;
       }
 
       int16_t __torque = instance->torque * 10;
@@ -148,6 +170,21 @@ void inverter_bsp_interrupt(inverter_t *instance, void *arg1, void *arg2) {
          */
         ((pm100_t *)(&instance->priv_pool))->fault =
             (*(uint16_t *)&rx_data[0] == 7);
+      } else if (rx_id == 0x0C + instance->hw_id) {
+        /* Torque & Timer Information
+         * Byte#  Description
+         * 0,1    Torque Command
+         * 2,3    Torque Feedback
+         * 4,5,6,7Timer
+         */
+        instance->torque_feedback = *(int16_t *)&rx_data[2];
+        instance->timestamp = *(uint32_t *)&rx_data[4];
+      } else if (rx_id == 0x22 + instance->hw_id) {
+        uint16_t address = (rx_data[1] << 8) | rx_data[0];
+        uint16_t value = (rx_data[5] << 8) | rx_data[4];
+        uint8_t status = rx_data[2];
+        SEGGER_RTT_printf(0, "I(0x%02x)Parameter %d (%d) 0x%04x\n",
+                          instance->hw_id, address, status, value);
       }
       break;
     }
