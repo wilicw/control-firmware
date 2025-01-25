@@ -112,7 +112,7 @@ void inverter_bsp_interrupt(inverter_t *instance, void *arg1, void *arg2) {
     case INVERTER_PM100: {
       CAN_RxHeaderTypeDef *rx_header = (CAN_RxHeaderTypeDef *)arg1;
       uint8_t *rx_data = (uint8_t *)arg2;
-      const uint8_t rx_id = rx_header->StdId;
+      const uint16_t rx_id = rx_header->StdId;
       if (rx_id == 0x05 + instance->hw_id) {
         /* Motor Position Information
          * Byte#  Description
