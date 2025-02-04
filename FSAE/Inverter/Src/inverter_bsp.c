@@ -13,6 +13,7 @@ typedef struct {
   CAN_TxHeaderTypeDef tx_handler;
   uint8_t buffer[8];
   uint8_t fault;
+  uint32_t run_fault;
 } pm100_t;
 
 static inline void inverter_bsp_set_direction(inverter_t *instance) {
@@ -93,15 +94,15 @@ void inverter_bsp_init(inverter_t *instance) {
       break;
   }
   inverter_bsp_set_direction(instance);
-  // IQ Limit
-  inverter_bsp_read_parameter(instance, 100);
 }
 
 void inverter_bsp_send_torque(inverter_t *instance) {
   switch (instance->type) {
     case INVERTER_PM100: {
       if (((pm100_t *)(&instance->priv_pool))->fault) {
-        SEGGER_RTT_printf(0, "Fault detected, clearing fault\n");
+        uint32_t fault_code = ((pm100_t *)(&instance->priv_pool))->run_fault;
+        SEGGER_RTT_printf(0, "Fault detected %08x, clearing fault\n",
+                          fault_code);
         inverter_bsp_write_parameter(instance, 20, 0);
         ((pm100_t *)(&instance->priv_pool))->fault = 0;
       }
@@ -165,11 +166,22 @@ void inverter_bsp_interrupt(inverter_t *instance, void *arg1, void *arg2) {
       } else if (rx_id == 0x0A + instance->hw_id) {
         /* Motor Status Information
          * Byte#  Description
-         * 0,1    VSM State
+         * 0      VSM State
+         * 1      PWM Frequency
          * 2      Inverter State
          */
         ((pm100_t *)(&instance->priv_pool))->fault =
             (*(uint16_t *)&rx_data[0] == 7);
+      } else if (rx_id == 0x0B + instance->hw_id) {
+        /* Torque & Timer Information
+         * Byte#  Description
+         * 0,1    POST Fault Lo
+         * 2,3    POST Fault Hi
+         * 4,5    RUN Fault Lo
+         * 6,7    RUN Fault Hi
+         */
+        ((pm100_t *)(&instance->priv_pool))->run_fault =
+            *(uint32_t *)&rx_data[4];
       } else if (rx_id == 0x0C + instance->hw_id) {
         /* Torque & Timer Information
          * Byte#  Description
