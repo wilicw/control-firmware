@@ -23,7 +23,7 @@ Purpose : Source code for the data logger task. Data acquisition from
             0x04 - Inverter, 2 inverters, each inverter data is 16-bit
               signed integer [INV_1][INV_2], each inverter data is constructed
               as:
-                [torque][speed][voltge][current]
+                [torque][speed][voltge][current][feedback_torque]
               each field is 16-bit unsigned/signed integer.
             0x05 - Steering wheel angle sensor, 16-bit signed integet [angle]
               and 8-bit signed integer [speed]
@@ -170,7 +170,7 @@ void logger_thread_entry(ULONG thread_input) {
     inverter_t *inverter[] = {open_inverter_instance(0),
                               open_inverter_instance(1)};
     const size_t INVERTER_N = sizeof(inverter) / sizeof(inverter[0]);
-    const size_t INVERTER_VALUE_SIZE = sizeof(uint16_t) * 4;
+    const size_t INVERTER_VALUE_SIZE = sizeof(uint16_t) * 5;
     static uint32_t last_inverter_timestamp = 0;
     if (timestamp - last_inverter_timestamp >
         TX_TIMER_TICKS_PER_SECOND / 1000) {
@@ -182,6 +182,8 @@ void logger_thread_entry(ULONG thread_input) {
         memcpy(buf + 8 + i * INVERTER_VALUE_SIZE, &inverter[i]->speed, 2);
         memcpy(buf + 10 + i * INVERTER_VALUE_SIZE, &inverter[i]->voltage, 2);
         memcpy(buf + 12 + i * INVERTER_VALUE_SIZE, &inverter[i]->current, 2);
+        memcpy(buf + 14 + i * INVERTER_VALUE_SIZE,
+               &inverter[i]->torque_feedback, 2);
       }
 
       buf[6 + INVERTER_N * INVERTER_VALUE_SIZE] = 0x0D;
