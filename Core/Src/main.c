@@ -692,7 +692,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-#if WHEEL_ENABLE
+#ifdef FSAE_WHEELSPEED
   if (htim->Instance != TIM1) {
     static wheel_t *wheel_fl = NULL, *wheel_fr = NULL, *wheel_rl = NULL,
                    *wheel_rr = NULL;
