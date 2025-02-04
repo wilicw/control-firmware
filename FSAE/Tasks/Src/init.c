@@ -8,6 +8,7 @@ Revision: $Rev: 2023.49$
 
 #include "init.h"
 
+#include "adc.h"
 #include "events.h"
 #include "fsae.h"
 #include "fx_api.h"
@@ -40,8 +41,8 @@ void init_thread_entry(ULONG thread_input) {
   adc_t *bpps_l = open_adc_instance(2);
   adc_t *bpps_r = open_adc_instance(3);
 
-  apps_l->alpha = 0.2;
-  apps_r->alpha = 0.2;
+  apps_l->alpha = 0.5;
+  apps_r->alpha = 0.5;
   bpps_l->alpha = 0.5;
   bpps_r->alpha = 0.5;
 
@@ -52,8 +53,8 @@ void init_thread_entry(ULONG thread_input) {
   adc_set_buffer_pos(bpps_l, 2);
   adc_set_buffer_pos(bpps_r, 3);
 
-  apps_l->cal.scale = 12.6;
-  apps_r->cal.scale = 12.6;
+  apps_l->cal.scale = 7.2832;
+  apps_r->cal.scale = 7.4256;
   apps_l->cal.offset = 0;
   apps_r->cal.offset = 0;
 
@@ -61,6 +62,9 @@ void init_thread_entry(ULONG thread_input) {
   bpps_l->cal.offset = -17500;
   bpps_r->cal.scale = 23.49853515;
   bpps_r->cal.offset = -17500;
+
+  adc_return_to_zero(apps_l);
+  adc_return_to_zero(apps_r);
 #endif
 
 #ifdef FSAE_IMU

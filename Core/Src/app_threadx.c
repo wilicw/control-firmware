@@ -108,7 +108,7 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
                          logger_priority, TX_NO_TIME_SLICE, TX_AUTO_START);
 
   /* Control Thread
-   * - Priority: 4
+   * - Priority: 1
    * - Stack size: 256 bytes
    * - Auto start: NO
    *   Dependencies: FileX
@@ -117,7 +117,7 @@ UINT App_ThreadX_Init(VOID *memory_ptr) {
    *   initialization. Only enabled if CONTROL_ENABLE is defined.
    */
   VOID *control_pointer;
-  int control_priority = 4;
+  int control_priority = 1;
   tx_byte_allocate(byte_pool, &control_pointer, 2048, TX_NO_WAIT);
   ret =
       tx_thread_create(&control_thread, "control_thread", control_thread_entry,

@@ -15,17 +15,15 @@ Revision: $Rev: 2024.11$
 #include "main.h"
 #include "stm32f4xx_hal_gpio.h"
 #include "tx_port.h"
+#include "utils.h"
 
 #define IS_PRECHARGED (recv_events_flags & EVENT_BIT(EVENT_PRECHARGE))
 #define IS_RECORDED (recv_events_flags & EVENT_BIT(EVENT_LOGGING))
 
-#define REGEN_ENABLE 1
-
-static const float TORQUE_FACTOR = 10.0f;
-static const float MAX_TORQUE = 150 * TORQUE_FACTOR;
-static const float REGEN_TORQUE = (REGEN_ENABLE ? -10 : 0) * TORQUE_FACTOR;
-static const float MAX_PEDAL_POSITION = MAX_TORQUE - REGEN_TORQUE;
-static const float RTD_BPPS = 10 * 1000;
+static const float MAX_POWER_PRE_WHEEL = 1000;
+static const float Ct = 0.95;
+static const float MAX_TORQUE = 150;
+static const float RTD_BPPS = 5 * 1000;  // 1MPa of average break pressure
 
 TX_THREAD control_thread;
 extern TX_EVENT_FLAGS_GROUP event_flags;
@@ -38,12 +36,7 @@ static inverter_t *inverter_R = NULL;
 static inverter_t *inverter_L = NULL;
 static ULONG recv_events_flags = 0;
 
-static inline void rtd_blink() {
-  static uint16_t t = 0;
-  if (!t++) HAL_GPIO_TogglePin(RTD_OUTPUT_GPIO_Port, RTD_OUTPUT_Pin);
-}
-
-static inline void control_stopped() {
+static inline void control_stopped(void) {
   inverter_R->torque = 0;
   inverter_L->torque = 0;
 
@@ -57,36 +50,33 @@ static inline void control_stopped() {
     control_state = CONTROL_RTD;
 }
 
-static inline void control_rtd() {
+static inline void control_rtd(void) {
   // Ready to drive
+  HAL_GPIO_WritePin(RTD_OUTPUT_GPIO_Port, RTD_OUTPUT_Pin, GPIO_PIN_SET);
   for (int i = 0; i < 1500; i++) {
     HAL_GPIO_TogglePin(BUZZER_OUTPUT_GPIO_Port, BUZZER_OUTPUT_Pin);
-    tx_thread_sleep(TX_TIMER_TICKS_PER_SECOND / 1000);
+    HAL_Delay(1);
   }
-  tx_thread_sleep(TX_TIMER_TICKS_PER_SECOND * 3);
   control_state = CONTROL_RUNNING;
 }
 
-static inline void control_running() {
-  const float __COMMAND_TORQUE =
-      (-apps_l->value + apps_r->value) / 2 + REGEN_TORQUE;
-  const float COMMAND_TORQUE =
-      (__COMMAND_TORQUE > MAX_TORQUE
-           ? MAX_TORQUE
-           : (__COMMAND_TORQUE < REGEN_TORQUE ? REGEN_TORQUE
-                                              : __COMMAND_TORQUE)) /
-      TORQUE_FACTOR;
-  const float COMMAND_BREAK = (bpps_l->value + bpps_r->value) / 2;
+static inline void control_running(void) {
+  // FULL pedal position is 1000
+  // Released pedal position is -50
+  const float PEDAL_POSITION = (-apps_l->value + apps_r->value) / 2;
+  const float AVERAGE_BREAK_PRESSURE = (bpps_l->value + bpps_r->value) / 2;
+
+  SEGGER_RTT_printf(0, "Pedal: %4d\n", (int)PEDAL_POSITION);
 
   recv_events_flags = 0;
   tx_event_flags_get(&event_flags,
                      EVENT_BIT(EVENT_PRECHARGE) | EVENT_BIT(EVENT_LOGGING),
                      TX_OR, &recv_events_flags, TX_NO_WAIT);
 
-  if (!IS_PRECHARGED) {
-    control_state = CONTROL_STOPPED;
-    return;
-  }
+  // if (!IS_PRECHARGED) {
+  //   control_state = CONTROL_STOPPED;
+  //   return;
+  // }
 
   /* WARN: BYPASS the rule while recoding */
   if (!IS_RECORDED) {
@@ -102,8 +92,8 @@ static inline void control_running() {
      * operating range, for example <0.5 V or >4.5 V.
      */
 
-    if (bpps_l->value > 4000 * bpps_l->cal.scale + bpps_l->cal.offset ||
-        bpps_r->value > 4000 * bpps_r->cal.scale + bpps_r->cal.offset) {
+    if (bpps_l->value > 3500 * bpps_l->cal.scale + bpps_l->cal.offset ||
+        bpps_r->value > 3500 * bpps_r->cal.scale + bpps_r->cal.offset) {
       SEGGER_RTT_printf(0, "Fault T4.3.3 or T4.3.4\n");
       inverter_R->torque = inverter_L->torque = 0;
       return;
@@ -118,13 +108,13 @@ static inline void control_running() {
      *   b. The Motor shut down must stay active until the APPS signals less
      * than 5% Pedal Travel, with or without brake operation */
     static uint8_t ev471_triggered = 0;
-    if (!ev471_triggered && COMMAND_BREAK > RTD_BPPS * 2) {
+    if (!ev471_triggered && AVERAGE_BREAK_PRESSURE > RTD_BPPS * 2) {
       SEGGER_RTT_printf(0, "Fault EV4.7.2\n");
       inverter_R->torque = inverter_L->torque = 0;
       ev471_triggered = 1;
       return;
     }
-    if (ev471_triggered && COMMAND_TORQUE <= MAX_TORQUE * 0.05f) {
+    if (ev471_triggered && PEDAL_POSITION <= 50) {
       ev471_triggered = 0;
     } else if (ev471_triggered) {
       inverter_R->torque = inverter_L->torque = 0;
@@ -132,30 +122,59 @@ static inline void control_running() {
     }
   }
 
-  /* NOTE: Disable the torque output if the APPS is less than 5% of the
-     maximum torque output.
-  */
-  if (apps_l->value >= -MAX_TORQUE * 0.05f &&
-      apps_r->value <= MAX_TORQUE * 0.05f) {
+  /* NOTE: Disable the inverter when either of the APPS sensors disconnected.
+   */
+  if (apps_l->value <= -1500 || apps_r->value >= 1500 || apps_l->value >= 200 ||
+      apps_r->value <= -200) {
     inverter_R->torque = inverter_L->torque = 0;
     return;
   }
 
-  if (COMMAND_TORQUE <= -5) {
+  if (PEDAL_POSITION < 60) {
     inverter_R->torque = inverter_L->torque = 0;
     return;
   }
 
-  inverter_R->torque = inverter_L->torque = COMMAND_TORQUE;
+  float ALLOW_TORQUE_R = _MIN_(MAX_TORQUE, MAX_POWER_PRE_WHEEL * 9.54929 * Ct /
+                                               (_ABS_(inverter_R->speed) + 1));
+  float ALLOW_TORQUE_L = _MIN_(MAX_TORQUE, MAX_POWER_PRE_WHEEL * 9.54929 * Ct /
+                                               (_ABS_(inverter_L->speed) + 1));
+
+  inverter_R->torque = PEDAL_POSITION * ALLOW_TORQUE_R / 1000;
+  inverter_L->torque = PEDAL_POSITION * ALLOW_TORQUE_L / 1000;
+}
+
+void control_main(ULONG input) {
+  adc_convert(apps_l);
+  adc_convert(apps_r);
+  adc_convert(bpps_l);
+  adc_convert(bpps_r);
+
+  switch (control_state) {
+    case CONTROL_STOPPED:
+      control_stopped();
+      break;
+    case CONTROL_RTD:
+      control_rtd();
+      break;
+    case CONTROL_RUNNING:
+      control_running();
+      break;
+    default:
+      break;
+  }
+
+  if (control_state <= CONTROL_RTD) inverter_R->torque = inverter_L->torque = 0;
+
+  inverter_send_torque(inverter_R);
+  inverter_send_torque(inverter_L);
 }
 
 void control_thread_entry(ULONG thread_input) {
-  UINT status = TX_SUCCESS;
-
   // Wait for the filesystem and config to be loaded
   ULONG recv_events_flags = 0;
-  status = tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_FS_INIT), TX_AND,
-                              &recv_events_flags, TX_WAIT_FOREVER);
+  tx_event_flags_get(&event_flags, EVENT_BIT(EVENT_FS_INIT), TX_AND,
+                     &recv_events_flags, TX_WAIT_FOREVER);
 
   CONTROL_DEBUG("control main loop started\n");
 
@@ -176,35 +195,10 @@ void control_thread_entry(ULONG thread_input) {
       GPIO_PIN_SET)
     tx_event_flags_set(&event_flags, EVENT_BIT(EVENT_PRECHARGE), TX_OR);
 
-  while (1) {
-    adc_convert(apps_l);
-    adc_convert(apps_r);
-    adc_convert(bpps_l);
-    adc_convert(bpps_r);
-
-    switch (control_state) {
-      case CONTROL_STOPPED:
-        control_stopped();
-        break;
-      case CONTROL_RTD:
-        control_rtd();
-        break;
-      case CONTROL_RUNNING:
-        control_running();
-        break;
-      default:
-        break;
-    }
-
-    if (control_state <= CONTROL_RTD)
-      inverter_R->torque = inverter_L->torque = 0;
-    else
-      rtd_blink();
-
-    inverter_send_torque(inverter_R);
-    inverter_send_torque(inverter_L);
-    tx_thread_sleep(TX_TIMER_TICKS_PER_SECOND / 1000);
-  }
-
+  TX_TIMER control_timer;
+  const ULONG delay = TX_TIMER_TICKS_PER_SECOND / 200;
+  tx_timer_create(&control_timer, "C Timer", control_main, 0, delay, delay,
+                  TX_AUTO_ACTIVATE);
+  SEGGER_RTT_printf(0, "control thread started\n");
   tx_thread_terminate(tx_thread_identify());
 }
